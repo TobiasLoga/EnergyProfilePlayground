@@ -1,0 +1,12 @@
+name: EnergyProfileShinyApp
+title: EnergyProfileShinyApp
+username: tobilo
+account: tobilo
+server: shinyapps.io
+hostUrl: https://api.shinyapps.io/v1
+appId: 14366115
+bundleId: 10332950
+url: https://tobilo.shinyapps.io/EnergyProfileShinyApp/
+version: 1
+asMultiple: FALSE
+asStatic: FALSE
