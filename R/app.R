@@ -1,5 +1,4 @@
 
-
 # install.packages("shiny")
 # install.packages ("shinyalert")
 # install.packages ("shinydashboard")
@@ -9,6 +8,7 @@
 # install.packages ("DT")
 # install.packages ("echarts4r")
 # install.packages ("devtools")
+# install.packages("gitcreds")
 
 # devtools::install_github ("IWUGERMANY/tabuladata")
 # #renv::install (packages = "IWUGERMANY/tabuladata")
@@ -18,12 +18,18 @@
 # renv::install (packages = "TobiasLoga/CliDaMon")
 # renv::install (packages = "TobiasLoga/MobasyModel")
 # # devtools::install_github ("TobiasLoga/MobasyModel")
-# renv::install (packages = "TobiasLoga/TabulaCharts")
+
+# # renv::install (packages = "TobiasLoga/TabulaCharts")
+# # devtools::install_github ("TobiasLoga/TabulaCharts")
+# remotes::install_github ("TobiasLoga/TabulaCharts")
 
 # install.packages("D:/TL/Entwicklung/R/GitHub/myRepos/MobasyBuildingData_0.1.0.tar.gz", repos = NULL, type = "source", 
 #                  lib="C:/Users/Tobias.DOMIWU/AppData/Local/R/cache/R/renv/sandbox/windows/R-4.4/x86_64-w64-mingw32/6698a5f3")
 # install.packages("D:/TL/Entwicklung/R/GitHub/myRepos/tabuladata_0.0.0.9000.tar.gz", repos = NULL, type = "source", 
 #                  lib="C:/Users/Tobias.DOMIWU/AppData/Local/R/cache/R/renv/sandbox/windows/R-4.4/x86_64-w64-mingw32/6698a5f3")
+
+# gitcreds::gitcreds_set()
+
 
 library (renv)
 
@@ -132,6 +138,20 @@ ID_Stack_Initialise <- "DE.N.SFH.06.Gen.ReEx.001.001"
 #####################################################################################X
 ### Styles -----
 
+## Function for altering the background colour of input fields
+# Script from https://stackoverflow.com/questions/50313540/r-shiny-conditionally-change-numericinput-background-colour
+
+
+jsCode <- '
+shinyjs.backgroundCol = function(params) {
+var defaultParams = {
+id : null,
+col : "ivory"
+};
+params = shinyjs.getParams(params, defaultParams);
+var el = $("#" + params.id);
+el.css("background-color", params.col);
+}'
 
 
 PercentageHeight_Dashboard_MainPanel <- 78 # percentage value
@@ -367,7 +387,44 @@ InputVariableNames <- c (
   "Indicator_Heatpump",	
   "Indicator_Heatpump_SysH",								
   "Indicator_Heatpump_SysW",
-  "Code_HeatpumpType"
+  "Code_HeatpumpType",
+  
+  "Indicator_ElectricCentral",	
+  "Indicator_ElectricCentral_SysH",								
+  "Indicator_ElectricCentral_SysW",
+  
+  "Indicator_ThermalSolar",	
+  "Indicator_ThermalSolar_SysH",								
+  "Indicator_ThermalSolar_SysW",
+  
+  "Indicator_CHP",	
+  "Indicator_CHP_SysH",								
+  "Indicator_CHP_SysW",
+  "Code_Type_EC_CHP",
+  
+  "Indicator_DistrictHeating",	
+  "Indicator_DistrictHeating_SysH",								
+  "Indicator_DistrictHeating_SysW",
+  
+  "Code_CentralisationType_SysHG",
+  
+  "Indicator_Storage_SysH",
+  "Indicator_Storage_SysH_Immersion",
+  "Indicator_Storage_SysH_InsideEnvelope",
+  
+  "Indicator_Distribution_SysH",
+  "Indicator_Distribution_SysH_OutsideEnvelope",
+  "Indicator_Distribution_SysH_PoorlyInsulated",
+  "Indicator_Distribution_SysH_LowTemperature",
+  
+  "Indicator_Storage_SysW",
+  "Indicator_Storage_SysW_Immersion",
+  "Indicator_Storage_SysW_InsideEnvelope",
+  
+  "Indicator_Distribution_SysW",
+  "Indicator_Distribution_SysW_CirculationLoop",
+  "Indicator_Distribution_SysW_OutsideEnvelope",
+  "Indicator_Distribution_SysW_PoorlyInsulated"
   
 )
 
@@ -473,10 +530,43 @@ List_UI_InputFields_CheckBox <- c (
 
   "Indicator_Heatpump",	
   "Indicator_Heatpump_SysH",								
-  "Indicator_Heatpump_SysW"
+  "Indicator_Heatpump_SysW",
 
+  "Indicator_ElectricCentral",	
+  "Indicator_ElectricCentral_SysH",								
+  "Indicator_ElectricCentral_SysW",
   
-) # Current number: 13 + 9 = 22
+  "Indicator_ThermalSolar",	
+  "Indicator_ThermalSolar_SysH",								
+  "Indicator_ThermalSolar_SysW",
+  
+  "Indicator_CHP",	
+  "Indicator_CHP_SysH",								
+  "Indicator_CHP_SysW",
+
+  "Indicator_DistrictHeating",	
+  "Indicator_DistrictHeating_SysH",								
+  "Indicator_DistrictHeating_SysW",
+  
+  "Indicator_Storage_SysH",
+  "Indicator_Storage_SysH_Immersion",
+  "Indicator_Storage_SysH_InsideEnvelope",
+  
+  "Indicator_Distribution_SysH",
+  "Indicator_Distribution_SysH_OutsideEnvelope",
+  "Indicator_Distribution_SysH_PoorlyInsulated",
+  "Indicator_Distribution_SysH_LowTemperature",
+  
+  "Indicator_Storage_SysW",
+  "Indicator_Storage_SysW_Immersion",
+  "Indicator_Storage_SysW_InsideEnvelope",
+  
+  "Indicator_Distribution_SysW",
+  "Indicator_Distribution_SysW_CirculationLoop",
+  "Indicator_Distribution_SysW_OutsideEnvelope",
+  "Indicator_Distribution_SysW_PoorlyInsulated"
+  
+) # Current number: 13 + 9 + 12 + 14 = 34 + 14 = 48
 
   
 List_UI_InputFields_RadioButton <- c (
@@ -505,10 +595,13 @@ List_UI_InputFields_RadioButton <- c (
   
   "Code_Type_EC_Boiler_Solid",
   
-  "Code_HeatpumpType"
+  "Code_HeatpumpType",
   
+  "Code_Type_EC_CHP",
   
-) # Current number: 17 + 4 = 21
+  "Code_CentralisationType_SysHG"
+  
+) # Current number: 17 + 4 + 1 + 1 = 23
   
 
 
@@ -2067,7 +2160,6 @@ ObserveMatrixButton_LoadDatasetFromPoolToCalculation <- function (
 ui <- shinydashboard::dashboardPage (
 
   
-  
   shinydashboard::dashboardHeader (
     title = "Energieprofil"
   ),
@@ -2128,6 +2220,7 @@ ui <- shinydashboard::dashboardPage (
   shinydashboard::dashboardBody (
     
     shinydashboard::tabItems (
+      
       
       
       #######################################################################X
@@ -2246,6 +2339,11 @@ www.iwu.de
         shinyjs::useShinyjs(),  # Set up shinyjs
         # Package used to simulate click on button
         
+        shinyjs::extendShinyjs (text = jsCode, functions = "backgroundCol"),
+        
+        
+        
+        
       #fillPage (  # 2025-05-09 abgeschaltet, da man im Datenbereich sonst nicht nach unten scrollen kann.
                    # Die Verwendung von fillPage ()in einem Tab bewirkt offensichtlich, dass die ganze Seite fixiert bleibt.
                    # Die Kopfleiste blieb damit immer sichtbar (was eigentlich gut aussah)
@@ -2274,7 +2372,7 @@ www.iwu.de
           
           ## Left section
           column (
-            4,
+            5,
             
             fluidRow (
               
@@ -2293,7 +2391,23 @@ www.iwu.de
               # ), # End column
               
               column (
-                9,
+                1,
+                div ("DS Nr.", style = "font-size:10px; line-height:0.8;"),
+                textInput (
+                  inputId = "TextInput_Index_Stack", 
+                  label = NULL,
+                  value = "-",
+                  width = NULL #'100%'
+                ),
+                style = "padding:0 !important;", 
+                #style = "padding-right:0;"
+                #style = "padding:0 !important; text-align:'right';", # align right doesn't work
+                #align = 'right'
+              ), # End column
+              
+              
+              column (
+                7,
                 div ("Auswahl eines Datensatzes aus dem Stapel", style = "font-size:10px; line-height:0.8;"),
                 selectInput (
                   inputId = "SelectInput_ID_Dataset_Stack",
@@ -2301,7 +2415,20 @@ www.iwu.de
                   choices = SelectionList_ID_Stack_Initialise, 
                   selected = ID_Stack_Initialise, # ID_Dataset_Initialise_Stack,  # "Example.01",
                   width = '100%'
-                ) 
+                ), 
+                style = "padding:0 !important"
+              ), # End column
+              
+              column (
+                1,
+                div ("Entfernen", style = "font-size:10px; line-height:0.8;"),
+                actionButton (
+                  "Button_Delete_Dataset_Stack",
+                  label = div ("x", style = "text-align: center;"),
+                  #label = "X",
+                  width = '100%',
+                ),
+                style = "padding:0 !important"
               ), # End column
               
               column (
@@ -2321,41 +2448,13 @@ www.iwu.de
 
           ## Center section
           column (
-              6,              
+              5,              
           
               fluidRow (    
               
                 column (
-                  2,
-                  div ("Stapel-Datensatz DS", style = "font-size:10px; line-height:0.8;"),
-                  textInput (
-                    inputId = "TextInput_Index_Stack", 
-                    label = NULL,
-                    value = "-",
-                    #width = '100%'
-                  )
-                  
-                  # fluidRow (
-                  #   column (
-                  #     4,
-                  #     "DS",
-                  #     align = 'right'
-                  #   ),
-                  #   column (
-                  #     8,
-                  #     textInput (
-                  #       inputId = "TextInput_Index_Stack", 
-                  #       label = NULL,
-                  #       value = "-",
-                  #       #width = '100%'
-                  #     )
-                  #   )
-                  # ) # End fluidRow
-                ), # End column
-                
-                column (
-                  4,
-                  div ("Berechnung im Stapel speichern", style = "font-size:10px; line-height:0.8;"),
+                  3,
+                  div ("im Stapel speichern", style = "font-size:10px; line-height:0.8;"),
                   actionButton (
                     "Button_SaveCalculationToStack",
                     label = "Speichern",
@@ -2364,7 +2463,24 @@ www.iwu.de
                     width = '100%',
                     #style =   "height: 30px"
                   ),
+                  style = "padding: 0 !important" 
                 ), # End column
+                
+                column (
+                  3,
+                  div ("Speichern als", style = "font-size:10px; line-height:0.8;"),
+                  textInput (
+                    inputId = "TextInput_SaveAs", 
+                    label = NULL,
+                    value = "-",
+                    #width = '100%'
+                  ),
+                  style = "padding: 0 !important" 
+                  
+
+                ), # End column
+                
+                
                 
                 column (
                   6,
@@ -2406,7 +2522,7 @@ www.iwu.de
               #     width = '100%'
               #   ),
               # ), # End column
-              
+             
               #style =   "height: 15px"
               #style =   "height: 30px; border: 1px dotted lightgrey; background-color: grey"
               
@@ -2511,11 +2627,41 @@ www.iwu.de
                       
                       fluidRow (
                         
+                        #br (),
+                        
+                        # Header 
+                        column ( 
+                          12,
+                          strong ("Ausgangsdatensätze - deutsche Wohngebäudetypologie - Beispielgebäude"),
+                          style = "background-color: white; color: black; text-align: center;"
+                          #style = "background-color: grey; color: white;",
+                          
+                        ), # End header column
+                        
+                        
+                      ), # End fluidRow
+
+                      fluidRow (
+                        
+                        style = "
+                              color: grey;
+                              line-height: 2.0; 
+                              text-align: center;",
+                        
+                        #"Deutsche Wohngebäudetypologie - Beispielgebäude - ",
+                        "Hüllflächen auf Basis geometrischer Merkmale geschätzt - ",
+                        "Zustand: nicht modernisiert"
+                        
+                      ), # End fluidRow
+                      
+                      fluidRow (
+                        
                         style = Style_Height_Dashboard_MainPanel,  
                         
                         column (
                           12,
                           
+
                           
                           fluidRow (
                             column (
@@ -3037,6 +3183,28 @@ www.iwu.de
                       
                       "Gebäude", 
                       
+                      #######################################################################X
+                      #### § Energieprofil Gebäude  -----
+                      
+                      
+                      fluidRow (
+                        
+                        # Header 
+                        column ( 
+                          12,
+                          strong ("Energieprofil Gebäude"),
+                          style = "background-color: white; color: black; text-align: center;"
+                          #style = "background-color: grey; color: white;"
+                          #style = "background-color: orange",
+                          
+                        ), # End header column
+                      
+                        br (),
+                        br (),
+                        
+                      ), # End fluidRow
+                      
+                      
                       fluidRow (
                         
                         style = Style_Height_Dashboard_MainPanel,  
@@ -3045,7 +3213,7 @@ www.iwu.de
                           12,
                       
                       
-                      br (),
+                      #br (),
                       
                       # 
                       # fluidRow (
@@ -3072,25 +3240,6 @@ www.iwu.de
                       #   textOutput("PixelHeight_MainPanel_New")
                       # ),
 
-                      #######################################################################X
-                      #### § Energieprofil Gebäude  -----
-                      
-                      
-                      fluidRow (
-                        
-                        # Header 
-                        column ( 
-                          12,
-                          strong ("Energieprofil Gebäude"),
-                          style = "background-color: orange",
-                          
-                        ), # End header column
-                        
-                        br (),
-                        br (),
-                        
-                      ), # End fluidRow
-                        
                       
 
                       #######################################################################X
@@ -3098,6 +3247,8 @@ www.iwu.de
                       
                       
                       fluidRow (
+                        
+                        style = "background-color:white;",
                         
                         # Header 
                         column ( 
@@ -3201,6 +3352,8 @@ www.iwu.de
                       
                       
                       fluidRow (
+                        
+                        style = "background-color:white;",
                         
                         # Header 
                         column ( 
@@ -3374,6 +3527,9 @@ www.iwu.de
 
 
                       fluidRow (
+                        
+                        style = "background-color:white;",
+                        
                         
                         column (12,
                                 strong ("Dach"),
@@ -3717,7 +3873,7 @@ www.iwu.de
                       ),  # End fluidRow input roof
                       
 
-                      br (),
+                    #  br (),
 
 
                       
@@ -3733,6 +3889,8 @@ www.iwu.de
                       
                       
                       fluidRow (
+                        
+                        style = "background-color:white;",
                         
                         column (12,
                                 strong ("oberste Geschossdecke"),
@@ -4076,9 +4234,9 @@ www.iwu.de
                       ),  # End fluidRow input Ceiling
                       
                       
-                      br (),
-                      
-                      br (),
+                      # br (),
+                      # 
+                      # br (),
                       
                       
                       
@@ -4096,6 +4254,8 @@ www.iwu.de
                       
                       fluidRow (
 
+                        style = "background-color:white;",
+                        
                         column (12,
                                 strong ("Außenwand"),
                                 style = "background-color: lightblue"
@@ -4445,9 +4605,9 @@ www.iwu.de
                       
 
                       
-                      br (),
-
-                      br (),
+                      # br (),
+                      # 
+                      # br (),
                       
                       
                       
@@ -4457,6 +4617,8 @@ www.iwu.de
                       ##### > Fußboden  -----
                       
                       fluidRow (
+                        
+                        style = "background-color:white;",
                         
                         column (12,
                                 strong ("Fußboden"),
@@ -4797,9 +4959,9 @@ www.iwu.de
                       
                       
                       
-                      br (),
-                      
-                      br (),
+                      # br (),
+                      # 
+                      # br (),
                       
                       
                       
@@ -4807,6 +4969,10 @@ www.iwu.de
                       ##### > Fenster  -----
 
                       fluidRow (
+                        
+                        style = "background-color:white;",
+                        
+                        
                         column (12,
                                 strong ("Fenster"),
                                 style = "background-color: lightblue"
@@ -4815,14 +4981,15 @@ www.iwu.de
                         
                       ),
                       
-                      br (),
-                      
+
                     
 
                       
                       ### Main window type 
                    
                       fluidRow (
+
+                        style = "background-color:white;",
                         
                         br (),
 
@@ -4945,21 +5112,23 @@ www.iwu.de
                       ), # End fluidRow
                       
                       
-                      br (),
-                      
 
                       ### Further window type 
 
                       conditionalPanel (
                         condition = "input.Show_WindowType2",
                         
+                        div (".", style = "line-height:0.2;"),
+                        
                         fluidRow (
                           
+                          style = "background-color:white;",
                           
+                          br (),
                           
                           column (
                             3,
-                            
+
                             strong ("Weiterer Fenstertyp"),
                             
                             br (),
@@ -5196,11 +5365,15 @@ www.iwu.de
                       
                       fluidRow (
                         
+                        style = "background-color:white;",
+                        
+                        
                         # Header 
                         column ( 
                           12,
                           strong ("Gebäudehülle - zusätzliche Eingaben durch Experten"),
-                          style = "background-color: orange",
+                          style = "background-color: grey; color: white;"
+                          #style = "background-color: orange",
                           
                         ), # End header column
                         
@@ -5215,7 +5388,9 @@ www.iwu.de
                       
                       
                       fluidRow (
-
+                        
+                        style = "background-color:white;",
+                        
                         ## Header thermal bridging
                         
                           column (
@@ -5510,6 +5685,7 @@ www.iwu.de
                       
                       fluidRow (
                         
+                        style = "background-color:white;",
                         
                         # Header 
                         column ( 
@@ -5815,7 +5991,8 @@ www.iwu.de
                       
                         
                       
-                    ), 
+                    ), # End tabPanel
+                    
   
                     #######################################################################X
                     #### tabPanel "Wärmeversorgung" - Input building data -----
@@ -5824,477 +6001,1602 @@ www.iwu.de
                       
                       "Wärmeversorgung", 
                       
-                      # style = "background-color: 'lightgrey'",
-                      # #style = "background-color: rgb(240, 240, 240)"
+                      #######################################################################X
+                      #### § Energieprofil Wärmeversorgung  -----
                       
-                      br (),
                       
-                      box (
+                      fluidRow (
                         
-                        # title =  strong ("Wärmeerzeugung Zentralheizung - Gebäude oder Wohnung"),
-                        status = "info",
-                        solidHeader = TRUE, 
-                        width = 12,
-                        background = NULL,
+                        #br (),
                         
-                        fluidRow (
+                        # Header 
+                        column ( 
+                          12,
+                          strong ("Energieprofil Wärmeversorgung"),
+                          style = "background-color: white; color: black; text-align: center;"
+                          #style = "background-color: grey; color: white;",
+                          #style = "background-color: orange",
                           
-                          box (
-                            title =  strong ("Wärmeerzeugung Zentralheizung - Gebäude oder Wohnung"),
-                            status = "primary",
-                            solidHeader = TRUE, 
-                            width = 10,
-                            height = 40,
-                            collapsible = FALSE, 
-                            collapsed = FALSE
-                          ),
-                          
-                          box (
-                            
-                            title =  strong ("Hzg", style = "font-size:12px;"),
-                            status = "primary",
-                            solidHeader = TRUE, 
-                            width = 1,
-                            height = 40,
-                            collapsible = FALSE, 
-                            collapsed = TRUE
-                          ),
-                          
-                          box (
-                            
-                            title =  strong ("WW", style = "font-size:12px;"),
-                            status = "primary",
-                            solidHeader = TRUE, 
-                            width = 1,
-                            height = 40,
-                            collapsible = FALSE, 
-                            collapsed = TRUE
-                          ),
-                          
-                        ),
+                        ), # End header column
                         
+                        br (),
+                        br (),
+                        
+                      ), # End fluidRow
+                      
+                      
+                      
+                      
+                      fluidRow (
+
+                        style = Style_Height_Dashboard_MainPanel,  
+                        
+                        # style = "background-color: 'lightgrey'",
+                        # #style = "background-color: rgb(240, 240, 240)"
+                        
+                        #br (),
+
                         
                         #######################################################################X
-                        ##### > Kessel (Gas oder Öl)  -----
-
-                        fluidRow (
+                        ##### § Centralisation of heat generation  -----
+                        
+                        
+                        
+                        box (
                           
-                          box (
-                            
-                            #title = strong ("Kessel (Gas oder Öl)", style = 'font-size:14px;'),
-                            #title = strong ("Kessel (Gas oder Öl)"),
+                          status = "info",
+                          solidHeader = TRUE, 
+                          width = 12,
+                          background = NULL,
+                          
 
-                            checkboxInput (
-                              inputId = "Indicator_Boiler_OilGas",
-                              label = strong ("Kessel (Gas oder Öl)", style = 'font-size:18px;'), 
-                              value = FALSE, 
-                              width = NULL
-                            ),
+                          # fluidRow (
+                          #   
+                          #   box (
+                          #     title =  strong ("Zentralisierungsgrad"),
+                          #     status = "primary",
+                          #     solidHeader = TRUE, 
+                          #     width = 12,
+                          #     height = 40,
+                          #     collapsible = FALSE, 
+                          #     collapsed = FALSE
+                          #   ), # End box
+                          # 
+                          # ), # End fluid row 
 
-                            status = "primary",
-                            footer = NULL, 
-                            solidHeader = FALSE, 
-                            background = NULL, 
-                            width = 4, 
-                            height = 150,
-                            collapsible = FALSE, 
-                            collapsed = FALSE
+                          fluidRow (
                             
-                          ), # End box
+                            # style = "
+                            #   #margin-top: -20px; 
+                            #   #margin-left: 8px; 
+                            #   margin-bottom: -20px; 
+                            #   padding:0 !important;
+                            # ",
+                            
+                            
+                            box (
+                              
+                              div (
+                                strong ("Zentralisierungsgrad"),
+                                style = "margin-top: -8px; margin-left: 0px;"
+                                      ),
+                              
+                              title =  NULL,
+                              footer = NULL,
+                              status = NULL,
+                              solidHeader = TRUE, 
+                              background = "light-blue", 
+                              width = 12,
+                              height = 24,
+                              collapsible = FALSE, 
+                              collapsed = FALSE,
+                              
+                            ), # End box
+                            
+                          ), # End fluid row 
                           
                           
-                          box (
-                            
-                            #title = strong ("Brennstoff", style = 'font-size:14px;'),
-                            #title = "Brennstoff",
+                          # fluidRow (
+                          #   
+                          #   box (
+                          #     
+                          #     #strong ("Zentralisierungsgrad"),
+                          #     
+                          #     title =  strong ("Zentralisierungsgrad", style = "font-size:14px; line-height:0.5"),
+                          #     footer = NULL,
+                          #     status = NULL,
+                          #     solidHeader = TRUE, 
+                          #     background = "light-blue", 
+                          #     width = 12,
+                          #     height = 35,
+                          #     collapsible = FALSE, 
+                          #     collapsed = FALSE,
+                          #     
+                          # 
+                          #                                   
+                          #   ), # End box
+                          #   
+                          # ), # End fluid row 
+                          
 
-                            radioButtons (
-                              inputId = "Code_Type_EC_Boiler_OilGas",
-                              label = "Brennstoff", 
-                              choiceNames = c (
-                                "Erdgas",
-                                "Flüssiggas",
-                                "Heizöl",
-                                "weiß nicht / k. A."
+                          fluidRow (
+                            
+                            style = "
+                              margin-top: -50px; 
+                              margin-left: 8px; 
+                              margin-bottom: -15px; 
+                              padding:0 !important;
+                            ",
+                            
+                            # box (
+                            #   
+                            #   status = "primary",
+                            #   footer = NULL, 
+                            #   solidHeader = FALSE, 
+                            #   background = NULL, 
+                            #   width = 12, 
+                            #   height = 50,
+                            #   collapsible = FALSE, 
+                            #   collapsed = FALSE,
+                              
+                              radioButtons (
+                                inputId = "Code_CentralisationType_SysHG",
+                                label = "Standort Wärmeerzeugung überwiegend", 
+                                choiceNames = c (
+                                  "Quartier/Stadt",
+                                  "Block",
+                                  "Gebäude",
+                                  "Wohnung",
+                                  "Raum",
+                                  "k.A."
                                 ),
-                              choiceValues =  c (
-                                "Gas",
-                                "Gas_Fluid",
-                                "Oil",
-                                "_NA_"
-                              ),
-                              selected = "_NA_",
-                              width = NULL,
-                              inline = FALSE
-                            ),
+                                choiceValues =  c (
+                                  "District",
+                                  "Block",
+                                  "Building",
+                                  "Dwelling",
+                                  "Room",
+                                  "_NA_"
+                                ),
+                                selected = "_NA_",
+                                width = NULL,
+                                inline = TRUE
+                              ) # End radioButtons
+                              
+                            # ), # End box
                             
-                            status = "primary",
-                            footer = NULL, 
-                            solidHeader = FALSE, 
-                            background = NULL, 
-                            width = 3, 
-                            height = 150,
-                            collapsible = FALSE, 
-                            collapsed = FALSE
-                            
-                          ), # End box
+                          ), # End fluidRow
                           
-                          
-                          
-                          box (
-                            
-                            #title = strong ("Kesseltyp", style = 'font-size:14px; line-height:0.5;'),
-                            #title = strong ("Kesseltyp", style = 'color:blue; line-height:1'),
-                            
-                            radioButtons (
-                              inputId = "Code_BoilerType_OilGas",
-                              label = "Kesseltyp", 
-                              choiceNames = c (
-                                "Konstanttemperatur",
-                                "Niedertemperatur",
-                                "Brennwert",
-                                "weiß nicht / k. A."
-                              ),
-                              choiceValues =  c (
-                                "B_NC_CT",
-                                "B_NC_LT",
-                                "B_C",
-                                "_NA_"
-                              ),
-                              selected = NULL,
-                              width = NULL,
-                              inline = FALSE
-                            ),
-                            
-                            status = "primary",
-                            footer = NULL, 
-                            solidHeader = FALSE, 
-                            background = NULL, 
-                            width = 3, 
-                            height = 150,
-                            collapsible = FALSE, 
-                            collapsed = FALSE
-                            
-                          ), # End box
-                          
-                          
-                          box (
-                            
-                            #title = "Hzg",
-                            
-                            checkboxInput (
-                              inputId = "Indicator_Boiler_OilGas_SysH",
-                              label = NULL, 
-                              value = FALSE, 
-                              width = NULL
-                            ),
-                            
-                            status = "primary",
-                            footer = NULL, 
-                            solidHeader = FALSE, 
-                            background = NULL, 
-                            width = 1, 
-                            height = 150,
-                            collapsible = FALSE, 
-                            collapsed = FALSE
-                            
-                          ), # End box
-                          
-                          box (
-                            
-                            #title = "WW",
-                            
-                            checkboxInput (
-                              inputId = "Indicator_Boiler_OilGas_SysW",
-                              label = NULL, 
-                              value = FALSE, 
-                              width = NULL
-                            ),
-                            
-                            status = "primary",
-                            footer = NULL, 
-                            solidHeader = FALSE, 
-                            background = NULL, 
-                            width = 1, 
-                            height = 150,
-                            collapsible = FALSE, 
-                            collapsed = FALSE
-                            
-                          ), # End box
-                          
-                          
-                          
-                          
-                        ), # End fluidRow "Kessel (Gas oder Öl)"
+                        ), # End box 
+                        
+                        
                         
                         
                         #######################################################################X
-                        ##### > Holzkessel / Feststoffkessel  -----
-                        
-                        fluidRow (
-                          
-                          box (
-                            
-                            #title = strong ("Holzkessel / Feststoffkessel"),
-                            
-                            checkboxInput (
-                              inputId = "Indicator_Boiler_Solid",
-                              label = strong ("Holzkessel / Feststoffkessel", style = 'font-size:18px;'), 
-                              value = FALSE, 
-                              width = NULL
-                            ),
-                            
-                            status = "primary",
-                            footer = NULL, 
-                            solidHeader = FALSE, 
-                            background = NULL, 
-                            width = 4, 
-                            height = 100,
-                            collapsible = FALSE, 
-                            collapsed = FALSE
-                            
-                          ), # End box
-                          
-                          
-                          box (
-                            
-                            #title = "Brennstoff",
-                            
-                            radioButtons (
-                              inputId = "Code_Type_EC_Boiler_Solid",
-                              label = "Brennstoff", 
-                              
-                              choices = c (  
-                                "Scheitholz"	      =	"Bio_FW",
-                                "Holzpellets"	      =	"Bio_WP",
-                                "Holzhackschnitzel"	=	"Bio_WC",
-                                "Kohle"	            =	"Coal",
-                                "andere"	          =	"Other",
-                                "weiß nicht / k.A."	=	"_NA_"
-                              ),
-
-                              selected = "_NA_",
-                              width = NULL,
-                              inline = TRUE
-                            ),
-                            
-                            status = "primary",
-                            footer = NULL, 
-                            solidHeader = FALSE, 
-                            background = NULL, 
-                            width = 6, 
-                            height = 100,
-                            collapsible = FALSE, 
-                            collapsed = FALSE
-                            
-                          ), # End box
-                          
-                          
-                          
-                          # box (
-                          #   
-                          #   title = "",
-                          # 
-                          #   status = "primary",
-                          #   footer = NULL, 
-                          #   solidHeader = FALSE, 
-                          #   background = NULL, 
-                          #   width = 3, 
-                          #   height = NULL,
-                          #   collapsible = FALSE, 
-                          #   collapsed = FALSE
-                          #   
-                          # ), # End box
-                          
-                          
-                          box (
-                            
-                            #title = "Hzg",
-                            
-                            checkboxInput (
-                              inputId = "Indicator_Boiler_Solid_SysH",
-                              label = NULL, 
-                              value = FALSE, 
-                              width = NULL
-                            ),
-                            
-                            status = "primary",
-                            footer = NULL, 
-                            solidHeader = FALSE, 
-                            background = NULL, 
-                            width = 1, 
-                            height = 100,
-                            collapsible = FALSE, 
-                            collapsed = FALSE
-                            
-                          ), # End box
-                          
-                          box (
-                            
-                            #title = "WW",
-                            
-                            checkboxInput (
-                              inputId = "Indicator_Boiler_Solid_SysW",
-                              label = NULL, 
-                              value = FALSE, 
-                              width = NULL
-                            ),
-                            
-                            status = "primary",
-                            footer = NULL, 
-                            solidHeader = FALSE, 
-                            background = NULL, 
-                            width = 1, 
-                            height = 100,
-                            collapsible = FALSE, 
-                            collapsed = FALSE
-                            
-                          ) # End box
-                          
-                        ), # End fluidRow "Holzkessel / Feststoffkessel"
-
-                        
-                        #######################################################################X
-                        ##### > Elektro-Wärmepumpe  -----
-                        
-                        fluidRow (
-                          
-                          box (
-                            
-                            title = NULL, #strong ("Elektro-Wärmepumpe"),
-                            
-                            # column (
-                            #   12,
-                              checkboxInput (
-                                inputId = "Indicator_Heatpump",
-                                label = strong ("Elektro-Wärmepumpe", style = 'font-size:18px;'), 
-                                value = FALSE, 
-                                width = NULL
-                              ),
-                            #   style = "height: 15px"
-                            #   #style = ColumnStyle_Checkbox
-                            # ),
-                            
-                            status = "primary",
-                            footer = NULL, 
-                            solidHeader = FALSE, 
-                            background = NULL, 
-                            width = 4, 
-                            height = 100,
-                            collapsible = FALSE, 
-                            collapsed = FALSE
-                            
-                          ), # End box
-                          
-                          
-                          box (
-                            
-                            title = NULL, #"Wärmequelle",
-                            
-                            radioButtons (
-                              inputId = "Code_HeatpumpType",
-                              label = "Wärmequelle", 
-                              
-                              choices = c (
-                                "Außenluft"	            =	"HP_Air",
-                                "Erdreich/Grundwasser"	=	"HP_Ground",
-                                "Abluft"	              =	"HP_ExhAir",
-                                "Kellerluft"	          =	"HP_Cellar",
-                                "weiß nicht / k.A."     =	"_NA_"
-                              ),
-                              
-                              selected = "_NA_",
-                              width = NULL,
-                              inline = TRUE
-                            ),
-                            
-                            status = "primary",
-                            footer = NULL, 
-                            solidHeader = FALSE, 
-                            background = NULL, 
-                            width = 6, 
-                            height = 100,
-                            collapsible = FALSE, 
-                            collapsed = FALSE
-                            
-                          ), # End box
-                          
-                          
-                          # 
-                          # box (
-                          #   
-                          #   title = "",
-                          # 
-                          #   status = "primary",
-                          #   footer = NULL, 
-                          #   solidHeader = FALSE, 
-                          #   background = NULL, 
-                          #   width = 4, 
-                          #   height = NULL,
-                          #   collapsible = FALSE, 
-                          #   collapsed = FALSE
-                          #   
-                          # ), # End box
-                          
-                          
-                          box (
-                            
-                            span (
-
-                             # title = strong ("Hzg", style = "font-size:14px;"),
-                              
-                              checkboxInput (
-                                inputId = "Indicator_Heatpump_SysH",
-                                label = NULL, 
-                                value = FALSE, 
-                                width = NULL
-                              ),
-                            ),
-                            
-                            status = "primary",
-                            footer = NULL, 
-                            solidHeader = FALSE, 
-                            background = NULL, 
-                            width = 1, 
-                            height = 100,
-                            collapsible = FALSE, 
-                            collapsed = FALSE
-                            
-                          ), # End box
-                          
-                          box (
-                            
-                            #title = strong ("WW", style = "font-size:14px;"),
-                            #title = "WW",
-                            
-                            checkboxInput (
-                              inputId = "Indicator_Heatpump_SysW",
-                              label = NULL, 
-                              value = FALSE, 
-                              width = NULL
-                            ),
-                            
-                            status = "primary",
-                            footer = NULL, 
-                            solidHeader = FALSE, 
-                            background = NULL, 
-                            width = 1, 
-                            height = 100,
-                            collapsible = FALSE, 
-                            collapsed = FALSE
-                            
-                          ) # End box
-                          
-                          
-                          
-                          
-                        ) # End fluidRow "Wärmepumpe"
+                        ##### § Central heating heat generators "Wärmeerzeugung Zentralheizung"  -----
                         
                         
                         
                         
                                                 
-                      ) # End box central heating system
+                        box (
+                          
+                          ## 
+                          
+                          status = "info",
+                          solidHeader = TRUE, 
+                          width = 12,
+                          background = NULL,
+                          
+                          #style = "padding: 0 !important;",
+                          
+                          fluidRow (
+                            
+                            
+                            box (
+                              
+                              div (
+                                strong ("Wärmeerzeugung Zentralheizung - Gebäude oder Wohnung"),
+                                style = "margin-top: -8px; margin-left: 0px;"
+                              ),
+                              
+                              title =  NULL,
+                              footer = NULL,
+                              status = NULL,
+                              solidHeader = TRUE, 
+                              background = "light-blue", 
+                              width = 10,
+                              height = 24,
+                              collapsible = FALSE, 
+                              collapsed = FALSE,
+                              
+                            ), # End box
+                            
+                            box (
+                              
+                              div (
+                                strong ("Hzg"),
+                                style = "margin-top: -8px; margin-left: 0px;"
+                              ),
+                              
+                              title =  NULL,
+                              footer = NULL,
+                              status = NULL,
+                              solidHeader = TRUE, 
+                              background = "light-blue", 
+                              width = 1,
+                              height = 24,
+                              collapsible = FALSE, 
+                              collapsed = FALSE,
+                              
+                            ), # End box
+                            
+                            box (
+                              
+                              div (
+                                strong ("WW"),
+                                style = "margin-top: -8px; margin-left: 0px;"
+                              ),
+                              
+                              title =  NULL,
+                              footer = NULL,
+                              status = NULL,
+                              solidHeader = TRUE, 
+                              background = "light-blue", 
+                              width = 1,
+                              height = 24,
+                              collapsible = FALSE, 
+                              collapsed = FALSE,
+                              
+                            ), # End box
+                            
+                            
+                          ), # End fluidRow
+                          
+                          
+                          
+                          # fluidRow (
+                          #   
+                          #   box (
+                          #     title =  strong ("Wärmeerzeugung Zentralheizung - Gebäude oder Wohnung"),
+                          #     status = "primary",
+                          #     solidHeader = TRUE, 
+                          #     width = 10,
+                          #     height = 40,
+                          #     collapsible = FALSE, 
+                          #     collapsed = FALSE
+                          #   ),
+                          #   
+                          #   box (
+                          #     
+                          #     title =  strong ("Hzg", style = "font-size:12px;"),
+                          #     status = "primary",
+                          #     solidHeader = TRUE, 
+                          #     width = 1,
+                          #     height = 40,
+                          #     collapsible = FALSE, 
+                          #     collapsed = TRUE
+                          #   ),
+                          #   
+                          #   box (
+                          #     
+                          #     title =  strong ("WW", style = "font-size:12px;"),
+                          #     status = "primary",
+                          #     solidHeader = TRUE, 
+                          #     width = 1,
+                          #     height = 40,
+                          #     collapsible = FALSE, 
+                          #     collapsed = TRUE
+                          #   ),
+                          #   
+                          # ),
+                          
+                          
+                          #######################################################################X
+                          ###### > Kessel (Gas oder Öl)  -----
+                          
+                          fluidRow (
+                            
+                            box (
+                              
+                              #title = strong ("Kessel (Gas oder Öl)", style = 'font-size:14px;'),
+                              #title = strong ("Kessel (Gas oder Öl)"),
+                              
+                              checkboxInput (
+                                inputId = "Indicator_Boiler_OilGas",
+                                label = strong ("Kessel (Gas oder Öl)", style = 'font-size:18px; line-height:1.1;'), 
+                                value = FALSE, 
+                                width = NULL
+                              ),
+                              
+                              status = "primary",
+                              footer = NULL, 
+                              solidHeader = FALSE, 
+                              background = NULL, 
+                              width = 4, 
+                              height = 150,
+                              collapsible = FALSE, 
+                              collapsed = FALSE
+                              
+                            ), # End box
+                            
+                            
+                            box (
+                              
+                              #title = strong ("Brennstoff", style = 'font-size:14px;'),
+                              #title = "Brennstoff",
+                              
+                              radioButtons (
+                                inputId = "Code_Type_EC_Boiler_OilGas",
+                                label = "Brennstoff", 
+                                choiceNames = c (
+                                  "Erdgas",
+                                  "Flüssiggas",
+                                  "Heizöl",
+                                  "weiß nicht / k. A."
+                                ),
+                                choiceValues =  c (
+                                  "Gas",
+                                  "Gas_Fluid",
+                                  "Oil",
+                                  "_NA_"
+                                ),
+                                selected = "_NA_",
+                                width = NULL,
+                                inline = FALSE
+                              ),
+                              
+                              status = "primary",
+                              footer = NULL, 
+                              solidHeader = FALSE, 
+                              background = NULL, 
+                              width = 3, 
+                              height = 150,
+                              collapsible = FALSE, 
+                              collapsed = FALSE
+                              
+                            ), # End box
+                            
+                            
+                            
+                            box (
+                              
+                              #title = strong ("Kesseltyp", style = 'font-size:14px; line-height:0.5;'),
+                              #title = strong ("Kesseltyp", style = 'color:blue; line-height:1'),
+                              
+                              radioButtons (
+                                inputId = "Code_BoilerType_OilGas",
+                                label = "Kesseltyp", 
+                                choiceNames = c (
+                                  "Konstanttemperatur",
+                                  "Niedertemperatur",
+                                  "Brennwert",
+                                  "weiß nicht / k. A."
+                                ),
+                                choiceValues =  c (
+                                  "B_NC_CT",
+                                  "B_NC_LT",
+                                  "B_C",
+                                  "_NA_"
+                                ),
+                                selected = NULL,
+                                width = NULL,
+                                inline = FALSE
+                              ),
+                              
+                              status = "primary",
+                              footer = NULL, 
+                              solidHeader = FALSE, 
+                              background = NULL, 
+                              width = 3, 
+                              height = 150,
+                              collapsible = FALSE, 
+                              collapsed = FALSE
+                              
+                            ), # End box
+                            
+                            
+                            box (
+                              
+                              #title = "Hzg",
+                              
+                              checkboxInput (
+                                inputId = "Indicator_Boiler_OilGas_SysH",
+                                label = NULL, 
+                                value = FALSE, 
+                                width = NULL
+                              ),
+                              
+                              status = "primary",
+                              footer = NULL, 
+                              solidHeader = FALSE, 
+                              background = NULL, 
+                              width = 1, 
+                              height = 150,
+                              collapsible = FALSE, 
+                              collapsed = FALSE
+                              
+                            ), # End box
+                            
+                            box (
+                              
+                              #title = "WW",
+                              
+                              checkboxInput (
+                                inputId = "Indicator_Boiler_OilGas_SysW",
+                                label = NULL, 
+                                value = FALSE, 
+                                width = NULL
+                              ),
+                              
+                              status = "primary",
+                              footer = NULL, 
+                              solidHeader = FALSE, 
+                              background = NULL, 
+                              width = 1, 
+                              height = 150,
+                              collapsible = FALSE, 
+                              collapsed = FALSE
+                              
+                            ), # End box
+                            
+                            
+                            
+                            
+                          ), # End fluidRow "Kessel (Gas oder Öl)"
+                          
+                          
+                          #######################################################################X
+                          ###### > Holzkessel / Feststoffkessel  -----
+                          
+                          fluidRow (
+                            
+                            box (
+                              
+                              #title = strong ("Holzkessel / Feststoffkessel"),
+                              
+                              checkboxInput (
+                                inputId = "Indicator_Boiler_Solid",
+                                label = strong ("Holzkessel / Feststoffkessel", 
+                                                style = 'font-size:18px; line-height:1.1;'), 
+                                value = FALSE, 
+                                width = NULL
+                              ),
+                              
+                              status = "primary",
+                              footer = NULL, 
+                              solidHeader = FALSE, 
+                              background = NULL, 
+                              width = 4, 
+                              height = 100,
+                              collapsible = FALSE, 
+                              collapsed = FALSE
+                              
+                            ), # End box
+                            
+                            
+                            box (
+                              
+                              #title = "Brennstoff",
+                              
+                              radioButtons (
+                                inputId = "Code_Type_EC_Boiler_Solid",
+                                label = "Brennstoff", 
+                                
+                                choices = c (  
+                                  "Scheitholz"	      =	"Bio_FW",
+                                  "Holzpellets"	      =	"Bio_WP",
+                                  "Holzhackschnitzel"	=	"Bio_WC",
+                                  "Kohle"	            =	"Coal",
+                                  "andere"	          =	"Other",
+                                  "weiß nicht / k.A."	=	"_NA_"
+                                ),
+                                
+                                selected = "_NA_",
+                                width = NULL,
+                                inline = TRUE
+                              ),
+                              
+                              status = "primary",
+                              footer = NULL, 
+                              solidHeader = FALSE, 
+                              background = NULL, 
+                              width = 6, 
+                              height = 100,
+                              collapsible = FALSE, 
+                              collapsed = FALSE
+                              
+                            ), # End box
+                            
+                            
+                            
+                            # box (
+                            #   
+                            #   title = "",
+                            # 
+                            #   status = "primary",
+                            #   footer = NULL, 
+                            #   solidHeader = FALSE, 
+                            #   background = NULL, 
+                            #   width = 3, 
+                            #   height = NULL,
+                            #   collapsible = FALSE, 
+                            #   collapsed = FALSE
+                            #   
+                            # ), # End box
+                            
+                            
+                            box (
+                              
+                              #title = "Hzg",
+                              
+                              checkboxInput (
+                                inputId = "Indicator_Boiler_Solid_SysH",
+                                label = NULL, 
+                                value = FALSE, 
+                                width = NULL
+                              ),
+                              
+                              status = "primary",
+                              footer = NULL, 
+                              solidHeader = FALSE, 
+                              background = NULL, 
+                              width = 1, 
+                              height = 100,
+                              collapsible = FALSE, 
+                              collapsed = FALSE
+                              
+                            ), # End box
+                            
+                            box (
+                              
+                              #title = "WW",
+                              
+                              checkboxInput (
+                                inputId = "Indicator_Boiler_Solid_SysW",
+                                label = NULL, 
+                                value = FALSE, 
+                                width = NULL
+                              ),
+                              
+                              status = "primary",
+                              footer = NULL, 
+                              solidHeader = FALSE, 
+                              background = NULL, 
+                              width = 1, 
+                              height = 100,
+                              collapsible = FALSE, 
+                              collapsed = FALSE
+                              
+                            ) # End box
+                            
+                          ), # End fluidRow "Holzkessel / Feststoffkessel"
+                          
+                          
+                          #######################################################################X
+                          ###### > Elektro-Wärmepumpe  -----
+                          
+                          fluidRow (
+                            
+                            box (
+                              
+                              title = NULL, #strong ("Elektro-Wärmepumpe"),
+                              
+                              # column (
+                              #   12,
+                              checkboxInput (
+                                inputId = "Indicator_Heatpump",
+                                label = strong ("Elektro-Wärmepumpe", 
+                                                style = 'font-size:18px; line-height:1.1;'), 
+                                value = FALSE, 
+                                width = NULL
+                              ),
+                              #   style = "height: 15px"
+                              #   #style = ColumnStyle_Checkbox
+                              # ),
+                              
+                              status = "primary",
+                              footer = NULL, 
+                              solidHeader = FALSE, 
+                              background = NULL, 
+                              width = 4, 
+                              height = 100,
+                              collapsible = FALSE, 
+                              collapsed = FALSE
+                              
+                            ), # End box
+                            
+                            
+                            box (
+                              
+                              title = NULL, #"Wärmequelle",
+                              
+                              radioButtons (
+                                inputId = "Code_HeatpumpType",
+                                label = "Wärmequelle", 
+                                
+                                choices = c (
+                                  "Außenluft"	            =	"HP_Air",
+                                  "Erdreich/Grundwasser"	=	"HP_Ground",
+                                  "Abluft"	              =	"HP_ExhAir",
+                                  "Kellerluft"	          =	"HP_Cellar",
+                                  "weiß nicht / k.A."     =	"_NA_"
+                                ),
+                                
+                                selected = "_NA_",
+                                width = NULL,
+                                inline = TRUE
+                              ),
+                              
+                              status = "primary",
+                              footer = NULL, 
+                              solidHeader = FALSE, 
+                              background = NULL, 
+                              width = 6, 
+                              height = 100,
+                              collapsible = FALSE, 
+                              collapsed = FALSE
+                              
+                            ), # End box
+                            
+                            
+                            # 
+                            # box (
+                            #   
+                            #   title = "",
+                            # 
+                            #   status = "primary",
+                            #   footer = NULL, 
+                            #   solidHeader = FALSE, 
+                            #   background = NULL, 
+                            #   width = 4, 
+                            #   height = NULL,
+                            #   collapsible = FALSE, 
+                            #   collapsed = FALSE
+                            #   
+                            # ), # End box
+                            
+                            
+                            box (
+                              
+                              span (
+                                
+                                # title = strong ("Hzg", style = "font-size:14px;"),
+                                
+                                checkboxInput (
+                                  inputId = "Indicator_Heatpump_SysH",
+                                  label = NULL, 
+                                  value = FALSE, 
+                                  width = NULL
+                                ),
+                              ),
+                              
+                              status = "primary",
+                              footer = NULL, 
+                              solidHeader = FALSE, 
+                              background = NULL, 
+                              width = 1, 
+                              height = 100,
+                              collapsible = FALSE, 
+                              collapsed = FALSE
+                              
+                            ), # End box
+                            
+                            box (
+                              
+                              #title = strong ("WW", style = "font-size:14px;"),
+                              #title = "WW",
+                              
+                              checkboxInput (
+                                inputId = "Indicator_Heatpump_SysW",
+                                label = NULL, 
+                                value = FALSE, 
+                                width = NULL
+                              ),
+                              
+                              status = "primary",
+                              footer = NULL, 
+                              solidHeader = FALSE, 
+                              background = NULL, 
+                              width = 1, 
+                              height = 100,
+                              collapsible = FALSE, 
+                              collapsed = FALSE
+                              
+                            ) # End box
+                            
+                            
+                            
+                            
+                          ), # End fluidRow "Wärmepumpe"
+                          
+                          
+                          
+                          #######################################################################X
+                          ###### > Direkt-elektrisch zentral  -----
+                          
+                          fluidRow (
+                            
+                            box (
+                              
+                              title = NULL,
+                              
+                              # column (
+                              #   12,
+                              checkboxInput (
+                                inputId = "Indicator_ElectricCentral",
+                                label = strong ("direkt-elektrisch zentral (ein System für mehrere Räume)", 
+                                                style = 'font-size:18px; line-height:1.1;'), 
+                                value = FALSE, 
+                                width = NULL
+                              ),
+                              
+                              status = "primary",
+                              footer = NULL, 
+                              solidHeader = FALSE, 
+                              background = NULL, 
+                              width = 10, 
+                              height = 50,
+                              collapsible = FALSE, 
+                              collapsed = FALSE
+                              
+                            ), # End box
+                            
+                            box (
+                              
+                              span (
+                                
+                                # title = strong ("Hzg", style = "font-size:14px;"),
+                                
+                                checkboxInput (
+                                  inputId = "Indicator_ElectricCentral_SysH",
+                                  label = NULL, 
+                                  value = FALSE, 
+                                  width = NULL
+                                ),
+                              ),
+                              
+                              status = "primary",
+                              footer = NULL, 
+                              solidHeader = FALSE, 
+                              background = NULL, 
+                              width = 1, 
+                              height = 50,
+                              collapsible = FALSE, 
+                              collapsed = FALSE
+                              
+                            ), # End box
+                            
+                            box (
+                              
+                              #title = strong ("WW", style = "font-size:14px;"),
+                              #title = "WW",
+                              
+                              checkboxInput (
+                                inputId = "Indicator_ElectricCentral_SysW",
+                                label = NULL, 
+                                value = FALSE, 
+                                width = NULL
+                              ),
+                              
+                              status = "primary",
+                              footer = NULL, 
+                              solidHeader = FALSE, 
+                              background = NULL, 
+                              width = 1, 
+                              height = 50,
+                              collapsible = FALSE, 
+                              collapsed = FALSE
+                              
+                            ) # End box
+                            
+                            
+                          ), # End fluidRow "Direkt-elektrisch zentral"
+                          
+                          
+                          
+                          #######################################################################X
+                          ###### > Thermische Solaranlage  -----
+                          
+                          fluidRow (
+                            
+                            box (
+                              
+                              title = NULL,
+                              
+                              # column (
+                              #   12,
+                              checkboxInput (
+                                inputId = "Indicator_ThermalSolar",
+                                label = strong ("thermische Solaranlage", 
+                                                style = 'font-size:18px; line-height:1.1;'), 
+                                value = FALSE, 
+                                width = NULL
+                              ),
+                              
+                              status = "primary",
+                              footer = NULL, 
+                              solidHeader = FALSE, 
+                              background = NULL, 
+                              width = 10, 
+                              height = 50,
+                              collapsible = FALSE, 
+                              collapsed = FALSE
+                              
+                            ), # End box
+                            
+                            box (
+                              
+                              span (
+                                
+                                # title = strong ("Hzg", style = "font-size:14px;"),
+                                
+                                checkboxInput (
+                                  inputId = "Indicator_ThermalSolar_SysH",
+                                  label = NULL, 
+                                  value = FALSE, 
+                                  width = NULL
+                                ),
+                              ),
+                              
+                              status = "primary",
+                              footer = NULL, 
+                              solidHeader = FALSE, 
+                              background = NULL, 
+                              width = 1, 
+                              height = 50,
+                              collapsible = FALSE, 
+                              collapsed = FALSE
+                              
+                            ), # End box
+                            
+                            box (
+                              
+                              #title = strong ("WW", style = "font-size:14px;"),
+                              #title = "WW",
+                              
+                              checkboxInput (
+                                inputId = "Indicator_ThermalSolar_SysW",
+                                label = NULL, 
+                                value = FALSE, 
+                                width = NULL
+                              ),
+                              
+                              status = "primary",
+                              footer = NULL, 
+                              solidHeader = FALSE, 
+                              background = NULL, 
+                              width = 1, 
+                              height = 50,
+                              collapsible = FALSE, 
+                              collapsed = FALSE
+                              
+                            ) # End box
+                            
+                            
+                          ), # End fluidRow "thermische Solaranlage"
+                          
+                          
+                          
+                          #######################################################################X
+                          ###### > Kraft-Wärme-Kopplung  -----
+                          
+                          fluidRow (
+                            
+                            box (
+                              
+                              title = NULL, 
+                              
+                              # column (
+                              #   12,
+                              checkboxInput (
+                                inputId = "Indicator_CHP",
+                                label = strong ("Kraft-Wärme-Kopplung", 
+                                                style = 'font-size:18px; line-height:1.1;'), 
+                                value = FALSE, 
+                                width = NULL
+                              ),
+                              
+                              status = "primary",
+                              footer = NULL, 
+                              solidHeader = FALSE, 
+                              background = NULL, 
+                              width = 4, 
+                              height = 100,
+                              collapsible = FALSE, 
+                              collapsed = FALSE
+                              
+                            ), # End box
+                            
+                            
+                            box (
+                              
+                              title = NULL, 
+                              
+                              radioButtons (
+                                inputId = "Code_Type_EC_CHP",
+                                label = "Brennstoff", 
+                                
+                                choices = c (
+                                  "Erdgas"	             =	"Gas",
+                                  "Heizöl"	             =	"HP_Ground",
+                                  "Bio"	                 =	"Oil",
+                                  "andere"	             =	"Bio",
+                                  "weiß nicht / k.A."    =	"_NA_"
+                                ),
+                                
+                                selected = "_NA_",
+                                width = NULL,
+                                inline = TRUE
+                              ),
+                              
+                              status = "primary",
+                              footer = NULL, 
+                              solidHeader = FALSE, 
+                              background = NULL, 
+                              width = 6, 
+                              height = 100,
+                              collapsible = FALSE, 
+                              collapsed = FALSE
+                              
+                            ), # End box
+                            
+                            
+                            box (
+                              
+                              span (
+                                
+                                # title = strong ("Hzg", style = "font-size:14px;"),
+                                
+                                checkboxInput (
+                                  inputId = "Indicator_CHP_SysH",
+                                  label = NULL, 
+                                  value = FALSE, 
+                                  width = NULL
+                                ),
+                              ),
+                              
+                              status = "primary",
+                              footer = NULL, 
+                              solidHeader = FALSE, 
+                              background = NULL, 
+                              width = 1, 
+                              height = 100,
+                              collapsible = FALSE, 
+                              collapsed = FALSE
+                              
+                            ), # End box
+                            
+                            box (
+                              
+                              #title = strong ("WW", style = "font-size:14px;"),
+                              #title = "WW",
+                              
+                              checkboxInput (
+                                inputId = "Indicator_CHP_SysW",
+                                label = NULL, 
+                                value = FALSE, 
+                                width = NULL
+                              ),
+                              
+                              status = "primary",
+                              footer = NULL, 
+                              solidHeader = FALSE, 
+                              background = NULL, 
+                              width = 1, 
+                              height = 100,
+                              collapsible = FALSE, 
+                              collapsed = FALSE
+                              
+                            ) # End box
+                            
+                            
+                            
+                            
+                          ), # End fluidRow "Kraft-Wärme-Kopplung"
+                          
+                          
+                          
+                          #######################################################################X
+                          ###### > Fern-/Nahwärme  -----
+                          
+                          fluidRow (
+                            
+                            box (
+                              
+                              title = NULL,
+                              
+                              # column (
+                              #   12,
+                              checkboxInput (
+                                inputId = "Indicator_DistrictHeating",
+                                label = strong ("Fern-/Nahwärme", 
+                                                style = 'font-size:18px; line-height:1.1;'), 
+                                value = FALSE, 
+                                width = NULL
+                              ),
+                              
+                              status = "primary",
+                              footer = NULL, 
+                              solidHeader = FALSE, 
+                              background = NULL, 
+                              width = 4, 
+                              height = 100,
+                              collapsible = FALSE, 
+                              collapsed = FALSE
+                              
+                            ), # End box
+                            
+                            
+                            box (
+                              
+                              title = NULL,
+                              
+                              strong ("Brennstoff"),
+                              
+                              checkboxInput (
+                                inputId = "Indicator_EC_DHStation_Fossil",
+                                label = "fossil", 
+                                value = FALSE, 
+                                width = NULL
+                              ),
+                              
+
+                              checkboxInput (
+                                inputId = "Indicator_EC_DHStation_Bio",
+                                label = "Biomasse", 
+                                value = FALSE, 
+                                width = NULL
+                              ),
+                              
+                              status = "primary",
+                              footer = NULL, 
+                              solidHeader = FALSE, 
+                              background = NULL, 
+                              width = 3, 
+                              height = 100,
+                              collapsible = FALSE, 
+                              collapsed = FALSE
+                              
+                            ), # End box
+                            
+                            
+                            box (
+                              
+                              title = NULL,
+                              #style = "line-height:0.8;",
+                              
+                              #fluidRow (
+                              # style = "height:3;",
+                                strong ("Wärmeerzeugung"),
+                              #),
+                              
+                              #fluidRow (
+                              # style = "height:3;",
+                                checkboxInput (
+                                  inputId = "Indicator_DHStation_Boiler",
+                                  label = "Heizwerk (Kessel)", 
+                                  value = FALSE, 
+                                  width = NULL
+                                ),
+                              #),
+                              
+                              #fluidRow (
+                              # style = "height:3;",
+                                checkboxInput (
+                                  inputId = "Indicator_DHStation_CHP",
+                                  label = "Heizkraftwerk / BHKW", 
+                                  value = FALSE, 
+                                  width = NULL
+                                ),
+                              #),
+                                                            
+                              
+                              status = "primary",
+                              footer = NULL, 
+                              solidHeader = FALSE, 
+                              background = NULL, 
+                              width = 3, 
+                              height = 100,
+                              collapsible = FALSE, 
+                              collapsed = FALSE
+                              
+                            ), # End box
+                            
+                            
+                            box (
+                              
+                              span (
+                                
+                                # title = strong ("Hzg", style = "font-size:14px;"),
+                                
+                                checkboxInput (
+                                  inputId = "Indicator_DistrictHeating_SysH",
+                                  label = NULL, 
+                                  value = FALSE, 
+                                  width = NULL
+                                ),
+                              ),
+                              
+                              status = "primary",
+                              footer = NULL, 
+                              solidHeader = FALSE, 
+                              background = NULL, 
+                              width = 1, 
+                              height = 100,
+                              collapsible = FALSE, 
+                              collapsed = FALSE
+                              
+                            ), # End box
+                            
+                            box (
+                              
+                              #title = strong ("WW", style = "font-size:14px;"),
+                              #title = "WW",
+                              
+                              checkboxInput (
+                                inputId = "Indicator_DistrictHeating_SysW",
+                                label = NULL, 
+                                value = FALSE, 
+                                width = NULL
+                              ),
+                              
+                              status = "primary",
+                              footer = NULL, 
+                              solidHeader = FALSE, 
+                              background = NULL, 
+                              width = 1, 
+                              height = 100,
+                              collapsible = FALSE, 
+                              collapsed = FALSE
+                              
+                            ) # End box
+                            
+                            
+                          ) # End fluidRow "Fern-/Nahwärme"
+                          
+                          
+                          
+                          
+                          
+                        ), # End box central heating heat generators
+                        
+                        
+                        
+                        
+                        column (
+                          width = 12,
+                          
+                          
+                          fluidRow (
+                            
+                            
+                            
+                            #######################################################################X
+                            ##### § heat storage heating system  -----
+                            
+                            box (
+                              
+                              status = "info",
+                              solidHeader = TRUE, 
+                              width = 6,
+                              background = NULL,
+                              
+                              
+                              fluidRow (
+                                
+                                box (
+                                  
+                                  div (
+                                    
+                                    checkboxInput (
+                                      inputId = "Indicator_Storage_SysH",
+                                      label = strong ("Pufferspeicher für Heizung"), 
+                                      value = FALSE, 
+                                      width = NULL
+                                    ),
+                                    
+                                    style = "margin-top: -8px; margin-left: 10px;"
+                                    #style = "margin-top: -15px; margin-left: 0px;"
+                                    
+                                  ), # End div
+                                  
+                                  #strong ("Pufferspeicher für Heizung"),
+                                  
+                                  title =  NULL,
+                                  footer = NULL,
+                                  status = NULL,
+                                  solidHeader = TRUE, 
+                                  background = "light-blue", 
+                                  width = 12,
+                                  height = 25,
+                                  collapsible = FALSE, 
+                                  collapsed = FALSE,
+                                  
+                                  
+                                  style = "
+                                margin-top: 0px;
+                                #margin-bottom: -10px;
+                                margin-left: 0px;
+                                padding: 0 !important;
+                                "
+                                  
+                                  #style = "margin-top: 2px;margin-left: 0px; margin-right: 0px; margin-bottom:2px;padding:-10px;",
+                                  #style = "margin-top: -5px; margin-left: 10px; padding: 0 !important;"
+                                  
+                                  
+                                ), # End box
+                                
+                                
+                                
+                              ), # End fluid row 
+                              
+                              
+                              fluidRow (
+                                
+                                style = "margin-top: -20px; margin-left: 8px; padding:0 !important;",
+                                
+                                checkboxInput (
+                                  inputId = "Indicator_Storage_SysH_Immersion",
+                                  label = "inklusive elektrischem Heizstab", 
+                                  value = FALSE, 
+                                  width = NULL
+                                ),
+                                
+                                checkboxInput (
+                                  inputId = "Indicator_Storage_SysH_InsideEnvelope",
+                                  label = "Heizungspufferspeicher innerhalb der thermischen Hülle", 
+                                  value = FALSE, 
+                                  width = NULL
+                                ),
+                                
+                                
+                                # div (
+                                #   
+                                #   checkboxInput (
+                                #     inputId = "Indicator_Storage_SysH_Immersion",
+                                #     label = "inklusive elektrischem Heizstab", 
+                                #     value = FALSE, 
+                                #     width = NULL
+                                #   ),
+                                #   
+                                #   #style = "margin-top: -20px; margin-left: 25px;"
+                                #   #style = "margin-top: -50px; margin-left: 30px; padding:0 !important;"
+                                #   
+                                # ), # End div
+                                
+                                
+                                
+                                
+                                # box (
+                                #   
+                                #   
+                                #   checkboxInput (
+                                #     inputId = "Indicator_Storage_SysH_Immersion",
+                                #     label = "inklusive elektrischem Heizstab", 
+                                #     value = FALSE, 
+                                #     width = NULL
+                                #   ),
+                                #   
+                                #   status = NULL, # "primary",
+                                #   footer = NULL, 
+                                #   solidHeader = FALSE, 
+                                #   background = NULL, 
+                                #   width = 12, 
+                                #   height = 50,
+                                #   collapsible = FALSE, 
+                                #   collapsed = FALSE,
+                                # 
+                                #   style = "
+                                #     margin-left: 10px; 
+                                #     padding: 0 !important;
+                                #   "
+                                #   
+                                # ), # End box
+                                
+                              ), # End fluidRow
+                              
+                              #style = "padding: 0 !important;"
+                              
+                              
+                            ), # End box 
+                            
+                            
+                            #######################################################################X
+                            ##### § heat storage DHW system  -----
+                            
+                            
+                            box (
+                              
+                              status = "info",
+                              solidHeader = TRUE, 
+                              width = 6,
+                              background = NULL,
+                              
+                              fluidRow (
+                                
+                                
+                                
+                                
+                                box (
+                                  
+                                  div (
+                                    checkboxInput (
+                                      inputId = "Indicator_Storage_SysW",
+                                      label = strong ("Warmwasserspeicher"),
+                                      value = FALSE,
+                                      width = NULL
+                                    ),
+                                    style = "margin-top: -8px; margin-left: 10px;"
+                                    
+                                  ), # End div
+                                  
+                                  title =  NULL,
+                                  footer = NULL,
+                                  status = NULL,
+                                  solidHeader = FALSE,
+                                  background = "light-blue",
+                                  width = 12,
+                                  height = 24,
+                                  collapsible = FALSE,
+                                  collapsed = FALSE,
+                                  
+                                  style = "margin-top: 0px; margin-left: 0px; padding: 0 !important;"
+                                  
+                                ), # End box
+                                
+                              ), # End fluid row 
+                              
+                              
+                              fluidRow (
+                                
+                                style = "margin-top: -20px; margin-left: 8px;",
+                                
+                                checkboxInput (
+                                  inputId = "Indicator_Storage_SysW_Immersion",
+                                  label = "inklusive elektrischem Heizstab", 
+                                  value = FALSE, 
+                                  width = NULL
+                                ),
+                                
+                                checkboxInput (
+                                  inputId = "Indicator_Storage_SysW_InsideEnvelope",
+                                  label = "Warmwasserspeicher innerhalb der thermischen Hülle", 
+                                  value = FALSE, 
+                                  width = NULL
+                                ),
+                                
+                                
+                                
+                                # box (
+                                #   
+                                #   checkboxInput (
+                                #     inputId = "Indicator_Storage_SysW_Immersion",
+                                #     label = "inklusive elektrischem Heizstab", 
+                                #     value = FALSE, 
+                                #     width = NULL
+                                #   ),
+                                # 
+                                #   status = "primary",
+                                #   footer = NULL, 
+                                #   solidHeader = FALSE, 
+                                #   background = NULL, 
+                                #   width = 12, 
+                                #   height = 50,
+                                #   collapsible = FALSE, 
+                                #   collapsed = FALSE,
+                                # 
+                                #   style = "
+                                #     margin-left: 10px; 
+                                #     padding: 0 !important;
+                                #   "
+                                #   
+                                #   #style = "margin-top: -10px; margin-left: 10px;"
+                                #   #style = "margin-top: -20px; margin-left: 10px; padding: 0 !important;"
+                                #   
+                                #   
+                                # ), # End box
+                                
+                              ), # End fluidRow
+                              
+                            ), # End box 
+                            
+
+                          ), # End fluidRow
+
+                        ), # End Column
+                        
+                        
+                        column (
+                          width = 12,
+                          
+                          
+                          fluidRow (
+                        
+                            
+                            #######################################################################X
+                            ##### § heat distribution heating system  -----
+                            
+                            
+                            box (
+                              
+                              status = "info",
+                              solidHeader = TRUE, 
+                              width = 6,
+                              background = NULL,
+                              
+                              
+                              fluidRow (
+                                
+                                box (
+                                  
+                                  div (
+                                    
+                                    checkboxInput (
+                                      inputId = "Indicator_Distribution_SysH",
+                                      label = strong ("Heizwärmeverteilung"), 
+                                      value = FALSE, 
+                                      width = NULL
+                                    ),
+                                    
+                                    style = "margin-top: -8px; margin-left: 10px;"
+                                    
+                                  ), # End div
+                                  
+                                  title =  NULL,
+                                  footer = NULL,
+                                  status = NULL,
+                                  solidHeader = TRUE, 
+                                  background = "light-blue", 
+                                  width = 12,
+                                  height = 25,
+                                  collapsible = FALSE, 
+                                  collapsed = FALSE,
+                                  
+                                  
+                                  style = "
+                                margin-top: 0px;
+                                #margin-bottom: -10px;
+                                margin-left: 0px;
+                                padding: 0 !important;
+                              "
+                                  
+                                ), # End box
+                                
+                              ), # End fluid row 
+                              
+                              
+                              fluidRow (
+                                
+                                style = "margin-top: -20px; margin-left: 8px; padding:0 !important;",
+                                
+                                checkboxInput (
+                                  inputId = "Indicator_Distribution_SysH_OutsideEnvelope",
+                                  label = "teilweise außerhalb der thermischen Hülle (in unbeheiztem Keller oder Dachgeschoss)", 
+                                  value = FALSE, 
+                                  width = NULL
+                                ),
+                                
+                                checkboxInput (
+                                  inputId = "Indicator_Distribution_SysH_PoorlyInsulated",
+                                  label = "Nur mäßige oder unvollständige Leitungsdämmung", 
+                                  value = FALSE, 
+                                  width = NULL
+                                ),
+                                
+                                checkboxInput (
+                                  inputId = "Indicator_Distribution_SysH_LowTemperature",
+                                  label = "Fußbodenheizung / niedrige Verteilnetztemperatur", 
+                                  value = FALSE, 
+                                  width = NULL
+                                ),
+                                
+                              ), # End fluidRow
+                              
+                            ), # End box 
+                            
+                            
+                            
+                            #######################################################################X
+                            ##### § heat distribution DHW system  -----
+                            
+                            
+                            box (
+                              
+                              status = "info",
+                              solidHeader = TRUE, 
+                              width = 6,
+                              background = NULL,
+                              
+                              
+                              fluidRow (
+                                
+                                box (
+                                  
+                                  div (
+                                    
+                                    checkboxInput (
+                                      inputId = "Indicator_Distribution_SysW",
+                                      label = strong ("Warmwasserverteilung"), 
+                                      value = FALSE, 
+                                      width = NULL
+                                    ),
+                                    
+                                    style = "margin-top: -8px; margin-left: 10px;"
+                                    
+                                  ), # End div
+                                  
+                                  title =  NULL,
+                                  footer = NULL,
+                                  status = NULL,
+                                  solidHeader = TRUE, 
+                                  background = "light-blue", 
+                                  width = 12,
+                                  height = 25,
+                                  collapsible = FALSE, 
+                                  collapsed = FALSE,
+                                  
+                                  
+                                  style = "
+                                margin-top: 0px;
+                                #margin-bottom: -10px;
+                                margin-left: 0px;
+                                padding: 0 !important;
+                              "
+                                  
+                                ), # End box
+                                
+                              ), # End fluid row 
+                              
+                              
+                              fluidRow (
+                                
+                                style = "margin-top: -20px; margin-left: 8px; padding:0 !important;",
+                                
+                                checkboxInput (
+                                  inputId = "Indicator_Distribution_SysW_CirculationLoop",
+                                  label = "mit Zirkulationsleitung", 
+                                  value = FALSE, 
+                                  width = NULL
+                                ),
+                                
+                                checkboxInput (
+                                  inputId = "Indicator_Distribution_SysW_OutsideEnvelope",
+                                  label = "teilweise außerhalb der thermischen Hülle (in unbeheiztem Keller oder Dachgeschoss)", 
+                                  value = FALSE, 
+                                  width = NULL
+                                ),
+                                
+                                checkboxInput (
+                                  inputId = "Indicator_Distribution_SysW_PoorlyInsulated",
+                                  label = "Nur mäßige oder unvollständige Leitungsdämmung", 
+                                  value = FALSE, 
+                                  width = NULL
+                                ),
+                                
+                              ), # End fluidRow
+                              
+                            ), # End box 
+                            
+                            
+                                
+                          ), # End fluidRow
+                          
+                        ), # End Column
+                        
+                        
+                        
+                        
+                                                
+                      ), # End fluidRow
+                      
+                      
+                      
+                      
+                      
+                      
+                      
+                      
                       
                       
                     ), # End tabPanel
@@ -6335,7 +7637,7 @@ www.iwu.de
                       
                       
                       
-                    ),             
+                    ),  # End tabPanel "Einstellungen"           
 
   
   #######################################################################X
@@ -8115,10 +9417,42 @@ server <- function (input, output, session) {
   
   session$allowReconnect (TRUE) 
 
+  #js$backgroundCol ("TextInput_Index_Stack","ivory") # Currently not an input field.
+  js$backgroundCol ("TextInput_ID_Calc","ivory") 
 
+  js$backgroundCol (List_UI_InputFields_Text [1],"ivory") 
+  js$backgroundCol (List_UI_InputFields_Text [2],"ivory") 
   
-
-
+  js$backgroundCol (List_UI_InputFields_Numeric [1],"ivory") 
+  js$backgroundCol (List_UI_InputFields_Numeric [2],"ivory") 
+  js$backgroundCol (List_UI_InputFields_Numeric [3],"ivory") 
+  js$backgroundCol (List_UI_InputFields_Numeric [4],"ivory") 
+  js$backgroundCol (List_UI_InputFields_Numeric [5],"ivory") 
+  js$backgroundCol (List_UI_InputFields_Numeric [6],"ivory") 
+  js$backgroundCol (List_UI_InputFields_Numeric [7],"ivory") 
+  js$backgroundCol (List_UI_InputFields_Numeric [8],"ivory") 
+  js$backgroundCol (List_UI_InputFields_Numeric [9],"ivory") 
+  js$backgroundCol (List_UI_InputFields_Numeric [10],"ivory") 
+  js$backgroundCol (List_UI_InputFields_Numeric [11],"ivory") 
+  js$backgroundCol (List_UI_InputFields_Numeric [12],"ivory") 
+  js$backgroundCol (List_UI_InputFields_Numeric [13],"ivory") 
+  js$backgroundCol (List_UI_InputFields_Numeric [14],"ivory") 
+  js$backgroundCol (List_UI_InputFields_Numeric [15],"ivory") 
+  js$backgroundCol (List_UI_InputFields_Numeric [16],"ivory") 
+  js$backgroundCol (List_UI_InputFields_Numeric [17],"ivory") 
+  js$backgroundCol (List_UI_InputFields_Numeric [18],"ivory") 
+  js$backgroundCol (List_UI_InputFields_Numeric [19],"ivory") 
+  js$backgroundCol (List_UI_InputFields_Numeric [20],"ivory") 
+  
+  
+  js$backgroundCol (List_UI_InputFields_Numeric_Percent [1],"ivory") 
+  js$backgroundCol (List_UI_InputFields_Numeric_Percent [2],"ivory") 
+  js$backgroundCol (List_UI_InputFields_Numeric_Percent [3],"ivory") 
+  js$backgroundCol (List_UI_InputFields_Numeric_Percent [4],"ivory") 
+  js$backgroundCol (List_UI_InputFields_Numeric_Percent [5],"ivory") 
+  
+  
+  
   
   #####################################################################################X
   ## Prepare the building data pool -----
@@ -9114,6 +10448,139 @@ server <- function (input, output, session) {
     SuffixInputField = "",
     input = input, rv = rv)
   
+
+  
+  ObserveInputField_UpdateDFCalcVariable (
+    Name_InputField = List_UI_InputFields_CheckBox [23],
+    SuffixInputField = "",
+    input = input, rv = rv)
+  
+  ObserveInputField_UpdateDFCalcVariable (
+    Name_InputField = List_UI_InputFields_CheckBox [24],
+    SuffixInputField = "",
+    input = input, rv = rv)
+  
+  ObserveInputField_UpdateDFCalcVariable (
+    Name_InputField = List_UI_InputFields_CheckBox [25],
+    SuffixInputField = "",
+    input = input, rv = rv)
+  
+  ObserveInputField_UpdateDFCalcVariable (
+    Name_InputField = List_UI_InputFields_CheckBox [26],
+    SuffixInputField = "",
+    input = input, rv = rv)
+  
+  ObserveInputField_UpdateDFCalcVariable (
+    Name_InputField = List_UI_InputFields_CheckBox [27],
+    SuffixInputField = "",
+    input = input, rv = rv)
+  
+  ObserveInputField_UpdateDFCalcVariable (
+    Name_InputField = List_UI_InputFields_CheckBox [28],
+    SuffixInputField = "",
+    input = input, rv = rv)
+  
+  ObserveInputField_UpdateDFCalcVariable (
+    Name_InputField = List_UI_InputFields_CheckBox [29],
+    SuffixInputField = "",
+    input = input, rv = rv)
+  
+  ObserveInputField_UpdateDFCalcVariable (
+    Name_InputField = List_UI_InputFields_CheckBox [30],
+    SuffixInputField = "",
+    input = input, rv = rv)
+  
+  ObserveInputField_UpdateDFCalcVariable (
+    Name_InputField = List_UI_InputFields_CheckBox [31],
+    SuffixInputField = "",
+    input = input, rv = rv)
+  
+  ObserveInputField_UpdateDFCalcVariable (
+    Name_InputField = List_UI_InputFields_CheckBox [32],
+    SuffixInputField = "",
+    input = input, rv = rv)
+  
+  ObserveInputField_UpdateDFCalcVariable (
+    Name_InputField = List_UI_InputFields_CheckBox [33],
+    SuffixInputField = "",
+    input = input, rv = rv)
+  
+  ObserveInputField_UpdateDFCalcVariable (
+    Name_InputField = List_UI_InputFields_CheckBox [34],
+    SuffixInputField = "",
+    input = input, rv = rv)
+  
+
+  ObserveInputField_UpdateDFCalcVariable (
+    Name_InputField = List_UI_InputFields_CheckBox [35],
+    SuffixInputField = "",
+    input = input, rv = rv)
+  
+  ObserveInputField_UpdateDFCalcVariable (
+    Name_InputField = List_UI_InputFields_CheckBox [36],
+    SuffixInputField = "",
+    input = input, rv = rv)
+  
+  ObserveInputField_UpdateDFCalcVariable (
+    Name_InputField = List_UI_InputFields_CheckBox [37],
+    SuffixInputField = "",
+    input = input, rv = rv)
+  
+  ObserveInputField_UpdateDFCalcVariable (
+    Name_InputField = List_UI_InputFields_CheckBox [38],
+    SuffixInputField = "",
+    input = input, rv = rv)
+  
+  ObserveInputField_UpdateDFCalcVariable (
+    Name_InputField = List_UI_InputFields_CheckBox [39],
+    SuffixInputField = "",
+    input = input, rv = rv)
+  
+  ObserveInputField_UpdateDFCalcVariable (
+    Name_InputField = List_UI_InputFields_CheckBox [40],
+    SuffixInputField = "",
+    input = input, rv = rv)
+  
+  ObserveInputField_UpdateDFCalcVariable (
+    Name_InputField = List_UI_InputFields_CheckBox [41],
+    SuffixInputField = "",
+    input = input, rv = rv)
+  
+  ObserveInputField_UpdateDFCalcVariable (
+    Name_InputField = List_UI_InputFields_CheckBox [42],
+    SuffixInputField = "",
+    input = input, rv = rv)
+  
+  ObserveInputField_UpdateDFCalcVariable (
+    Name_InputField = List_UI_InputFields_CheckBox [43],
+    SuffixInputField = "",
+    input = input, rv = rv)
+  
+  ObserveInputField_UpdateDFCalcVariable (
+    Name_InputField = List_UI_InputFields_CheckBox [44],
+    SuffixInputField = "",
+    input = input, rv = rv)
+  
+  ObserveInputField_UpdateDFCalcVariable (
+    Name_InputField = List_UI_InputFields_CheckBox [45],
+    SuffixInputField = "",
+    input = input, rv = rv)
+  
+  ObserveInputField_UpdateDFCalcVariable (
+    Name_InputField = List_UI_InputFields_CheckBox [46],
+    SuffixInputField = "",
+    input = input, rv = rv)
+  
+  ObserveInputField_UpdateDFCalcVariable (
+    Name_InputField = List_UI_InputFields_CheckBox [47],
+    SuffixInputField = "",
+    input = input, rv = rv)
+  
+  ObserveInputField_UpdateDFCalcVariable (
+    Name_InputField = List_UI_InputFields_CheckBox [48],
+    SuffixInputField = "",
+    input = input, rv = rv)
+  
   
   
   
@@ -9229,6 +10696,16 @@ server <- function (input, output, session) {
     SuffixInputField = "",
     input = input, rv = rv)
   
+  ObserveInputField_UpdateDFCalcVariable (
+    Name_InputField = List_UI_InputFields_RadioButton [22],
+    SuffixInputField = "",
+    input = input, rv = rv)
+  
+  
+  ObserveInputField_UpdateDFCalcVariable (
+    Name_InputField = List_UI_InputFields_RadioButton [23],
+    SuffixInputField = "",
+    input = input, rv = rv)
   
   
   
@@ -9786,9 +11263,9 @@ server <- function (input, output, session) {
       
       NewText <-  
         paste0 (
-          "Speichern (DS ",
+          "DS ",
           input$TextInput_Index_Stack, 
-          " überschreiben)" 
+          " (überschreiben)" 
         )
         # paste0 (
         #   "Speichern <br> (Datensatz ",
@@ -9800,9 +11277,9 @@ server <- function (input, output, session) {
       
       NewText <-  
         paste0 (
-          "Speichern (neu als DS ",
-          nrow (rv$DF_Stack_Input) + 1, 
-          ")" 
+          "DS ",
+          nrow (rv$DF_Stack_Input) + 1,
+          " (neu)"
         )
         # paste0 (
         #   "Speichern <br> (als Datensatz ",
@@ -9810,18 +11287,25 @@ server <- function (input, output, session) {
         #   " hinzufügen)" 
         # )
     } # End else
-    
-    updateActionButton (
-      inputId = "Button_SaveCalculationToStack",
-      label = NewText
-      # Das folgende funktioniert nicht
-      #label = strong (NewText, style = "font-size:14px; line-height:0.8;")
-      #label =  div (as.character (NewText), style = "font-size:14px; line-height:0.8;") 
-      # label = div (HTML (as.character (NewText) , .noWS = 'outside'),
-      #              style = "font-size:14px; line-height:0.8;")
-      # label = div (HTML ("Umbe-<br>nennen", .noWS = 'outside'), 
-      #              style = "font-size:14px; line-height:0.8;")
+
+    updateTextInput (
+      session,
+      inputId = "TextInput_SaveAs",
+      value = NewText
     )
+    
+    # updateActionButton (
+    #   session,
+    #   inputId = "Button_SaveCalculationToStack",
+    #   label = NewText
+    #   # Das folgende funktioniert nicht
+    #   #label = strong (NewText, style = "font-size:14px; line-height:0.8;")
+    #   #label =  div (as.character (NewText), style = "font-size:14px; line-height:0.8;")
+    #   # label = div (HTML (as.character (NewText) , .noWS = 'outside'),
+    #   #              style = "font-size:14px; line-height:0.8;")
+    #   # label = div (HTML ("Umbe-<br>nennen", .noWS = 'outside'),
+    #   #              style = "font-size:14px; line-height:0.8;")
+    # )
     
     
     updateSelectInput (
@@ -9846,6 +11330,42 @@ server <- function (input, output, session) {
   ignoreInit = TRUE
   
   ) # End: observe event selection "TextInput_ID_Calc"
+  
+  
+  
+  #####################################################################################X
+  ## Button_Delete_Dataset_Stack -----
+  
+  observeEvent (
+    input$Button_Delete_Dataset_Stack, {
+      
+      if (nrow (rv$DF_Stack_Input) > 1) {
+        
+        Index_Dataset <- which (input$SelectInput_ID_Dataset_Stack == rownames (rv$DF_Stack_Input))
+        
+        rv$DF_Stack_Input  <-
+          rv$DF_Stack_Input  [-Index_Dataset, ]
+        
+        rv$DF_Stack_Output  <-
+          rv$DF_Stack_Output  [-Index_Dataset, ]
+    
+
+        updateSelectInput (
+          session = session,
+          inputId = "SelectInput_ID_Dataset_Stack",
+          choices = rv$DF_Stack_Input [ , 1],  
+          selected = rv$DF_Stack_Input [1, 1]
+        )
+        
+        
+        shinyjs::click ("Button_LoadFromStackToCalculation")
+        
+      } # End if  
+      
+    }, 
+    ignoreInit = TRUE
+  ) # End observe event Button_Delete_Dataset_Stack
+  
   
   
   
@@ -10016,11 +11536,13 @@ server <- function (input, output, session) {
             #     row.names = 1
             #   )  
             
+            Index_Dataset <- nrow (rv$DF_Stack_Input)
+            
             updateSelectInput (
               session,
               "SelectInput_ID_Dataset_Stack",
               choices = rownames (rv$DF_Stack_Input),
-              selected = rownames (rv$DF_Stack_Input [nrow (rv$DF_Stack_Input), ])
+              selected = rownames (rv$DF_Stack_Input [Index_Dataset, ])
               # choices = rv$DF_Stack_Input [ , 1],
               # selected = rv$DF_Calc_Input [1, 1]
             )
@@ -10030,7 +11552,7 @@ server <- function (input, output, session) {
               session,
               "SelectInput_ID_Dataset_Stack_2",
               choices = rownames (rv$DF_Stack_Input),
-              selected = rownames (rv$DF_Stack_Input [nrow (rv$DF_Stack_Input), ])
+              selected = rownames (rv$DF_Stack_Input [Index_Dataset, ])
               # choices = rv$DF_Stack_Input [ , 1],
               # selected = rv$DF_Calc_Input [1, 1]
             )
@@ -10038,12 +11560,21 @@ server <- function (input, output, session) {
             
             updateTextInput (
               inputId = "TextInput_Index_Stack",
-              value = nrow (rv$DF_Stack_Input)
+              value = Index_Dataset
             )
             
             
-            #shinyjs::click ("Button_SaveCalculationToStackAsNew")
+            # 2025-06-20
+            rv$DF_Stack_Input [Index_Dataset,1] <-
+              rownames (rv$DF_Stack_Input [Index_Dataset, ])
+            rv$DF_Calc_Input [1,1] <-
+              rownames (rv$DF_Stack_Input [Index_Dataset, ])
+            rv$DF_Stack_Output [Index_Dataset,1] <-
+              rownames (rv$DF_Stack_Output [Index_Dataset, ])
+            rv$DF_Calc_Output [1,1] <-
+              rownames (rv$DF_Stack_Output [Index_Dataset, ])
             
+
                     
             }
         
