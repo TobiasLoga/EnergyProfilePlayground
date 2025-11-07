@@ -20,6 +20,14 @@ base::load ("www/DF_BuildingTypeMatrix.rda")
 
 
 
+
+
+
+
+
+
+
+######################################################################
 ## Test Einzel-Bausteine aus der Shiny App -----
 
 
@@ -132,6 +140,13 @@ ID_Dataset <- c ("Example.01", "DE.MOBASY.WBG.0008.61")
 #View (MobasyBuildingDataTables$Data_Input)
 
 
+
+MobasyModel::GetBuildingData_RDataPackage (
+  myFilterName = "EnergyProfileShinyApp"
+  #myFilterName = "All"
+  #myFilterName = "Examples"
+  #      myFilterName = "WebTool"
+)
 
 
 
@@ -651,6 +666,76 @@ DT:::available_plugins()
 # 
 #       2025-02 neu installieren hat nichts gebracht
 
+
+
+
+#####################################################################################X
+## Spielwiese -----
+#####################################################################################X
+# 
+# 
+
+
+
+MobasyModel::GetStationClimate_RDataPackage()
+
+
+
+# https://stackoverflow.com/questions/46327408/why-is-as-data-frame-ignoring-col-names-vector
+
+forecast <- as.data.frame(list(c(1, 32, 60, 91, 121, 152,
+                                 182, 213, 244, 274, 305, 335),
+                               c(31, 59, 90, 120, 151, 181,
+                                 212, 243, 273, 304, 334, 365),
+                               as.vector(rep(0, times=12))),
+                          row.names = c("Jan", "Feb", "Mar", "Apr", "May", "Jun", 
+                                        "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"),
+                          col.names = c("Start", "End", "forecast"))
+
+#     Start End forecast
+# Jan     1  31        0
+# Feb    32  59        0
+# Mar    60  90        0
+# Apr    91 120        0
+# May   121 151        0
+# Jun   152 181        0
+# Jul   182 212        0
+# Aug   213 243        0
+# Sep   244 273        0
+# Oct   274 304        0
+# Nov   305 334        0
+# Dec   335 365        0
+
+
+
+# SO GEHT DAS !!!
+
+
+DF_Test <- NA
+
+DF_Test = as.data.frame (
+  
+    as.list (
+      TabulaCharts::ChartData_HeatNeed [ ,1:3]
+  ),
+  col.names = c ("A", "B", "C")
+  
+  )
+
+
+x <- c('a','b','c','a')
+x_df <- as.data.frame(table(x, dnn = list("name")), responseName = "freq")
+
+
+MobasyModel::GetParameterTables_RDataPackage ()
+
+
+
+View (
+  TabulaTables$ParTab_Infiltration
+)
+
+TabulaTables$ParTab_Infiltration [5:7, ] <- NA
 
 
 

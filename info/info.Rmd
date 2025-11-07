@@ -1,0 +1,54 @@
+## IWU - Energieprofil - Shiny App - Development Version
+Version: 07.11.2025
+
+## Erläuterungen 
+
+Diese Shiny-App dient der Berechnung des Energiebedarfs für Heizung und Warmwasser auf der Basis von Energieprofil-Indikatoren. 
+
+Details zum fachlichen Hintergrund finden sich auf der MOBASY-Projektseite: https://www.iwu.de/forschung/energie/mobasy/ (Beschreibung des Gesamtverfahrens: https://www.iwu.de/fileadmin/publikationen/energie/mobasy/2021_IWU_LogaEtAl_MOBASY-Realbilanzierung-Verbrauch-Bedarf-Vergleich.pdf). 
+
+Die Shiny-App erweitert die Funktionalität des MOBASY-Energieprofil-Webtools https://www.iwu.de/publikationen/tools/energieprofil/webtool/ um die Möglichkeit, berechnete Ein- und Ausgabedaten in einem Stack abzulegen und nach Durchführung der Berechnung als Excel-Tabelle herunterzuladen. Umgekehrt kann eine in Excel präparierte Eingabetabelle in den Stack geladen und berechnet werden.
+
+Die Shiny-App besteht aus folgenden Bausteinen:
+
+- 'Energieprofil-Indikatoren' für die Erfassung der wesentlichen energetischen Merkmale von Gebäudehülle und Wärmeversorgung (2 Eingabe-Formulare)
+- Schätzverfahren für die Gebäudehüllfläche auf der Basis der Wohnfläche und der geometrischen Energieprofil-Indikatoren
+- Schätzverfahren für Wärmedurchgangskoeffizienten (U-Werte) auf Basis von Informationen zu Baualter und nachträglicher Dämmung der Komponenten der thermischen Hülle
+- Konfigurationsalgorithmus für die Komponenten der Wärmeversorgung auf Basis der wesentlichen Merkmale (Vorhandensein und ggf. Art und Lokalisation von Anlagenkomponenten)
+- Pauschalwerte für die Effizienz der Komponenten der Wärmeversorgung (Wärmeverteilung, -speicherung und -erzeugung)
+- Energiebilanz-Berechnung (TABULA-Verfahren) zur Ermittlung des Heizwärmebedarfs sowie des nach Energieträger differenzierten Endenergiebedarfs für Heizung und Warmwasser (Beschreibung der Methodik: https://episcope.eu/fileadmin/tabula/public/docs/report/TABULA_CommonCalculationMethod.pdf)  
+
+Die in R programmierten Berechnungsformeln finden sich im R-Paket MobasyModel https://github.com/TobiasLoga/MobasyModel .
+Die Algorithmen sind weitgehend identisch mit denen des Excel-Tools 'EnergyProfile.xlsm' https://www.iwu.de/fileadmin/tools/energyprofile/EnergyProfile-XL-Package.zip .
+
+Wir stellen das Werkzeug gerne anderen Experten zur Nutzung Verfügung, können jedoch keinerlei Support übernehmen. Wir übernehmen keine Gewähr für die Vollständigkeit, Richtigkeit und Genauigkeit der Berechnungen und der Daten. Fehler können gemeldet werden an: Tobias Loga t.loga@iwu.de
+
+
+## Hinweise zur Funktionalität der vorliegenden Version  
+
+- Die Energieprofil-Indikatoren können je Einzelgebäude erfasst und eingegeben werden. Sind keine Informationen vorhanden, werden für die Berechnung Mittelwerte aus dem Wohngebäudebestand als Input angesetzt. Damit vergrößert sich jeweils die Unsicherheit des Berechnungsergebenisses. 
+
+- Die Ergebnisse können im Menüpunkt 'Daten' gesichtet und dort auch als Tabelle heruntergeladen werden. 
+
+- Weiterhin kann im Menüpunkt 'Daten' / 'Daten-Import' eine Tabelle mit Eingabedaten in den Stack geladen und berechnet werden. Wird eine heruntergeladene Eingabedatentabelle (Download unter 'Daten' / 'Stack_Input') als Ausgangbasis für den Upload verwendet (z.B. in dem ein Datensatz mehrfach kopiert und für eine Parameterstudie bei bestimmten Variablen systematisch variiert wird), so muss vor dem Upload die erste (über alle Spalten verbundene) Zeile gelöscht werden (Die Download-Funktion schreibt dort das Wort 'Energieprofil' hinein - es ist derzeit nicht klar, wie dies abgeschaltet werden kann.) 
+
+- Weitere im oben genannten Excel-Tool gegebene Möglichkeiten der Eingabe sind derzeit in der Shiny-App (noch) nicht implementiert. Für die gebäudeweise Eingabe und Analyse von Verbrauchsdaten und für den Verbrauch-Bedarf-Vergleich muss also weiterhin das Excel-Tool verwendet werden.  
+
+- Allerdings bietet die Shiny-App die Möglichkeit, den Verbrauch-Bedarf-Vergleich für importierte Datensätze (vorbereitet in Excel) als Stack-Berechnung durchzuführen. Hierfür dient die Schaltfläche 'Gesamten Stack inkl. V/B-Vergleich berechnen'. Man beachte hier allerdings die lange Rechenzeit (ca. 20 Sekunden je im Stack enthaltenen Datensatz).  
+
+		
+
+-----
+
+Logbuch der Änderungen						
+						
+  		    
+						
+-----
+
+
+Institut Wohnen und Umwelt GmbH
+
+Tobias Loga 									
+
+www.iwu.de 

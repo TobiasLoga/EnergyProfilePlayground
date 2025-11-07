@@ -9,20 +9,27 @@
 # install.packages ("echarts4r")
 # install.packages ("devtools")
 # install.packages("gitcreds")
+# install.packages ("clidamonger")
 
 # devtools::install_github ("IWUGERMANY/tabuladata")
 # #renv::install (packages = "IWUGERMANY/tabuladata")
 # renv::install (packages = "TobiasLoga/AuxFunctions")
-# renv::install (packages = "TobiasLoga/MobasyBuildingData")
+# 
+# devtools::install_github ("TobiasLoga/MobasyBuildingData")
+## renv::install (packages = "TobiasLoga/MobasyBuildingData")
+
 # renv::install (packages = "IWUGERMANY/clidamonger")
 # renv::install (packages = "TobiasLoga/CliDaMon")
-# renv::install (packages = "TobiasLoga/MobasyModel")
-# # devtools::install_github ("TobiasLoga/MobasyModel")
+
+## renv::install (packages = "TobiasLoga/MobasyModel")
+# devtools::install_github ("TobiasLoga/MobasyModel")
 
 # # renv::install (packages = "TobiasLoga/TabulaCharts")
 # # devtools::install_github ("TobiasLoga/TabulaCharts")
 # remotes::install_github ("TobiasLoga/TabulaCharts")
+# install.packages("D:/TL/Entwicklung/R/GitHub/myRepos/TabulaCharts_0.1.1.tar.gz", repos = NULL, type = "source")
 
+# install.packages("D:/TL/Entwicklung/R/GitHub/myRepos/MobasyBuildingData_0.1.2.tar.gz", repos = NULL, type = "source")
 # install.packages("D:/TL/Entwicklung/R/GitHub/myRepos/MobasyBuildingData_0.1.0.tar.gz", repos = NULL, type = "source", 
 #                  lib="C:/Users/Tobias.DOMIWU/AppData/Local/R/cache/R/renv/sandbox/windows/R-4.4/x86_64-w64-mingw32/6698a5f3")
 # install.packages("D:/TL/Entwicklung/R/GitHub/myRepos/tabuladata_0.0.0.9000.tar.gz", repos = NULL, type = "source", 
@@ -97,9 +104,33 @@ base::load ("www/DF_BuildingTypeMatrix.rda")
 
 
 SelectionList_ID_Pool_Initialise <- 
-  MobasyBuildingData::DF_FilterBuildingData [ ,"Typologie-Beispielgebäude"]
+  MobasyBuildingData::DF_FilterBuildingData [ ,"EnergyProfileShinyApp"]
+  #  MobasyBuildingData::DF_FilterBuildingData [ ,"Typology-DE_Example-Buildings"]
+
+ID_Pool_Initialise <-
+  "Example.01"
+  #"DE.N.SFH.01.Gen.ReEx.001.001"
+  #"DE.Template.01" # 2025-07-17 Das funktioniert nicht -> Meldung "Zeilennamen enthalten fehlende Werte"
+  # -> Die Zeilennamen sind aber da, daher debuggen
+  # Kann auch sein, dass MobasyModel den Datensatz nicht rechnen kann und der Fehler dadurch entsteht. 
+
+ID_Stack_Initialise <- 
+  ID_Pool_Initialise
+
+SelectionList_ID_Stack_Initialise <- c (
+  ID_Stack_Initialise
+)
+
+
+
+SelectionList_ID_TypologyExampleBuildings <- 
+   MobasyBuildingData::DF_FilterBuildingData [ ,"Typology-DE_Example-Buildings"]
+
+
+
+
 #SelectionList_ID_Pool_Initialise <- MobasyBuildingData::Data_Output$ID_Dataset
-ID_Pool_Initialise <- "DE.N.SFH.01.Gen.ReEx.001.001"
+
 #ID_Pool_Initialise <- "Example.01" 
 #ID_Pool_Initialise <- "DE.MOBASY.WBG.0008.61" 
 
@@ -112,10 +143,11 @@ ID_Pool_Initialise <- "DE.N.SFH.01.Gen.ReEx.001.001"
 #ID_Stack_Initialise <- "Example.01"
 
 
-SelectionList_ID_Stack_Initialise <- c (
-  "DE.N.SFH.06.Gen.ReEx.001.001"
-  )
-ID_Stack_Initialise <- "DE.N.SFH.06.Gen.ReEx.001.001"
+
+# SelectionList_ID_Stack_Initialise <- c (
+#   "DE.N.SFH.06.Gen.ReEx.001.001"
+#   )
+# ID_Stack_Initialise <- "DE.N.SFH.06.Gen.ReEx.001.001"
 
 
 # SelectionList_ID_Stack_Initialise <- c (
@@ -133,6 +165,29 @@ ID_Stack_Initialise <- "DE.N.SFH.06.Gen.ReEx.001.001"
 
 
 
+Set_MaxY_Auto_ChartHeatNeed <- FALSE
+y_Max_ManualInput_ChartHeatNeed <- 400 
+
+Set_MaxY_Auto_ChartFinalEnergy <- FALSE
+y_Max_ManualInput_ChartFinalEnergy <- 400 
+
+Set_MaxY_Auto_ChartExpectationRanges <- FALSE
+y_Max_ManualInput_ChartExpectationRanges <- 600 
+
+
+
+Set_MaxY_Auto_ChartCompareLeft <- TRUE
+y_Max_ManualInput_ChartCompareLeft <- 400 
+
+Set_MaxY_Auto_ChartCompareRight <- TRUE
+y_Max_ManualInput_ChartCompareRight <- 400 
+
+
+
+Height_ChartCompare_Default <- 600
+Height_ChartCompareLeft  <- Height_ChartCompare_Default
+Height_ChartCompareRight <- Height_ChartCompare_Default
+
 
 
 #####################################################################################X
@@ -141,6 +196,7 @@ ID_Stack_Initialise <- "DE.N.SFH.06.Gen.ReEx.001.001"
 ## Function for altering the background colour of input fields
 # Script from https://stackoverflow.com/questions/50313540/r-shiny-conditionally-change-numericinput-background-colour
 
+# The colour is assigned to the respective fields at the top of the server function. 
 
 jsCode <- '
 shinyjs.backgroundCol = function(params) {
@@ -358,6 +414,7 @@ InputVariableNames <- c (
   "f_Insulation_Ceiling",
   "f_Insulation_Wall",
   "f_Insulation_Floor",
+  "Indicator_InternalWallInsulation",
   
   "f_Area_WindowType2",
   "Code_NumberPanes_WindowType1",
@@ -424,9 +481,57 @@ InputVariableNames <- c (
   "Indicator_Distribution_SysW",
   "Indicator_Distribution_SysW_CirculationLoop",
   "Indicator_Distribution_SysW_OutsideEnvelope",
-  "Indicator_Distribution_SysW_PoorlyInsulated"
+  "Indicator_Distribution_SysW_PoorlyInsulated",
+  
+  "Code_Potential_ExternalWallInsulation",
+  
+  "Indicator_SysH_G_Decentral",
+  "Indicator_SysH_G_Stove",
+  "Code_Type_EC_Stove",
+  
+  "Indicator_SysH_G_Dec_DirectElectric",
+  "Indicator_SysH_G_Dec_ElectricNightStorage",
+  "Indicator_SysH_G_Dec_Heatpump",
+  "Indicator_SysW_G_Decentral",
+  "Indicator_SysW_G_Dec_ElectricStorage",
+  "Indicator_SysW_G_Dec_ElectricTankless",
+  "Indicator_SysW_G_Dec_GasTankless",
+  
+  "Indicator_SysVent_Mechanical",
+  "Indicator_SysVent_HeatRec",
+  "Indicator_SysPV",
+  "Indicator_SysPV_ElectricStorage",
+  
+  "Indicator_SysHW_D_S_ExtraThickInsulation",
+  
+  "Code_BoundaryCond", 
+  "Code_Climate",
+  
+  "Code_U_Class_National"
   
 )
+
+
+
+## not yet used:
+#
+# "Fraction_Input_SysH_G_Stove",
+# "Fraction_Input_SysH_G_Dec_DirectElectric",
+# "Fraction_Input_SysH_G_Dec_ElectricNightStorage",
+# "Fraction_Input_SysH_G_Dec_Heatpump",
+# "Fraction_Input_SysW_G_Dec_ElectricStorage",
+# "Fraction_Input_SysW_G_Dec_ElectricTankless",
+# "Fraction_Input_SysW_G_Dec_GasTankless",
+# "Year_Installation_SysH_G_Stove",
+# "Year_SysH_G_Dec_DirectElectric",
+# "Year_SysH_G_Dec_ElectricNightStorage",
+# "Year_SysH_G_Dec_Heatpump",
+# "Year_Installation_SysW_G_Dec_ElectricStorage",
+# "Year_Installation_SysW_G_Dec_ElectricTankless",
+# "Year_Installation_SysW_G_Dec_GasTankless",
+# "Year_Installation_SysVent_Mechanical",
+# "Year_Installation_SysPV",
+# "eta_SysVent_HeatRec"
 
 
 
@@ -435,7 +540,7 @@ List_UI_InputFields_Text <- c (
   "Name_Variant",
   "ID_Zone_LocationBuilding"
 )
-
+# Current number: 2 
 
 
 List_UI_InputFields_Numeric <- c (
@@ -515,6 +620,8 @@ List_UI_InputFields_CheckBox <- c (
   "Indicator_Floor_Constr_Massive",
   "Indicator_Floor_Constr_Wood",
   
+  "Indicator_InternalWallInsulation",
+  
   "Indicator_LowE_WindowType1",
   "Indicator_LowE_WindowType2",
   "Indicator_PassiveHouseWindow_WindowType1",
@@ -564,9 +671,30 @@ List_UI_InputFields_CheckBox <- c (
   "Indicator_Distribution_SysW",
   "Indicator_Distribution_SysW_CirculationLoop",
   "Indicator_Distribution_SysW_OutsideEnvelope",
-  "Indicator_Distribution_SysW_PoorlyInsulated"
+  "Indicator_Distribution_SysW_PoorlyInsulated",
   
-) # Current number: 13 + 9 + 12 + 14 = 34 + 14 = 48
+  "Indicator_SysH_G_Decentral",
+  "Indicator_SysH_G_Stove",
+  
+  "Indicator_SysH_G_Dec_DirectElectric",
+  "Indicator_SysH_G_Dec_ElectricNightStorage",
+  "Indicator_SysH_G_Dec_Heatpump",
+  "Indicator_SysW_G_Decentral",
+  "Indicator_SysW_G_Dec_ElectricStorage",
+  "Indicator_SysW_G_Dec_ElectricTankless",
+  "Indicator_SysW_G_Dec_GasTankless",
+  
+  "Indicator_SysVent_Mechanical",
+  "Indicator_SysVent_HeatRec",
+  "Indicator_SysPV",
+  "Indicator_SysPV_ElectricStorage",
+  
+  "Indicator_SysHW_D_S_ExtraThickInsulation"
+  
+  
+  
+  
+) # Current number: 13 + 1 + 9 + 12 + 14 = 34 + 14 + 14 = 63
 
   
 List_UI_InputFields_RadioButton <- c (
@@ -599,9 +727,19 @@ List_UI_InputFields_RadioButton <- c (
   
   "Code_Type_EC_CHP",
   
-  "Code_CentralisationType_SysHG"
+  "Code_CentralisationType_SysHG",
   
-) # Current number: 17 + 4 + 1 + 1 = 23
+  "Code_Potential_ExternalWallInsulation",
+  
+  "Code_Type_EC_Stove",
+  
+  "Code_BoundaryCond", 
+  "Code_Climate",
+  
+  "Code_U_Class_National"
+  
+  
+) # Current number: 17 + 4 + 1 + 1 + 2 + 2 + 1 = 28
   
 
 
@@ -833,7 +971,37 @@ Construct_UI_MatrixActionButton <- function (
     onclick = "document.getElementById('Button_Load_Example_Type_53').style.backgroundColor = 'transparent';",
     onclick = "document.getElementById('Button_Load_Example_Type_54').style.backgroundColor = 'transparent';",
     
-
+    onclick = "document.getElementById('Button_Load_Example_Type_61').style.backgroundColor = 'transparent';",
+    onclick = "document.getElementById('Button_Load_Example_Type_62').style.backgroundColor = 'transparent';",
+    onclick = "document.getElementById('Button_Load_Example_Type_63').style.backgroundColor = 'transparent';",
+    onclick = "document.getElementById('Button_Load_Example_Type_64').style.backgroundColor = 'transparent';",
+    
+    onclick = "document.getElementById('Button_Load_Example_Type_71').style.backgroundColor = 'transparent';",
+    onclick = "document.getElementById('Button_Load_Example_Type_72').style.backgroundColor = 'transparent';",
+    onclick = "document.getElementById('Button_Load_Example_Type_73').style.backgroundColor = 'transparent';",
+    onclick = "document.getElementById('Button_Load_Example_Type_74').style.backgroundColor = 'transparent';",
+    
+    onclick = "document.getElementById('Button_Load_Example_Type_81').style.backgroundColor = 'transparent';",
+    onclick = "document.getElementById('Button_Load_Example_Type_82').style.backgroundColor = 'transparent';",
+    onclick = "document.getElementById('Button_Load_Example_Type_83').style.backgroundColor = 'transparent';",
+    onclick = "document.getElementById('Button_Load_Example_Type_84').style.backgroundColor = 'transparent';",
+    
+    onclick = "document.getElementById('Button_Load_Example_Type_91').style.backgroundColor = 'transparent';",
+    onclick = "document.getElementById('Button_Load_Example_Type_92').style.backgroundColor = 'transparent';",
+    onclick = "document.getElementById('Button_Load_Example_Type_93').style.backgroundColor = 'transparent';",
+    onclick = "document.getElementById('Button_Load_Example_Type_94').style.backgroundColor = 'transparent';",
+    
+    onclick = "document.getElementById('Button_Load_Example_Type_101').style.backgroundColor = 'transparent';",
+    onclick = "document.getElementById('Button_Load_Example_Type_102').style.backgroundColor = 'transparent';",
+    onclick = "document.getElementById('Button_Load_Example_Type_103').style.backgroundColor = 'transparent';",
+    onclick = "document.getElementById('Button_Load_Example_Type_104').style.backgroundColor = 'transparent';",
+    
+    onclick = "document.getElementById('Button_Load_Example_Type_111').style.backgroundColor = 'transparent';",
+    onclick = "document.getElementById('Button_Load_Example_Type_112').style.backgroundColor = 'transparent';",
+    onclick = "document.getElementById('Button_Load_Example_Type_113').style.backgroundColor = 'transparent';",
+    onclick = "document.getElementById('Button_Load_Example_Type_114').style.backgroundColor = 'transparent';",
+    
+    
     
     onclick =
       paste0 (
@@ -1052,7 +1220,7 @@ Construct_UI_BuildingTypeMatrix <- function (
 
 
 #####################################################################################X
-## FUNCTION Calculate_Stack () - Calculate selected datasets of the calculation stack -----
+## FUNCTION Calculate_EnergyDemand () - Calculate selected datasets of the calculation stack -----
 
 # The calculation is performed on the basis of DF_Stack_Input and a list of stack dataset IDs  
 # that should be recalculated. The list usually consists of only one dataset ID, but the concept is open to
@@ -1060,58 +1228,109 @@ Construct_UI_BuildingTypeMatrix <- function (
 # The output calculation stack DF_Stack_Output is provided to the function and also returned by the function
 # modified in the rows that were identified by the dataset ID input.   
 
-Calculate_Stack <- function (
-    myDF_Stack_Input,
-    myDF_Stack_Output,
+Calculate_EnergyDemand <- function (
+    myDF_BuildingData_Input,
+    myDF_BuildingData_Output,
     TabulaTables,
-    ID_Calculate = NA
+    ID_Calculate = NA,
+    Include_TargetActualComparison = FALSE
 ){
 
   if (is.na (ID_Calculate)) {
-    ID_Calculate <- myDF_Stack_Input [ ,1]
+    ID_Calculate <- rownames (myDF_BuildingData_Input)
+    #ID_Calculate <- myDF_BuildingData_Input [ ,1]
   }
   
-  myOutputTables  <- 
-    MobasyModel::EnergyProfileCalc (
-      TabulaTables = TabulaTables,
-      myBuildingDataTables = 
-        list (
-          Data_Input  = myDF_Stack_Input  [ID_Calculate, -1],
-          Data_Output = myDF_Stack_Output [ID_Calculate, -1]
-        ),
-      Indicator_Include_UncertaintyAssessment = 1
-    )
-  # Note: the -1 is necessary to remove the calculation stack ID (column ID_Stack).
-  # This datafield is not existing in the MOBASY building data table used as input and returned 
-  # by the function EnergyProfileCalc ().
+  if (Include_TargetActualComparison == FALSE) {
+    
+    List_OutputTables  <-
+      MobasyModel::EnergyProfileCalc (
+        TabulaTables = TabulaTables,
+        myBuildingDataTables =
+          list (
+            Data_Input  = myDF_BuildingData_Input  [ID_Calculate, -1],
+            Data_Output = myDF_BuildingData_Output [ID_Calculate, -1]
+          ),
+        Indicator_Include_UncertaintyAssessment = 1
+      )
+    # Note: the -1 is necessary to remove the calculation stack ID (column ID_Stack).
+    # This datafield is not existing in the MOBASY building data table used as input and returned
+    # by the function EnergyProfileCalc ().
+    
+  } else {
+
+    ## Alternative calculation core: 
+    ## MobasyCalc () includes the target / actual comparison 
+    #  
+    #  In principle this is working (on the calc dataset and also on all stack datasets). 
+    #  However before loading the datasets to be calculated, the automatic calculation must be switched of,
+    #  since it collides / interferes with the very long target actual calculation, which is done dataset by dataset 
+    #  in MobasyCalc (). 
+    #  It is also recommended to load all datasets at one time into the stack. 
+    # 
+    #  Next step: 
+    #  > Include a parameter in this function to switch from EnergyProfileCalc () to MobasyCalc ()
+    #  > The function with the parameter Include_TargetActualComparison == TRUE should only be called by an extra button.   
+    #  > When pressing the extra button the automatic calculation should be switched off. 
+
+    List_OutputTables  <-
+      MobasyModel::MobasyCalc (
+        TabulaTables = TabulaTables,
+        myBuildingDataTables =
+          list (
+            Data_Input  = myDF_BuildingData_Input  [ID_Calculate, -1],
+            Data_Output = myDF_BuildingData_Output [ID_Calculate, -1]
+          ),
+        StationClimateTables <-
+          MobasyModel::GetStationClimate_RDataPackage ()
+      )
+    # # Note: the -1 is necessary to remove the calculation stack ID (column ID_Stack).
+    # # This datafield is not existing in the MOBASY building data table used as input and returned
+    # # by the function EnergyProfileCalc ().
+    
+  } # End else
+  
 
   
   
-  myDF_Stack_Output [ID_Calculate , -1] <- 
-    myOutputTables$Data_Output [ , ]
   
-#  myDF_Stack_CalcData [ID_Calculate , -1] <- 
+  
+  
+  
+  myDF_BuildingData_Output [ID_Calculate , -1] <- 
+    List_OutputTables$Data_Output [ , ]
+  
+#  myDF_BuildingData_CalcData [ID_Calculate , -1] <- 
   myDF_Calc_InterimResults  <- 
-    myOutputTables$Data_Calc [ , ]
+    List_OutputTables$Data_Calc [ , ]
   
   myDF_Calc_ChartEnergyData <-
-    myOutputTables$DF_Display_Energy
-  #myOutputTables$List_Chart_HeatNeed$DF_HeatNeed_Data [ , ]
+    List_OutputTables$DF_Display_Energy
+  #List_OutputTables$List_Chart_HeatNeed$DF_HeatNeed_Data [ , ]
+  
+  
+  # 2025-10-24 / ging nicht --> löschen
+  #colnames(myDF_Calc_ChartEnergyData [ ,1]) <- "ID_Dataset" 
+   # colnames (myDF_Calc_ChartEnergyData) <- 
+   #   colnames (List_OutputTables$DF_Display_Energy)
+  
+  
   
   myResultList <- 
     list (
-      DF_Stack_Output         = myDF_Stack_Output, # complete stack with updated row
+      DF_Stack_Output         = myDF_BuildingData_Output, # complete stack with updated row
       DF_Calc_InterimResults  = myDF_Calc_InterimResults, # complete stack with updated row
-      DF_Calc_ChartEnergyData = myDF_Calc_ChartEnergyData # only calculated dataset
+      DF_Calc_ChartEnergyData = 
+        myDF_Calc_ChartEnergyData # only calculated dataset
     )
   
   
-  # myDF_Stack_Output <- reactive ({
+  # myDF_BuildingData_Output <- reactive ({
   #   SetDFColNames (
   #     myDataFrame = cbind (
   #       data.frame (DF_Stack_Input () [ ,1]),
   #       RemoveStringFromDFColNames (
-  #         myDataFrame = data.frame ( myOutputTables ()  ["Data_Output"]),
+  #         myDataFrame = data.frame ( List_OutputTables ()  ["Data_Output"]),
   #         myStringToRemove = "Data_Output."
   #       )
   #     ),
@@ -2019,7 +2238,7 @@ ObserveMatrixButton_LoadDatasetFromPoolToCalculation <- function (
 # # 2024-08-19 Funktion wird nicht mehr benutzt --> Löschen
 # 
 # #####################################################################################X
-# ## FUNCTION AddToCalculationStack () - Add current calculation dataset to the stack -----
+# ## ÜBERHOLT FUNCTION AddToCalculationStack () - Add current calculation dataset to the stack -----
 # 
 # 
 # AddToCalculationStack <- function (
@@ -2201,10 +2420,10 @@ ui <- shinydashboard::dashboardPage (
         tabName = "Tab_Data",          
         icon = shiny::icon ("table")
       ),
-      
+
       shinydashboard::menuItem (
-        "Expertenbereich",     
-        tabName = "Tab_Expert",          
+        "Expertenbereich",
+        tabName = "Tab_Expert",
         icon = shiny::icon ("table")
       )
       
@@ -2237,31 +2456,63 @@ ui <- shinydashboard::dashboardPage (
         # shinyapps.io; see commented script below the text. Any suggestions are welcome :)  
         # Thus, I pasted the original text from "info.Rmd" into the script below.
         
-        markdown (
+        markdown ("
           
-          "## IWU - Energieprofil - Shiny App
-App-Version: 30.08.2024
+        ## IWU - Energieprofil - Shiny App - Development Version
+        Version: 07.11.2025
+        
+        ## Erläuterungen 
+        
+        Diese Shiny-App dient der Berechnung des Energiebedarfs für Heizung und Warmwasser auf der Basis von Energieprofil-Indikatoren. 
+        
+        Details zum fachlichen Hintergrund finden sich auf der MOBASY-Projektseite: https://www.iwu.de/forschung/energie/mobasy/ (Beschreibung des Gesamtverfahrens: https://www.iwu.de/fileadmin/publikationen/energie/mobasy/2021_IWU_LogaEtAl_MOBASY-Realbilanzierung-Verbrauch-Bedarf-Vergleich.pdf). 
+        
+        Die Shiny-App erweitert die Funktionalität des MOBASY-Energieprofil-Webtools https://www.iwu.de/publikationen/tools/energieprofil/webtool/ um die Möglichkeit, berechnete Ein- und Ausgabedaten in einem Stack abzulegen und nach Durchführung der Berechnung als Excel-Tabelle herunterzuladen. Umgekehrt kann eine in Excel präparierte Eingabetabelle in den Stack geladen und berechnet werden.
+        
+        Die Shiny-App besteht aus folgenden Bausteinen:
+        
+        - 'Energieprofil-Indikatoren' für die Erfassung der wesentlichen energetischen Merkmale von Gebäudehülle und Wärmeversorgung (2 Eingabe-Formulare)
+        - Schätzverfahren für die Gebäudehüllfläche auf der Basis der Wohnfläche und der geometrischen Energieprofil-Indikatoren
+        - Schätzverfahren für Wärmedurchgangskoeffizienten (U-Werte) auf Basis von Informationen zu Baualter und nachträglicher Dämmung der Komponenten der thermischen Hülle
+        - Konfigurationsalgorithmus für die Komponenten der Wärmeversorgung auf Basis der wesentlichen Merkmale (Vorhandensein und ggf. Art und Lokalisation von Anlagenkomponenten)
+        - Pauschalwerte für die Effizienz der Komponenten der Wärmeversorgung (Wärmeverteilung, -speicherung und -erzeugung)
+        - Energiebilanz-Berechnung (TABULA-Verfahren) zur Ermittlung des Heizwärmebedarfs sowie des nach Energieträger differenzierten Endenergiebedarfs für Heizung und Warmwasser (Beschreibung der Methodik: https://episcope.eu/fileadmin/tabula/public/docs/report/TABULA_CommonCalculationMethod.pdf)  
+        
+        Die in R programmierten Berechnungsformeln finden sich im R-Paket MobasyModel https://github.com/TobiasLoga/MobasyModel .
+        Die Algorithmen sind weitgehend identisch mit denen des Excel-Tools 'EnergyProfile.xlsm' https://www.iwu.de/fileadmin/tools/energyprofile/EnergyProfile-XL-Package.zip .
+        
+        Wir stellen das Werkzeug gerne anderen Experten zur Nutzung Verfügung, können jedoch keinerlei Support übernehmen. Wir übernehmen keine Gewähr für die Vollständigkeit, Richtigkeit und Genauigkeit der Berechnungen und der Daten. Fehler können gemeldet werden an: Tobias Loga t.loga@iwu.de
+        
+        
+        ## Hinweise zur Funktionalität der vorliegenden Version  
+        
+        - Die Energieprofil-Indikatoren können je Einzelgebäude erfasst und eingegeben werden. Sind keine Informationen vorhanden, werden für die Berechnung Mittelwerte aus dem Wohngebäudebestand als Input angesetzt. Damit vergrößert sich jeweils die Unsicherheit des Berechnungsergebenisses. 
+        
+        - Die Ergebnisse können im Menüpunkt 'Daten' gesichtet und dort auch als Tabelle heruntergeladen werden. 
+        
+        - Weiterhin kann im Menüpunkt 'Daten' / 'Daten-Import' eine Tabelle mit Eingabedaten in den Stack geladen und berechnet werden. Wird eine heruntergeladene Eingabedatentabelle (Download unter 'Daten' / 'Stack_Input') als Ausgangbasis für den Upload verwendet (z.B. in dem ein Datensatz mehrfach kopiert und für eine Parameterstudie bei bestimmten Variablen systematisch variiert wird), so muss vor dem Upload die erste (über alle Spalten verbundene) Zeile gelöscht werden (Die Download-Funktion schreibt dort das Wort 'Energieprofil' hinein - es ist derzeit nicht klar, wie dies abgeschaltet werden kann.) 
+        
+        - Weitere im oben genannten Excel-Tool gegebene Möglichkeiten der Eingabe sind derzeit in der Shiny-App (noch) nicht implementiert. Für die gebäudeweise Eingabe und Analyse von Verbrauchsdaten und für den Verbrauch-Bedarf-Vergleich muss also weiterhin das Excel-Tool verwendet werden.  
+        
+        - Allerdings bietet die Shiny-App die Möglichkeit, den Verbrauch-Bedarf-Vergleich für importierte Datensätze (vorbereitet in Excel) als Stack-Berechnung durchzuführen. Hierfür dient die Schaltfläche 'Gesamten Stack inkl. V/B-Vergleich berechnen'. Man beachte hier allerdings die lange Rechenzeit (ca. 20 Sekunden je im Stack enthaltenen Datensatz).  
+        
+        		
+        
+        -----
+        
+        Logbuch der Änderungen						
+        						
+          		    
+        						
+        -----
+        
+        
+        Institut Wohnen und Umwelt GmbH
+        
+        Tobias Loga 									
+        
+        www.iwu.de 
 
-## Erläuterungen 
-
-Mit dieser Shiny-App ...
-
-...
-...
-...
-
-Wir stellen das Werkzeug gerne anderen Experten zur Nutzung Verfügung, können jedoch keinerlei Support übernehmen. Wir übernehmen keine Gewähr für die Vollständigkeit, Richtigkeit und Genauigkeit der Berechnungen und der Daten. Fehler können gemeldet werden an: Tobias Loga t.loga@iwu.de
-
-...
-...
-...
-
-Institut Wohnen und Umwelt GmbH
-
-Tobias Loga 									
-
-www.iwu.de 
-         
           
 ")
         
@@ -2274,60 +2525,6 @@ www.iwu.de
       ), # End tabItem "Tab_Info"
 
       
-      #######################################################################X
-      ## tabItem "Tab_Comparison"  -----
-
-      shinydashboard::tabItem (
-
-        tabName = "Tab_Comparison",
-
-        #fillPage (    # 2025-05-09 versuchsweise abgeschaltet, da man im Datenbereich sonst nicht nach unten scrollen kann
-          
-          sidebarLayout ( 
-            
-            
-            ### sidebar START (left area of sidebarLayout) -----
-            
-            
-            sidebarPanel (
-              width = 8,
-              
-          
-          tabsetPanel (
-            type = "tabs",
-            
-            tabPanel (
-            
-            "Heizwärmebedarf", 
-            
-            fluidRow (
-              
-              style = Style_Height_Dashboard_MainPanel,  
-              
-              column (
-                12,
-                
-                
-                br (),
-              ) # End column 
-              
-            ) # End fluidRow
-            
-          ) # End tabPanel
-          
-          ) # End tabSetPanel
-          
-          ), # End sidebarPanel
-        
-        mainPanel (
-          width = 4,
-          
-        )
-        ) # End sideBarLayout 
-        
-        #) # End fillPage  # 2025-05-09 versuchsweise abgeschaltet
-        
-      ), # End tabItem
       
       #######################################################################X
       ## tabItem "Tab_Dashboard"  -----
@@ -2408,7 +2605,8 @@ www.iwu.de
               
               column (
                 7,
-                div ("Auswahl eines Datensatzes aus dem Stapel", style = "font-size:10px; line-height:0.8;"),
+                div ("Auswahl eines Datensatzes aus dem Stack", style = "font-size:10px; line-height:0.8;"),
+                
                 selectInput (
                   inputId = "SelectInput_ID_Dataset_Stack",
                   label = NULL,
@@ -2454,7 +2652,7 @@ www.iwu.de
               
                 column (
                   3,
-                  div ("im Stapel speichern", style = "font-size:10px; line-height:0.8;"),
+                  div ("im Stack speichern", style = "font-size:10px; line-height:0.8;"),
                   actionButton (
                     "Button_SaveCalculationToStack",
                     label = "Speichern",
@@ -2623,7 +2821,7 @@ www.iwu.de
                     
                     tabPanel (
                       
-                      "Typologie", 
+                      strong ("Typologie"), 
                       
                       fluidRow (
                         
@@ -2646,11 +2844,53 @@ www.iwu.de
                         style = "
                               color: grey;
                               line-height: 2.0; 
-                              text-align: center;",
+                              text-align: left;
+                              #text-align: center;
+                        ",
                         
-                        #"Deutsche Wohngebäudetypologie - Beispielgebäude - ",
-                        "Hüllflächen auf Basis geometrischer Merkmale geschätzt - ",
-                        "Zustand: nicht modernisiert"
+                        column (
+                          8,
+                          
+                          #"Deutsche Wohngebäudetypologie - Beispielgebäude - ",
+                          "Hüllflächen auf Basis geometrischer Merkmale geschätzt - ",
+                          "Zustand: nicht modernisiert"
+                          
+                        ), # End column
+
+                        
+                        column (
+                          1,
+                          
+                          # Dieser Hilfsknopf ist notwendig, da der direkte Aufruf nicht funktioniert hat. 
+                          # Loads the currently selected pool datasets to the stack
+                          actionButton (
+                            "Button_AddAllTypologyExamplesToStack_Step2",
+                            label = "",
+                            width = '0px',
+                            style = "padding: 0 !important"
+                          ),
+                          #align = 'right'
+                          
+                        ),
+                        
+                                                
+                        column (
+                          3, 
+                          
+                          
+                          actionButton (
+                            "Button_AddAllTypologyExamplesToStack",
+                            label = strong (" Alle in den Stack laden ",),
+                            #width = '120%'
+                            style = "padding: 0 !important"
+                          ),
+                          align = 'right'
+                          
+                          #style = "background-color:white"
+
+                          
+                        )
+                        
                         
                       ), # End fluidRow
                       
@@ -3144,8 +3384,50 @@ www.iwu.de
                             i_Row_Matrix = 5
                           ),
                           
+                          Construct_UI_BuildingTypeMatrix (
+                            i_Row_Matrix = 6
+                          ),
                           
+                          Construct_UI_BuildingTypeMatrix (
+                            i_Row_Matrix = 7
+                          ),
                           
+                          Construct_UI_BuildingTypeMatrix (
+                            i_Row_Matrix = 8
+                          ),
+                          
+                          Construct_UI_BuildingTypeMatrix (
+                            i_Row_Matrix = 9
+                          ),
+                          
+                          Construct_UI_BuildingTypeMatrix (
+                            i_Row_Matrix = 10
+                          ),
+                          
+                          Construct_UI_BuildingTypeMatrix (
+                            i_Row_Matrix = 11
+                          ),
+                          
+                          # Construct_UI_BuildingTypeMatrix (
+                          #   i_Row_Matrix = 12
+                          # ),
+                           
+                          # Construct_UI_BuildingTypeMatrix (
+                          #   i_Row_Matrix = 13
+                          # ),
+                          #
+                          # Construct_UI_BuildingTypeMatrix (
+                          #   i_Row_Matrix = 14
+                          # ),
+                          # 
+                          # Construct_UI_BuildingTypeMatrix (
+                          #   i_Row_Matrix = 15
+                          # ),
+                          # 
+                          # Construct_UI_BuildingTypeMatrix (
+                          #   i_Row_Matrix = 16
+                          # ),
+                          # 
                           
                           
                           
@@ -3181,7 +3463,7 @@ www.iwu.de
                     
                     tabPanel (
                       
-                      "Gebäude", 
+                      strong ("Gebäude"), 
                       
                       #######################################################################X
                       #### § Energieprofil Gebäude  -----
@@ -3494,13 +3776,24 @@ www.iwu.de
                           ), # End radioButtons                           
                           
                           
+                          conditionalPanel (
+                            condition = "
+                            input.Code_CellarCond == 'N' | 
+                            input.Code_CellarCond == 'P' | 
+                            input.Code_CellarCond == '_NA_'  
+                            ",
+                            
+                            checkboxInput (
+                              inputId = "Indicator_Cellar_Insulated", 
+                              label = "Keller liegt vollständig in der thermischen Hülle 
+                                    (falls mehr Dämmung in der Ebene des Fußbodens zum Erdreich als in der der Kellerdecke liegt)",
+                              #label = "Kellerboden und -wände gedämmt", 
+                              value = FALSE, 
+                              width = NULL
+                            )
+                            
+                          ), # End conditional panel
                           
-                          checkboxInput (
-                            inputId = "Indicator_Cellar_Insulated", 
-                            label = "Kellerboden und -wände gedämmt", 
-                            value = FALSE, 
-                            width = NULL
-                          ),
                           
                           
                           
@@ -3901,335 +4194,363 @@ www.iwu.de
                                 
                         ),
                         
-                        
-                        column (
-                          2,
-                          br (),
+                        conditionalPanel (
+                          condition = "
+                            (input.Code_AtticCond != '-') &
+                            (input.Code_AtticCond != 'C') 
+                          ",
                           
-                          
-                          fluidRow (
-                            column (
-                              12,
-                              strong ("Art der Konstruktion")
-                            ),
-                            style = ColumnStyle_Label_2Lines 
-                          ),
-                          
-                          checkboxInput (
-                            inputId = "Indicator_Ceiling_Constr_Massive", 
-                            label = "massiv", 
-                            value = FALSE, 
-                            width = NULL
-                          ),
-                          
-                          checkboxInput (
-                            inputId = "Indicator_Ceiling_Constr_Wood", 
-                            label = "Holz", 
-                            value = FALSE, 
-                            width = NULL
-                          ),
-                          
-                        ), # End column
-                        
-                        column (
-                          4,
-                          
-                          br (),
-                          
-                          
-                          fluidRow(
-                            column (
-                              12,
-                              strong ("energetischer Zustand")
-                            ),
-                            style = ColumnStyle_Label_2Lines 
-                          ),
-                          
-                          
-                          radioButtons(
-                            inputId = "Code_InsulationType_Ceiling",
-                            label = NULL,
-                            # choices = c(
-                            #     "keine Änderung",
-                            #     "Original-Dämmung",
-                            #     "Modernisierung",
-                            #     "keine Angabe / unbekannt"
-                            # ),                                ,
-                            selected = NULL,
-                            inline = FALSE,
-                            width = NULL,
-                            choiceNames = c (
-                              "Original, keine Angaben zur Dämmung bei Errichtung",
-                              "Original, Angaben zur Dämmung bei Errichtung",
-                              "nachträgliche Dämmung / Modernisierung",
-                              "keine Angabe / unbekannter Zustand"
-                            ),
-                            # choiceNames = c (
-                            #   "seit Errichtung keine Änderung, keine Angaben zur Dämmung",
-                            #   "keine Änderung, Angaben beziehen sich auf Original-Dämmung",
-                            #   "Modernisierung / nachträgliche Dämmung",
-                            #   "keine Angabe / unbekannter Zustand"
-                            # ),
-                            choiceValues = c(
-                              "None",
-                              "Original",
-                              "Refurbish",
-                              "_NA_"
-                            )
-                          ) # End radioButtons                           
-                          
-                        ), # End column 
-                        
-                        column (
-                          2,
-                          
-                          br (),
-                          
-                          fluidRow (
-                            column (
-                              12,
-                              strong ("Jahr der Modernisierung")  
-                            ),
-                            style = ColumnStyle_Label_2Lines 
-                          ),
-                          
-                          conditionalPanel (
-                            condition = "(input.Code_Type_NumericQueries != 'Numeric') &
-                                (input.Checkbox_Year_Refurbishment_Ceiling_InputNotAvailable == 0) &
-                                (input.Code_InsulationType_Ceiling == 'Refurbish')",
+                          column (
+                            2,
+                            br (),
                             
-                            sliderInput (
-                              inputId = "Year_Refurbishment_Ceiling_Slider",
-                              label = NULL,
-                              value = 1970,
-                              min = 1970,
-                              max = 2030,
-                              step = 1,
-                              sep = ""
-                              #width = 500
-                            ), # End slider input
                             
-                          ), # End conditional panel
-                          
-                          conditionalPanel (
-                            condition = "(input.Code_Type_NumericQueries != 'Slider') &
-                                (input.Checkbox_Year_Refurbishment_Ceiling_InputNotAvailable == 0) &
-                                (input.Code_InsulationType_Ceiling == 'Refurbish')",
-                            
-                            numericInput (
-                              inputId = "Year_Refurbishment_Ceiling",
-                              label = NULL,
-                              value = NA,
-                              min = 1970,
-                              max = 2030,
-                              width = 75
-                            ) # End numeric input
-                            
-                          ), # End conditional panel
-                          
-                          
-                          conditionalPanel (
-                            condition = "(input.Code_InsulationType_Ceiling == 'Refurbish')",
+                            fluidRow (
+                              column (
+                                12,
+                                strong ("Art der Konstruktion")
+                              ),
+                              style = ColumnStyle_Label_2Lines 
+                            ),
                             
                             checkboxInput (
-                              inputId = "Checkbox_Year_Refurbishment_Ceiling_InputNotAvailable",
-                              label = "keine Angabe / unbekannt",
-                              value = FALSE,
+                              inputId = "Indicator_Ceiling_Constr_Massive", 
+                              label = "massiv", 
+                              value = FALSE, 
                               width = NULL
-                            ), # End checkbox input 
-                            
-                          ), # End conditional panel
-                          
-                          
-                          conditionalPanel (
-                            condition = "(input.Code_InsulationType_Ceiling != 'Refurbish')",
-                            
-                            "- entfällt -" 
-                            
-                          ), # End conditional panel
-                          
-                          
-                        ), # End column
-                        
-                        column (
-                          2,
-                          
-                          br (),
-                          
-                          fluidRow(
-                            column (
-                              12,
-                              strong ("Dämmstärke [cm]")
                             ),
-                            style = ColumnStyle_Label_2Lines 
-                          ),
+                            
+                            checkboxInput (
+                              inputId = "Indicator_Ceiling_Constr_Wood", 
+                              label = "Holz", 
+                              value = FALSE, 
+                              width = NULL
+                            ),
+                            
+                          ), # End column
                           
+                          column (
+                            4,
+                            
+                            br (),
+                            
+                            
+                            fluidRow(
+                              column (
+                                12,
+                                strong ("energetischer Zustand")
+                              ),
+                              style = ColumnStyle_Label_2Lines 
+                            ),
+                            
+                            
+                            radioButtons(
+                              inputId = "Code_InsulationType_Ceiling",
+                              label = NULL,
+                              # choices = c(
+                              #     "keine Änderung",
+                              #     "Original-Dämmung",
+                              #     "Modernisierung",
+                              #     "keine Angabe / unbekannt"
+                              # ),                                ,
+                              selected = NULL,
+                              inline = FALSE,
+                              width = NULL,
+                              choiceNames = c (
+                                "Original, keine Angaben zur Dämmung bei Errichtung",
+                                "Original, Angaben zur Dämmung bei Errichtung",
+                                "nachträgliche Dämmung / Modernisierung",
+                                "keine Angabe / unbekannter Zustand"
+                              ),
+                              # choiceNames = c (
+                              #   "seit Errichtung keine Änderung, keine Angaben zur Dämmung",
+                              #   "keine Änderung, Angaben beziehen sich auf Original-Dämmung",
+                              #   "Modernisierung / nachträgliche Dämmung",
+                              #   "keine Angabe / unbekannter Zustand"
+                              # ),
+                              choiceValues = c(
+                                "None",
+                                "Original",
+                                "Refurbish",
+                                "_NA_"
+                              )
+                            ) # End radioButtons                           
+                            
+                          ), # End column 
                           
-                          conditionalPanel (
-                            condition = "(input.Code_Type_NumericQueries != 'Numeric') &
+                          column (
+                            2,
+                            
+                            br (),
+                            
+                            fluidRow (
+                              column (
+                                12,
+                                strong ("Jahr der Modernisierung")  
+                              ),
+                              style = ColumnStyle_Label_2Lines 
+                            ),
+                            
+                            conditionalPanel (
+                              condition = "(input.Code_Type_NumericQueries != 'Numeric') &
+                                (input.Checkbox_Year_Refurbishment_Ceiling_InputNotAvailable == 0) &
+                                (input.Code_InsulationType_Ceiling == 'Refurbish')",
+                              
+                              sliderInput (
+                                inputId = "Year_Refurbishment_Ceiling_Slider",
+                                label = NULL,
+                                value = 1970,
+                                min = 1970,
+                                max = 2030,
+                                step = 1,
+                                sep = ""
+                                #width = 500
+                              ), # End slider input
+                              
+                            ), # End conditional panel
+                            
+                            conditionalPanel (
+                              condition = "(input.Code_Type_NumericQueries != 'Slider') &
+                                (input.Checkbox_Year_Refurbishment_Ceiling_InputNotAvailable == 0) &
+                                (input.Code_InsulationType_Ceiling == 'Refurbish')",
+                              
+                              numericInput (
+                                inputId = "Year_Refurbishment_Ceiling",
+                                label = NULL,
+                                value = NA,
+                                min = 1970,
+                                max = 2030,
+                                width = 75
+                              ) # End numeric input
+                              
+                            ), # End conditional panel
+                            
+                            
+                            conditionalPanel (
+                              condition = "(input.Code_InsulationType_Ceiling == 'Refurbish')",
+                              
+                              checkboxInput (
+                                inputId = "Checkbox_Year_Refurbishment_Ceiling_InputNotAvailable",
+                                label = "keine Angabe / unbekannt",
+                                value = FALSE,
+                                width = NULL
+                              ), # End checkbox input 
+                              
+                            ), # End conditional panel
+                            
+                            
+                            conditionalPanel (
+                              condition = "(input.Code_InsulationType_Ceiling != 'Refurbish')",
+                              
+                              "- entfällt -" 
+                              
+                            ), # End conditional panel
+                            
+                            
+                          ), # End column
+                          
+                          column (
+                            2,
+                            
+                            br (),
+                            
+                            fluidRow(
+                              column (
+                                12,
+                                strong ("Dämmstärke [cm]")
+                              ),
+                              style = ColumnStyle_Label_2Lines 
+                            ),
+                            
+                            
+                            conditionalPanel (
+                              condition = "(input.Code_Type_NumericQueries != 'Numeric') &
                                          (input.Checkbox_d_Insulation_Ceiling_InputNotAvailable == 0) &
                                          ((input.Code_InsulationType_Ceiling == 'Original') | 
                                          ( input.Code_InsulationType_Ceiling == 'Refurbish'))",
+                              
+                              sliderInput (
+                                # numericInput (
+                                inputId = "d_Insulation_Ceiling_Slider",
+                                label = NULL,
+                                #label = "Dämmstärke [cm]",
+                                value = 0,
+                                min = 1,
+                                max = 40,
+                                step = 1
+                                #width = 500
+                              ),
+                              
+                            ), # End conditional panel
                             
-                            sliderInput (
-                              # numericInput (
-                              inputId = "d_Insulation_Ceiling_Slider",
-                              label = NULL,
-                              #label = "Dämmstärke [cm]",
-                              value = 0,
-                              min = 1,
-                              max = 40,
-                              step = 1
-                              #width = 500
-                            ),
-                            
-                          ), # End conditional panel
-                          
-                          conditionalPanel (
-                            condition = "(input.Code_Type_NumericQueries != 'Slider') &
+                            conditionalPanel (
+                              condition = "(input.Code_Type_NumericQueries != 'Slider') &
                                          (input.Checkbox_d_Insulation_Ceiling_InputNotAvailable == 0) &
                                          ((input.Code_InsulationType_Ceiling == 'Original') | 
                                          ( input.Code_InsulationType_Ceiling == 'Refurbish'))",
+                              
+                              # fluidRow (
+                              #   
+                              #   column (
+                              #     8,
+                              
+                              numericInput (
+                                inputId = "d_Insulation_Ceiling",
+                                label = NULL,
+                                #label = "[cm]",
+                                value = NA,
+                                min = 1,
+                                max = 40,
+                                width = 75
+                              ) # End numeric input
+                              
+                              #   ), # End column
+                              #   
+                              #   column (
+                              #     4,
+                              #     "cm"
+                              #   ) # End column
+                              #   
+                              # ) # End fluid row
+                              
+                            ), # End conditional panel
                             
-                            # fluidRow (
-                            #   
-                            #   column (
-                            #     8,
-                                
-                                numericInput (
-                                  inputId = "d_Insulation_Ceiling",
-                                  label = NULL,
-                                  #label = "[cm]",
-                                  value = NA,
-                                  min = 1,
-                                  max = 40,
-                                  width = 75
-                                ) # End numeric input
-                                
-                            #   ), # End column
-                            #   
-                            #   column (
-                            #     4,
-                            #     "cm"
-                            #   ) # End column
-                            #   
-                            # ) # End fluid row
                             
-                          ), # End conditional panel
-                          
-                          
-                          
-                          conditionalPanel (
-                            condition = "(input.Code_InsulationType_Ceiling == 'Refurbish') | 
+                            
+                            conditionalPanel (
+                              condition = "(input.Code_InsulationType_Ceiling == 'Refurbish') | 
                                          (input.Code_InsulationType_Ceiling == 'Original')",
+                              
+                              checkboxInput (
+                                inputId = "Checkbox_d_Insulation_Ceiling_InputNotAvailable",
+                                label = "keine Angabe / unbekannt",
+                                value = FALSE,
+                                width = NULL
+                              ), # End checkbox input
+                              
+                            ), # End conditional panel
                             
-                            checkboxInput (
-                              inputId = "Checkbox_d_Insulation_Ceiling_InputNotAvailable",
-                              label = "keine Angabe / unbekannt",
-                              value = FALSE,
-                              width = NULL
-                            ), # End checkbox input
                             
-                          ), # End conditional panel
-                          
-                          
-                          conditionalPanel (
-                            condition = "(input.Code_InsulationType_Ceiling != 'Refurbish') & 
+                            conditionalPanel (
+                              condition = "(input.Code_InsulationType_Ceiling != 'Refurbish') & 
                                          (input.Code_InsulationType_Ceiling != 'Original')",
+                              
+                              "- entfällt -" 
+                              
+                            ), # End conditional panel
                             
-                            "- entfällt -" 
                             
-                          ), # End conditional panel
+                            
+                            
+                            
+                            #style = "height:35px"
+                          ), # End column
                           
-                          
-                          
-                          
-                          
-                          #style = "height:35px"
-                        ), # End column
-                        
-                        column (
-                          2,
-                          
-                          br (),
-                          
-                          fluidRow (
-                            column (
-                              12,
-                              strong ("Anteil an der Bauteilfläche [%]")
+                          column (
+                            2,
+                            
+                            br (),
+                            
+                            fluidRow (
+                              column (
+                                12,
+                                strong ("Anteil an der Bauteilfläche [%]")
+                              ),
+                              style = ColumnStyle_Label_2Lines 
                             ),
-                            style = ColumnStyle_Label_2Lines 
-                          ),
-                          
-                          
-                          conditionalPanel (
-                            condition = "(input.Code_Type_NumericQueries != 'Numeric')  &
+                            
+                            
+                            conditionalPanel (
+                              condition = "(input.Code_Type_NumericQueries != 'Numeric')  &
                                          (input.Checkbox_f_Insulation_Ceiling_InputNotAvailable == 0)  &
                                          ((input.Code_InsulationType_Ceiling == 'Original') | 
                                          ( input.Code_InsulationType_Ceiling == 'Refurbish'))",
+                              
+                              sliderInput (
+                                inputId = "f_Insulation_Ceiling_Slider",
+                                label = NULL,
+                                value = 0,
+                                min = 10,
+                                max = 100,
+                                step = 10
+                                #width = 200
+                              ),
+                              
+                            ), # End conditional panel
                             
-                            sliderInput (
-                              inputId = "f_Insulation_Ceiling_Slider",
-                              label = NULL,
-                              value = 0,
-                              min = 10,
-                              max = 100,
-                              step = 10
-                              #width = 200
-                            ),
-                            
-                          ), # End conditional panel
-                          
-                          conditionalPanel (
-                            condition = "(input.Code_Type_NumericQueries != 'Slider') &
+                            conditionalPanel (
+                              condition = "(input.Code_Type_NumericQueries != 'Slider') &
                                          (input.Checkbox_f_Insulation_Ceiling_InputNotAvailable == 0)  &
                                          ((input.Code_InsulationType_Ceiling == 'Original') | 
                                          ( input.Code_InsulationType_Ceiling == 'Refurbish'))",
+                              
+                              numericInput (
+                                inputId = "f_Insulation_Ceiling",
+                                label = NULL,
+                                value = 0,
+                                min = 10,
+                                max = 100,
+                                step = 10,
+                                width = 75
+                              ) # End numericInput
+                              
+                            ), # End conditional panel
                             
-                            numericInput (
-                              inputId = "f_Insulation_Ceiling",
-                              label = NULL,
-                              value = 0,
-                              min = 10,
-                              max = 100,
-                              step = 10,
-                              width = 75
-                            ) # End numericInput
                             
-                          ), # End conditional panel
-                          
-                          
-                          conditionalPanel (
-                            condition = "(input.Code_InsulationType_Ceiling == 'Refurbish') | 
+                            conditionalPanel (
+                              condition = "(input.Code_InsulationType_Ceiling == 'Refurbish') | 
                                          (input.Code_InsulationType_Ceiling == 'Original')",
+                              
+                              checkboxInput (
+                                inputId = "Checkbox_f_Insulation_Ceiling_InputNotAvailable",
+                                label = "keine Angabe / unbekannt",
+                                value = FALSE,
+                                width = NULL
+                              ), # End checkbos input 
+                              
+                            ), # End conditional panel
                             
-                            checkboxInput (
-                              inputId = "Checkbox_f_Insulation_Ceiling_InputNotAvailable",
-                              label = "keine Angabe / unbekannt",
-                              value = FALSE,
-                              width = NULL
-                            ), # End checkbos input 
                             
-                          ), # End conditional panel
-                          
-                          
-                          conditionalPanel (
-                            condition = "(input.Code_InsulationType_Ceiling != 'Refurbish') & 
+                            conditionalPanel (
+                              condition = "(input.Code_InsulationType_Ceiling != 'Refurbish') & 
                                          (input.Code_InsulationType_Ceiling != 'Original')",
+                              
+                              "- entfällt -" 
+                              
+                            ), # End conditional panel
                             
-                            "- entfällt -" 
                             
-                          ), # End conditional panel
+                            
+                            
+                            
+                            #style = "height:35px"
+                          ), # End column
+                          
+                          style = "border: 1px solid lightgrey"
+                          #style = "border: 1px dotted lightgrey"
                           
                           
                           
-                          
-                          
-                          #style = "height:35px"
-                        ), # End column
+                        ), # End conditional panel "Show input for top ceiling"
                         
-                        style = "border: 1px solid lightgrey"
-                        #style = "border: 1px dotted lightgrey"
+                        
+                        conditionalPanel (
+                          condition = "
+                            (input.Code_AtticCond == '-') |
+                            (input.Code_AtticCond == 'C')
+                          ",
+                          column (
+                            12,
+                            br (),
+                            "- keine Eingabe bei der gewählten Dach-Situation -",
+                            br (),
+                            br ()
+                          )
+                        ), # End conditional panel "Don't show input for top ceiling"
+                        
+                        
+                        
+                        
                         
                       ),  # End fluidRow input Ceiling
                       
@@ -4350,122 +4671,125 @@ www.iwu.de
                           
                         ), # End column 
                         
-                        
                         column (
-                          2,
-                          
-                          br (),
-                          
+                          6,
                           fluidRow (
+                            
                             column (
-                              12,
-                              strong ("Jahr der Modernisierung")  
-                            ),
-                            style = ColumnStyle_Label_2Lines 
-                          ),
-                          
-                          conditionalPanel (
-                            condition = "(input.Code_Type_NumericQueries != 'Numeric') &
+                              4,
+                              
+                              br (),
+                              
+                              fluidRow (
+                                column (
+                                  12,
+                                  strong ("Jahr der Modernisierung")  
+                                ),
+                                style = ColumnStyle_Label_2Lines 
+                              ),
+                              
+                              conditionalPanel (
+                                condition = "(input.Code_Type_NumericQueries != 'Numeric') &
                                 (input.Checkbox_Year_Refurbishment_Wall_InputNotAvailable == 0) &
                                 (input.Code_InsulationType_Wall == 'Refurbish')",
-                            
-                            sliderInput (
-                              inputId = "Year_Refurbishment_Wall_Slider",
-                              label = NULL,
-                              value = 1970,
-                              min = 1970,
-                              max = 2030,
-                              step = 1,
-                              sep = ""
-                              #width = 500
-                            ), # End slider input
-                            
-                          ), # End conditional panel
-                          
-                          conditionalPanel (
-                            condition = "(input.Code_Type_NumericQueries != 'Slider') &
+                                
+                                sliderInput (
+                                  inputId = "Year_Refurbishment_Wall_Slider",
+                                  label = NULL,
+                                  value = 1970,
+                                  min = 1970,
+                                  max = 2030,
+                                  step = 1,
+                                  sep = ""
+                                  #width = 500
+                                ), # End slider input
+                                
+                              ), # End conditional panel
+                              
+                              conditionalPanel (
+                                condition = "(input.Code_Type_NumericQueries != 'Slider') &
                                 (input.Checkbox_Year_Refurbishment_Wall_InputNotAvailable == 0) &
                                 (input.Code_InsulationType_Wall == 'Refurbish')",
+                                
+                                numericInput (
+                                  inputId = "Year_Refurbishment_Wall",
+                                  label = NULL,
+                                  value = NA,
+                                  min = 1970,
+                                  max = 2030,
+                                  width = 75
+                                ) # End numeric input
+                                
+                              ), # End conditional panel
+                              
+                              
+                              conditionalPanel (
+                                condition = "(input.Code_InsulationType_Wall == 'Refurbish')",
+                                
+                                checkboxInput (
+                                  inputId = "Checkbox_Year_Refurbishment_Wall_InputNotAvailable",
+                                  label = "keine Angabe / unbekannt",
+                                  value = FALSE,
+                                  width = NULL
+                                ), # End checkbox input 
+                                
+                              ), # End conditional panel
+                              
+                              
+                              conditionalPanel (
+                                condition = "(input.Code_InsulationType_Wall != 'Refurbish')",
+                                
+                                "- entfällt -" 
+                                
+                              ), # End conditional panel
+                              
+                              
+                            ), # End column
                             
-                            numericInput (
-                              inputId = "Year_Refurbishment_Wall",
-                              label = NULL,
-                              value = NA,
-                              min = 1970,
-                              max = 2030,
-                              width = 75
-                            ) # End numeric input
-                            
-                          ), # End conditional panel
-                          
-                          
-                          conditionalPanel (
-                            condition = "(input.Code_InsulationType_Wall == 'Refurbish')",
-                            
-                            checkboxInput (
-                              inputId = "Checkbox_Year_Refurbishment_Wall_InputNotAvailable",
-                              label = "keine Angabe / unbekannt",
-                              value = FALSE,
-                              width = NULL
-                            ), # End checkbox input 
-                            
-                          ), # End conditional panel
-                          
-                          
-                          conditionalPanel (
-                            condition = "(input.Code_InsulationType_Wall != 'Refurbish')",
-                            
-                            "- entfällt -" 
-                            
-                          ), # End conditional panel
-                          
-                          
-                        ), # End column
-                        
-                        column (
-                          2,
-                          
-                          br (),
-                          
-                          fluidRow(
                             column (
-                              12,
-                              strong ("Dämmstärke [cm]")
-                            ),
-                            style = ColumnStyle_Label_2Lines 
-                          ),
-                          
-                          
-                          conditionalPanel (
-                            condition = "(input.Code_Type_NumericQueries != 'Numeric') &
+                              4,
+                              
+                              br (),
+                              
+                              fluidRow(
+                                column (
+                                  12,
+                                  strong ("Dämmstärke [cm]")
+                                ),
+                                style = ColumnStyle_Label_2Lines 
+                              ),
+                              
+                              
+                              conditionalPanel (
+                                condition = "(input.Code_Type_NumericQueries != 'Numeric') &
                                          (input.Checkbox_d_Insulation_Wall_InputNotAvailable == 0) &
                                          ((input.Code_InsulationType_Wall == 'Original') | 
                                          ( input.Code_InsulationType_Wall == 'Refurbish'))",
-                            
-                            sliderInput (
-                              # numericInput (
-                              inputId = "d_Insulation_Wall_Slider",
-                              label = NULL,
-                              #label = "Dämmstärke [cm]",
-                              value = 0,
-                              min = 1,
-                              max = 40,
-                              step = 1
-                              #width = 500
-                            ),
-                            
-                          ), # End conditional panel
-                          
-                          conditionalPanel (
-                            condition = "(input.Code_Type_NumericQueries != 'Slider') &
+                                
+                                sliderInput (
+                                  # numericInput (
+                                  inputId = "d_Insulation_Wall_Slider",
+                                  label = NULL,
+                                  #label = "Dämmstärke [cm]",
+                                  value = 0,
+                                  min = 1,
+                                  max = 40,
+                                  step = 1
+                                  #width = 500
+                                ),
+                                
+                              ), # End conditional panel
+                              
+                              conditionalPanel (
+                                condition = "(input.Code_Type_NumericQueries != 'Slider') &
                                          (input.Checkbox_d_Insulation_Wall_InputNotAvailable == 0) &
                                          ((input.Code_InsulationType_Wall == 'Original') | 
                                          ( input.Code_InsulationType_Wall == 'Refurbish'))",
-                            
-                            # fluidRow (
-                            #   
-                            #   column (
-                            #     8,
+                                
+                                # fluidRow (
+                                #   
+                                #   column (
+                                #     8,
                                 
                                 numericInput (
                                   inputId = "d_Insulation_Wall",
@@ -4477,125 +4801,438 @@ www.iwu.de
                                   width = 75
                                 ) # End numeric input
                                 
-                            #   ), # End column
-                            #   
-                            #   column (
-                            #     4,
-                            #     "cm"
-                            #   ) # End column
-                            #   
-                            # ) # End fluid row
-                            
-                          ), # End conditional panel
-                          
-                          
-                          
-                          conditionalPanel (
-                            condition = "(input.Code_InsulationType_Wall == 'Refurbish') | 
+                                #   ), # End column
+                                #   
+                                #   column (
+                                #     4,
+                                #     "cm"
+                                #   ) # End column
+                                #   
+                                # ) # End fluid row
+                                
+                              ), # End conditional panel
+                              
+                              
+                              
+                              conditionalPanel (
+                                condition = "(input.Code_InsulationType_Wall == 'Refurbish') | 
                                          (input.Code_InsulationType_Wall == 'Original')",
-                            
-                            checkboxInput (
-                              inputId = "Checkbox_d_Insulation_Wall_InputNotAvailable",
-                              label = "keine Angabe / unbekannt",
-                              value = FALSE,
-                              width = NULL
-                            ), # End checkbox input
-                            
-                          ), # End conditional panel
-                          
-                          
-                          conditionalPanel (
-                            condition = "(input.Code_InsulationType_Wall != 'Refurbish') & 
+                                
+                                checkboxInput (
+                                  inputId = "Checkbox_d_Insulation_Wall_InputNotAvailable",
+                                  label = "keine Angabe / unbekannt",
+                                  value = FALSE,
+                                  width = NULL
+                                ), # End checkbox input
+                                
+                              ), # End conditional panel
+                              
+                              
+                              conditionalPanel (
+                                condition = "(input.Code_InsulationType_Wall != 'Refurbish') & 
                                          (input.Code_InsulationType_Wall != 'Original')",
+                                
+                                "- entfällt -" 
+                                
+                              ), # End conditional panel
+                              
+                              
+                              
+                              
+                              
+                              #style = "height:35px"
+                            ), # End column
                             
-                            "- entfällt -" 
                             
-                          ), # End conditional panel
-                          
-                          
-                          
-                          
-                          
-                          #style = "height:35px"
-                        ), # End column
-                        
-                        
-                        column (
-                          2,
-                          
-                          br (),
+                            column (
+                              4,
+                              
+                              br (),
+                              
+                              fluidRow (
+                                column (
+                                  12,
+                                  strong ("Anteil an der Bauteilfläche [%]")
+                                ),
+                                style = ColumnStyle_Label_2Lines 
+                              ),
+                              
+                              
+                              conditionalPanel (
+                                condition = "(input.Code_Type_NumericQueries != 'Numeric')  &
+                                         (input.Checkbox_f_Insulation_Wall_InputNotAvailable == 0)  &
+                                         ((input.Code_InsulationType_Wall == 'Original') | 
+                                         ( input.Code_InsulationType_Wall == 'Refurbish'))",
+                                
+                                sliderInput (
+                                  inputId = "f_Insulation_Wall_Slider",
+                                  label = NULL,
+                                  value = 0,
+                                  min = 10,
+                                  max = 100,
+                                  step = 10
+                                  #width = 200
+                                ),
+                                
+                              ), # End conditional panel
+                              
+                              conditionalPanel (
+                                condition = "(input.Code_Type_NumericQueries != 'Slider') &
+                                         (input.Checkbox_f_Insulation_Wall_InputNotAvailable == 0)  &
+                                         ((input.Code_InsulationType_Wall == 'Original') | 
+                                         ( input.Code_InsulationType_Wall == 'Refurbish'))",
+                                
+                                numericInput (
+                                  inputId = "f_Insulation_Wall",
+                                  label = NULL,
+                                  value = 0,
+                                  min = 10,
+                                  max = 100,
+                                  step = 10,
+                                  width = 75
+                                ) # End numericInput
+                                
+                              ), # End conditional panel
+                              
+                              
+                              conditionalPanel (
+                                condition = "(input.Code_InsulationType_Wall == 'Refurbish') | 
+                                         (input.Code_InsulationType_Wall == 'Original')",
+                                
+                                checkboxInput (
+                                  inputId = "Checkbox_f_Insulation_Wall_InputNotAvailable",
+                                  label = "keine Angabe / unbekannt",
+                                  value = FALSE,
+                                  width = NULL
+                                ), # End checkbos input 
+                                
+                              ), # End conditional panel
+                              
+                              
+                              conditionalPanel (
+                                condition = "(input.Code_InsulationType_Wall != 'Refurbish') & 
+                                         (input.Code_InsulationType_Wall != 'Original')",
+                                
+                                "- entfällt -" 
+                                
+                              ), # End conditional panel
+                              
+                              
+                              #style = "height:35px"
+                            ), # End column
+                            
+                            
+                          ), # End fluidRow
                           
                           fluidRow (
+                            
+                            conditionalPanel (
+                              condition = "
+                                ((input.Code_InsulationType_Wall == 'Refurbish') | 
+                                 (input.Code_InsulationType_Wall == 'Original')) &
+                                 (input.Checkbox_d_Insulation_Wall_InputNotAvailable == 0)
+                                ",
+
+                              column (
+                                4
+                              ),
+                              
+                              column (
+                                8,
+                                checkboxInput (
+                                  inputId = "Indicator_InternalWallInsulation",
+                                  label = "überwiegend Innendämmung",
+                                  value = FALSE,
+                                  width = NULL
+                                )
+                                
+                              
+                            ), # End conditionalPanel
+                              
+                            ),
+                            
+                            
+                          ), # End fluidRow
+                          
+                          fluidRow (
+                            
+                            br (),
+                            
                             column (
                               12,
-                              strong ("Anteil an der Bauteilfläche [%]")
+                              strong ("Dämmung von außen möglich?"),
+                              radioButtons (
+                                inputId = "Code_Potential_ExternalWallInsulation",
+                                label = NULL,
+                                selected = NULL,
+                                inline = TRUE,
+                                width = NULL,
+                                choiceNames = c (
+                                  "ja",
+                                  "teilweise",
+                                  "nein",
+                                  "unbekannt"
+                                ),
+                                choiceValues = c(
+                                  "Possible",
+                                  "PartlyPossible",
+                                  "NotPossible",
+                                  "_NA_"
+                                )
+                              ) # End radioButtons                           
+                              
                             ),
-                            style = ColumnStyle_Label_2Lines 
-                          ),
+                          ) # End fluidRow
                           
+                        
                           
-                          conditionalPanel (
-                            condition = "(input.Code_Type_NumericQueries != 'Numeric')  &
-                                         (input.Checkbox_f_Insulation_Wall_InputNotAvailable == 0)  &
-                                         ((input.Code_InsulationType_Wall == 'Original') | 
-                                         ( input.Code_InsulationType_Wall == 'Refurbish'))",
-                            
-                            sliderInput (
-                              inputId = "f_Insulation_Wall_Slider",
-                              label = NULL,
-                              value = 0,
-                              min = 10,
-                              max = 100,
-                              step = 10
-                              #width = 200
-                            ),
-                            
-                          ), # End conditional panel
-                          
-                          conditionalPanel (
-                            condition = "(input.Code_Type_NumericQueries != 'Slider') &
-                                         (input.Checkbox_f_Insulation_Wall_InputNotAvailable == 0)  &
-                                         ((input.Code_InsulationType_Wall == 'Original') | 
-                                         ( input.Code_InsulationType_Wall == 'Refurbish'))",
-                            
-                            numericInput (
-                              inputId = "f_Insulation_Wall",
-                              label = NULL,
-                              value = 0,
-                              min = 10,
-                              max = 100,
-                              step = 10,
-                              width = 75
-                            ) # End numericInput
-                            
-                          ), # End conditional panel
-                          
-                          
-                          conditionalPanel (
-                            condition = "(input.Code_InsulationType_Wall == 'Refurbish') | 
-                                         (input.Code_InsulationType_Wall == 'Original')",
-                            
-                            checkboxInput (
-                              inputId = "Checkbox_f_Insulation_Wall_InputNotAvailable",
-                              label = "keine Angabe / unbekannt",
-                              value = FALSE,
-                              width = NULL
-                            ), # End checkbos input 
-                            
-                          ), # End conditional panel
-                          
-                          
-                          conditionalPanel (
-                            condition = "(input.Code_InsulationType_Wall != 'Refurbish') & 
-                                         (input.Code_InsulationType_Wall != 'Original')",
-                            
-                            "- entfällt -" 
-                            
-                          ), # End conditional panel
-
-                          
-                          #style = "height:35px"
-                        ), # End column
+                          ), # End column
+                        
+                        # column (
+                        #   2,
+                        #   
+                        #   br (),
+                        #   
+                        #   fluidRow (
+                        #     column (
+                        #       12,
+                        #       strong ("Jahr der Modernisierung")  
+                        #     ),
+                        #     style = ColumnStyle_Label_2Lines 
+                        #   ),
+                        #   
+                        #   conditionalPanel (
+                        #     condition = "(input.Code_Type_NumericQueries != 'Numeric') &
+                        #         (input.Checkbox_Year_Refurbishment_Wall_InputNotAvailable == 0) &
+                        #         (input.Code_InsulationType_Wall == 'Refurbish')",
+                        #     
+                        #     sliderInput (
+                        #       inputId = "Year_Refurbishment_Wall_Slider",
+                        #       label = NULL,
+                        #       value = 1970,
+                        #       min = 1970,
+                        #       max = 2030,
+                        #       step = 1,
+                        #       sep = ""
+                        #       #width = 500
+                        #     ), # End slider input
+                        #     
+                        #   ), # End conditional panel
+                        #   
+                        #   conditionalPanel (
+                        #     condition = "(input.Code_Type_NumericQueries != 'Slider') &
+                        #         (input.Checkbox_Year_Refurbishment_Wall_InputNotAvailable == 0) &
+                        #         (input.Code_InsulationType_Wall == 'Refurbish')",
+                        #     
+                        #     numericInput (
+                        #       inputId = "Year_Refurbishment_Wall",
+                        #       label = NULL,
+                        #       value = NA,
+                        #       min = 1970,
+                        #       max = 2030,
+                        #       width = 75
+                        #     ) # End numeric input
+                        #     
+                        #   ), # End conditional panel
+                        #   
+                        #   
+                        #   conditionalPanel (
+                        #     condition = "(input.Code_InsulationType_Wall == 'Refurbish')",
+                        #     
+                        #     checkboxInput (
+                        #       inputId = "Checkbox_Year_Refurbishment_Wall_InputNotAvailable",
+                        #       label = "keine Angabe / unbekannt",
+                        #       value = FALSE,
+                        #       width = NULL
+                        #     ), # End checkbox input 
+                        #     
+                        #   ), # End conditional panel
+                        #   
+                        #   
+                        #   conditionalPanel (
+                        #     condition = "(input.Code_InsulationType_Wall != 'Refurbish')",
+                        #     
+                        #     "- entfällt -" 
+                        #     
+                        #   ), # End conditional panel
+                        #   
+                        #   
+                        # ), # End column
+                        # 
+                        # column (
+                        #   2,
+                        #   
+                        #   br (),
+                        #   
+                        #   fluidRow(
+                        #     column (
+                        #       12,
+                        #       strong ("Dämmstärke [cm]")
+                        #     ),
+                        #     style = ColumnStyle_Label_2Lines 
+                        #   ),
+                        #   
+                        #   
+                        #   conditionalPanel (
+                        #     condition = "(input.Code_Type_NumericQueries != 'Numeric') &
+                        #                  (input.Checkbox_d_Insulation_Wall_InputNotAvailable == 0) &
+                        #                  ((input.Code_InsulationType_Wall == 'Original') | 
+                        #                  ( input.Code_InsulationType_Wall == 'Refurbish'))",
+                        #     
+                        #     sliderInput (
+                        #       # numericInput (
+                        #       inputId = "d_Insulation_Wall_Slider",
+                        #       label = NULL,
+                        #       #label = "Dämmstärke [cm]",
+                        #       value = 0,
+                        #       min = 1,
+                        #       max = 40,
+                        #       step = 1
+                        #       #width = 500
+                        #     ),
+                        #     
+                        #   ), # End conditional panel
+                        #   
+                        #   conditionalPanel (
+                        #     condition = "(input.Code_Type_NumericQueries != 'Slider') &
+                        #                  (input.Checkbox_d_Insulation_Wall_InputNotAvailable == 0) &
+                        #                  ((input.Code_InsulationType_Wall == 'Original') | 
+                        #                  ( input.Code_InsulationType_Wall == 'Refurbish'))",
+                        #     
+                        #     # fluidRow (
+                        #     #   
+                        #     #   column (
+                        #     #     8,
+                        #         
+                        #         numericInput (
+                        #           inputId = "d_Insulation_Wall",
+                        #           label = NULL,
+                        #           #label = "[cm]",
+                        #           value = NA,
+                        #           min = 1,
+                        #           max = 40,
+                        #           width = 75
+                        #         ) # End numeric input
+                        #         
+                        #     #   ), # End column
+                        #     #   
+                        #     #   column (
+                        #     #     4,
+                        #     #     "cm"
+                        #     #   ) # End column
+                        #     #   
+                        #     # ) # End fluid row
+                        #     
+                        #   ), # End conditional panel
+                        #   
+                        #   
+                        #   
+                        #   conditionalPanel (
+                        #     condition = "(input.Code_InsulationType_Wall == 'Refurbish') | 
+                        #                  (input.Code_InsulationType_Wall == 'Original')",
+                        #     
+                        #     checkboxInput (
+                        #       inputId = "Checkbox_d_Insulation_Wall_InputNotAvailable",
+                        #       label = "keine Angabe / unbekannt",
+                        #       value = FALSE,
+                        #       width = NULL
+                        #     ), # End checkbox input
+                        #     
+                        #   ), # End conditional panel
+                        #   
+                        #   
+                        #   conditionalPanel (
+                        #     condition = "(input.Code_InsulationType_Wall != 'Refurbish') & 
+                        #                  (input.Code_InsulationType_Wall != 'Original')",
+                        #     
+                        #     "- entfällt -" 
+                        #     
+                        #   ), # End conditional panel
+                        #   
+                        #   
+                        #   
+                        #   
+                        #   
+                        #   #style = "height:35px"
+                        # ), # End column
+                        # 
+                        # 
+                        # column (
+                        #   2,
+                        #   
+                        #   br (),
+                        #   
+                        #   fluidRow (
+                        #     column (
+                        #       12,
+                        #       strong ("Anteil an der Bauteilfläche [%]")
+                        #     ),
+                        #     style = ColumnStyle_Label_2Lines 
+                        #   ),
+                        #   
+                        #   
+                        #   conditionalPanel (
+                        #     condition = "(input.Code_Type_NumericQueries != 'Numeric')  &
+                        #                  (input.Checkbox_f_Insulation_Wall_InputNotAvailable == 0)  &
+                        #                  ((input.Code_InsulationType_Wall == 'Original') | 
+                        #                  ( input.Code_InsulationType_Wall == 'Refurbish'))",
+                        #     
+                        #     sliderInput (
+                        #       inputId = "f_Insulation_Wall_Slider",
+                        #       label = NULL,
+                        #       value = 0,
+                        #       min = 10,
+                        #       max = 100,
+                        #       step = 10
+                        #       #width = 200
+                        #     ),
+                        #     
+                        #   ), # End conditional panel
+                        #   
+                        #   conditionalPanel (
+                        #     condition = "(input.Code_Type_NumericQueries != 'Slider') &
+                        #                  (input.Checkbox_f_Insulation_Wall_InputNotAvailable == 0)  &
+                        #                  ((input.Code_InsulationType_Wall == 'Original') | 
+                        #                  ( input.Code_InsulationType_Wall == 'Refurbish'))",
+                        #     
+                        #     numericInput (
+                        #       inputId = "f_Insulation_Wall",
+                        #       label = NULL,
+                        #       value = 0,
+                        #       min = 10,
+                        #       max = 100,
+                        #       step = 10,
+                        #       width = 75
+                        #     ) # End numericInput
+                        #     
+                        #   ), # End conditional panel
+                        #   
+                        #   
+                        #   conditionalPanel (
+                        #     condition = "(input.Code_InsulationType_Wall == 'Refurbish') | 
+                        #                  (input.Code_InsulationType_Wall == 'Original')",
+                        #     
+                        #     checkboxInput (
+                        #       inputId = "Checkbox_f_Insulation_Wall_InputNotAvailable",
+                        #       label = "keine Angabe / unbekannt",
+                        #       value = FALSE,
+                        #       width = NULL
+                        #     ), # End checkbos input 
+                        #     
+                        #   ), # End conditional panel
+                        #   
+                        #   
+                        #   conditionalPanel (
+                        #     condition = "(input.Code_InsulationType_Wall != 'Refurbish') & 
+                        #                  (input.Code_InsulationType_Wall != 'Original')",
+                        #     
+                        #     "- entfällt -" 
+                        #     
+                        #   ), # End conditional panel
+                        # 
+                        #   
+                        #   #style = "height:35px"
+                        # ), # End column
                         
                         style = "border: 1px solid lightgrey"
                         #style = "border: 1px dotted lightgrey"
@@ -5999,7 +6636,7 @@ www.iwu.de
                     
                     tabPanel (
                       
-                      "Wärmeversorgung", 
+                      strong ("Wärmeversorgung"), 
                       
                       #######################################################################X
                       #### § Energieprofil Wärmeversorgung  -----
@@ -7585,10 +8222,430 @@ www.iwu.de
                         ), # End Column
                         
                         
+  
                         
+                        
+                        
+                        
+                        column (
+                          width = 6,
+                          
+                          
+                          fluidRow (
+                            
+                            
+                            #######################################################################X
+                            ##### § Decentral or room-by-room heating / stoves  -----
+                            
+                            box (
+                              
+                              status = "info",
+                              solidHeader = TRUE, 
+                              width = 12,
+                              background = NULL,
+                              
+                              
+                              fluidRow (
+                                
+                                box (
+                                  
+                                  div (
+                                    
+                                    checkboxInput (
+                                      inputId = "Indicator_SysH_G_Decentral",
+                                      label = strong ("Dezentrale / raumweise Heizung"), 
+                                      value = FALSE, 
+                                      width = NULL
+                                    ),
+                                    
+                                    style = "margin-top: -8px; margin-left: 10px;"
+                                    
+                                  ), # End div
+                                  
+                                  title =  NULL,
+                                  footer = NULL,
+                                  status = NULL,
+                                  solidHeader = TRUE, 
+                                  background = "light-blue", 
+                                  width = 12,
+                                  height = 25,
+                                  collapsible = FALSE, 
+                                  collapsed = FALSE,
+                                  
+                                  
+                                  style = "
+                                margin-top: 0px;
+                                #margin-bottom: -10px;
+                                margin-left: 0px;
+                                padding: 0 !important;
+                              "
+                                  
+                                ), # End box
+                                
+                              ), # End fluid row 
+                              
+                              
+                              fluidRow (
+                                
+                                style = "margin-top: -20px; margin-left: 8px; padding:0 !important;",
+                                
+                                fluidRow (
+                                  
+                                  column (
+                                    3,
+                                    
+                                    checkboxInput (
+                                      inputId = "Indicator_SysH_G_Stove",
+                                      label = "Einzelöfen", 
+                                      value = FALSE, 
+                                      width = NULL
+                                    ),
+                                    
+                                    style = "margin-top: -10px; margin-left: 0px;"
+                                    
+                                    
+                                  ), # End column
+                                  
+                                  column (
+                                    3, 
+                                    "Brennstoff:",
+                                    
+                                  ), # End column
+                                  
+                                  
+                                  column (
+                                    6,
+
+                                    radioButtons (
+                                      inputId = "Code_Type_EC_Stove",
+                                      label = NULL,
+                                      #label = "Brennstoff", 
+                                      
+                                      choices = c (
+                                        "Holz"       = "Bio_Wood",
+                                        "Heizöl"     = "Oil",
+                                        "Gas"        = "Gas",
+                                        "Kohle"      = "Coal",
+                                        "k.A."       = "_NA_"
+                                      ),
+                                      
+                                      selected = "_NA_",
+                                      width = NULL,
+                                      inline = TRUE
+                                    ),
+                                    
+                                  ) # End column
+                                  
+                                ), # End fluidRow
+                                
+                                
+                                
+                                
+                                
+                                checkboxInput (
+                                  inputId = "Indicator_SysH_G_Dec_DirectElectric",
+                                  label = "Elektro-Heizgeräte / Elektro-Öfen",
+                                  value = FALSE, 
+                                  width = NULL
+                                ),
+                                
+                                checkboxInput (
+                                  inputId = "Indicator_SysH_G_Dec_ElectricNightStorage",
+                                  label = "elektrische Nachtspeicherheizung",
+                                  value = FALSE, 
+                                  width = NULL
+                                ),
+                                
+                                checkboxInput (
+                                  inputId = "Indicator_SysH_G_Dec_Heatpump",
+                                  label = "elektrische Wärmepumpen (raumweise)",
+                                  value = FALSE, 
+                                  width = NULL
+                                ),
+                                
+                                
+                              ), # End fluidRow
+                              
+                            ), # End box 
+                            
+                            
+                            
+                            
+                            
+                            
+                            #######################################################################X
+                            ##### § Extra thick insulation of system components  -----
+                            
+                            
+                            box (
+                              
+                              status = "info",
+                              solidHeader = TRUE, 
+                              width = 12,
+                              background = NULL,
+                              
+                              
+                              fluidRow (
+                                
+                                box (
+                                  
+                                  div (
+                                    
+                                    checkboxInput (
+                                      inputId = "Indicator_SysHW_D_S_ExtraThickInsulation",
+                                      label = strong ("Extra dicke Dämmung von Komponenten"), 
+                                      value = FALSE, 
+                                      width = NULL
+                                    ),
+                                    
+                                    style = "margin-top: -8px; margin-left: 10px;"
+                                    
+                                  ), # End div
+                                  
+                                  title =  NULL,
+                                  footer = NULL,
+                                  status = NULL,
+                                  solidHeader = TRUE, 
+                                  background = "light-blue", 
+                                  width = 12,
+                                  height = 25,
+                                  collapsible = FALSE, 
+                                  collapsed = FALSE,
+                                  
+                                  
+                                  style = "
+                                    margin-top: 0px;
+                                    #margin-bottom: -10px;
+                                    margin-left: 0px;
+                                    padding: 0 !important;
+                                  "
+                                  
+                                ), # End box
+                                
+                              ), # End fluid row 
+                              
+                  
+                              fluidRow (
+                                
+                                style = "margin-top: -40px; margin-left: 8px; padding:0 !important;",
+                                
+                                "Dämmstärke von Leitungen (doppelter Leitungsdurchmesser) 
+                                 und Speicher entsprechend Passivhaus-Empfehlungen",
+
+                              ), # End fluidRow
+                              
+                            ), # End box 
+                            
+                            
+                            
+                            
+                          ), # End fluidRow
+                          
+                        ), # End Column
+                        
+                        
+                        
+                        column (
+                          width = 6,
+                          
+                          
+                          fluidRow (
+                            
+                            
+                            #######################################################################X
+                            ##### § Decentral DHW devices  -----
+                            
+                            box (
+                              
+                              status = "info",
+                              solidHeader = TRUE, 
+                              width = 12,
+                              background = NULL,
+                              
+                              
+                              fluidRow (
+                                
+                                box (
+                                  
+                                  div (
+                                    
+                                    checkboxInput (
+                                      inputId = "Indicator_SysH_W_Decentral",
+                                      label = strong ("Dezentrale Warmwasserbereitung"), 
+                                      value = FALSE, 
+                                      width = NULL
+                                    ),
+                                    
+                                    style = "margin-top: -8px; margin-left: 10px;"
+                                    
+                                  ), # End div
+                                  
+                                  title =  NULL,
+                                  footer = NULL,
+                                  status = NULL,
+                                  solidHeader = TRUE, 
+                                  background = "light-blue", 
+                                  width = 12,
+                                  height = 25,
+                                  collapsible = FALSE, 
+                                  collapsed = FALSE,
+                                  
+                                  
+                                  style = "
+                                margin-top: 0px;
+                                #margin-bottom: -10px;
+                                margin-left: 0px;
+                                padding: 0 !important;
+                              "
+                                  
+                                ), # End box
+                                
+                              ), # End fluid row 
+                              
+                              
+                              fluidRow (
+                                
+                                style = "margin-top: -20px; margin-left: 8px; padding:0 !important;",
+                                
+                                checkboxInput (
+                                  inputId = "Indicator_SysW_G_Dec_ElectricStorage",
+                                  label = "dezentrale elektrische Speicher",
+                                  value = FALSE, 
+                                  width = NULL
+                                ),
+                                
+                                checkboxInput (
+                                  inputId = "Indicator_SysW_G_Dec_ElectricTankless",
+                                  label =  "Elektro-Durchlauferhitzer",
+                                  value = FALSE, 
+                                  width = NULL
+                                ),
+                                
+                                checkboxInput (
+                                  inputId = "Indicator_SysW_G_Dec_GasTankless",
+                                  label = "Gas-Durchlauferhitzer",
+                                  value = FALSE, 
+                                  width = NULL
+                                ),
+                                
+                                
+                              ), # End fluidRow
+                              
+                            ), # End box 
+                            
+                            
+                            
+                            
+                            
+                            
+                            #######################################################################X
+                            ##### § Further systems  -----
+                            
+                            
+                            box (
+                              
+                              status = "info",
+                              solidHeader = TRUE, 
+                              width = 12,
+                              background = NULL,
+                              
+                              
+                              fluidRow (
+                                
+                                box (
+                                  
+                                  div (
+
+                                    strong ("Weitere Systeme"), 
+
+                                    style = "margin-top: -8px; margin-left: 10px;"
+                                    
+                                  ), # End div
+                                  
+                                  title =  NULL,
+                                  footer = NULL,
+                                  status = NULL,
+                                  solidHeader = TRUE, 
+                                  background = "light-blue", 
+                                  width = 12,
+                                  height = 25,
+                                  collapsible = FALSE, 
+                                  collapsed = FALSE,
+                                  
+                                  
+                                  # style = "
+                                  #   margin-top: 0px;
+                                  #   #margin-bottom: -10px;
+                                  #   margin-left: 0px;
+                                  #   padding: 0 !important;
+                                  # "
+                                  
+                                ), # End box
+                                
+                              ), # End fluid row 
+                              
+                              
+                              fluidRow (
+
+                                style = "margin-top: -20px; margin-left: 8px; padding:0 !important;",
+
+                                checkboxInput (
+                                  inputId = "Indicator_SysVent_Mechanical",
+                                  label = "Lüftungsanlage",
+                                  value = FALSE,
+                                  width = NULL
+                                ),
+
+                                div (
+                                  
+                                  checkboxInput (
+                                    inputId = "Indicator_SysVent_HeatRec",
+                                    label = "mit Wärmerückgewinnung",
+                                    value = FALSE,
+                                    width = NULL
+                                  ),
+                                  
+                                  style = "margin-top: -15px; margin-left: 20px;"
+                                  
+                                ), # End div
+
+                                checkboxInput (
+                                  inputId = "Indicator_SysPV",
+                                  label = "Photovoltaik-Anlage (Solarstrom)",
+                                  value = FALSE,
+                                  width = NULL
+                                ),
+
+                                div (
+                                  checkboxInput (
+                                    inputId = "Indicator_SysPV_ElectricStorage",
+                                    label = "mit Batterie-Speicher",
+                                    value = FALSE,
+                                    width = NULL
+                                  ),
+  
+                                  style = "margin-top: -15px; margin-left: 20px;"
+                                  
+                                ), # End div
+
+                                
+                              ), # End fluidRow
+                              
+                            ), # End box 
+                            
+                            
+                            
+                            
+                          ), # End fluidRow
+                          
+                        ), # End Column
+                        
+                        
+                        
+                                              
                         
                                                 
-                      ), # End fluidRow
+                      ), # End fluidRow including all heating system input elements
                       
                       
                       
@@ -7603,139 +8660,571 @@ www.iwu.de
 
                     
                     
-                    #######################################################################X
-                    #### tabPanel "Einstellungen" -----
-                    
-                    
-                    tabPanel (
-                      
-                      "Einstellungen",
-                      
-                      style = Style_Height_Dashboard_MainPanel,  
-                      
-                      
-                      radioButtons(
-                        inputId = "Code_Type_NumericQueries",
-                        label = "Art der Eingabe numerischer Werte",
-                        choices = NULL,
-                        selected = "Slider",
-                        inline = FALSE,
-                        width = NULL,
-                        choiceNames = c (
-                          "numerische Eingaben",
-                          "Skala",
-                          "beides"
-                        ),
-                        choiceValues = c (
-                          "Numeric",
-                          "Slider",
-                          "Both"
-                        )
-                      )
-                      
-                      
-                      
-                      
-                      
-                    ),  # End tabPanel "Einstellungen"           
 
   
   #######################################################################X
-  #### tabPanel "Admin" - further administration related input -----
+  #### tabPanel "Further Information" - further administration related input -----
   
   
   tabPanel (
     
-    "Admin",
+    strong ("Zusatz-Infos"),
     
     br (),
     
-    fluidRow(
+    
+    
+    
+    
+    
+    
+    #### > Administrative data -----
+    
+    box (
       
-      style = Style_Height_Dashboard_MainPanel,
+      status = "info",
+      solidHeader = TRUE, 
+      width = 6,
+      background = NULL,
       
-      #"height:75vh !important; overflow-y: scroll",
-      #style = "height: 600px; overflow-y: scroll;",
-      #style = "overflow-y: scroll"
+      style = "
+        #margin-top: -20px;
+        #margin-bottom: -10px;
+        #margin-left: -20px;
+        padding: 0 !important;
+      ",
       
+      fluidRow (
+        
+        box (
+          
+          div (
+            
+            strong ("Zusätzliche Informationen zum Gebäude"), 
+            
+            style = "margin-top: -8px; margin-left: 10px;"
+            
+          ), # End div
+          
+          title =  NULL,
+          footer = NULL,
+          status = NULL,
+          solidHeader = TRUE, 
+          background = "light-blue", 
+          width = 12,
+          height = 25,
+          collapsible = FALSE, 
+          collapsed = FALSE,
+          
+          
+        ), # End box
+        
+      ), # End fluid row 
+      
+      
+      fluidRow (
+        
+        style = "margin-top: -20px; margin-left: 8px; padding:0 !important;",
+        
+        column (
+          12,
+          
+          
+          textInput(
+            inputId = "TextInput_ID_Dataset",
+            label = "Datensatz-ID",
+            placeholder = "ID_Dataset",
+            width = '95%'
+          ),
+          
+          
+          textInput(
+            inputId = "Name_Variant",
+            label = "Variante",
+            placeholder = "Name_Variant",
+            width = '95%'
+          ),
+          
+          
+          numericInput (
+            inputId = "Year_State",
+            label = "Jahr der Erfassung",
+            value = 2001,
+            min = 0,
+            max = 9999,
+            width = '95%'
+          ), # End numeric input
+          
+          numericInput (
+            inputId = "Year_State_First",
+            label = "Zeitraum Zustand erstes Jahr",
+            value = 2001,
+            min = 0,
+            max = 9999,
+            width = '95%'
+          ), # End numeric input
+          
+          numericInput (
+            inputId = "Year_State_Last",
+            label = "Zeitraum Zustand letztes Jahr",
+            value = 2001,
+            min = 0,
+            max = 9999,
+            width = '95%'
+          ), # End numeric input
+          
+          numericInput (
+            inputId = "n_Block",
+            label = "Anzahl Blöcke",
+            value = 1,
+            min = 1,
+            max = 100,
+            width = '95%'
+          ), # End numeric input
+          
+          numericInput (
+            inputId = "n_House",
+            label = "Anzahl Häuser",
+            value = 1,
+            min = 1,
+            max = 100,
+            width = '95%'
+          ), # End numeric input
+    
+        ), # End column
+        
+        
+        # column (
+        #   12,
+        #   "Leere Spalte",
+        #   
+        #   
+        #   br (),
+        #   br (),
+        #   
+        # ), # End column
+        
+      ) # End fluidRow
+      
+    ), # End box 
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+#     fluidRow(
+#       
+#       style = Style_Height_Dashboard_MainPanel,
+#       
+#       #"height:75vh !important; overflow-y: scroll",
+#       #style = "height: 600px; overflow-y: scroll;",
+#       #style = "overflow-y: scroll"
+#       
+#       
+#       column (
+#         4,
+# 
+# # 
+# #         textInput(
+# #           inputId = "TextInput_ID_Dataset",
+# #           label = "Datensatz-ID",
+# #           placeholder = "ID_Dataset"
+# #         ),
+# #         
+# #         
+# #         textInput(
+# #           inputId = "Name_Variant",
+# #           label = "Variante",
+# #           placeholder = "Name_Variant"
+# #         ),
+# #         
+# # 
+# #         numericInput (
+# #           inputId = "Year_State",
+# #           label = "Jahr der Erfassung",
+# #           value = 2001,
+# #           min = 0,
+# #           max = 9999
+# #           #width = 50
+# #         ), # End numeric input
+# #         
+# #         numericInput (
+# #           inputId = "Year_State_First",
+# #           label = "Zeitraum Zustand erstes Jahr",
+# #           value = 2001,
+# #           min = 0,
+# #           max = 9999
+# #           #width = 50
+# #         ), # End numeric input
+# #         
+# #         numericInput (
+# #           inputId = "Year_State_Last",
+# #           label = "Zeitraum Zustand letztes Jahr",
+# #           value = 2001,
+# #           min = 0,
+# #           max = 9999
+# #           #width = 50
+# #         ), # End numeric input
+# #         
+# #         numericInput (
+# #           inputId = "n_Block",
+# #           label = "Anzahl Blöcke",
+# #           value = 1,
+# #           min = 1,
+# #           max = 100
+# #           #width = 50
+# #         ), # End numeric input
+# #         
+# #         numericInput (
+# #           inputId = "n_House",
+# #           label = "Anzahl Häuser",
+# #           value = 1,
+# #           min = 1,
+# #           max = 100
+# #           #width = 50
+# #         ), # End numeric input
+# #         
+# #         
+#         
+#         br (),
+#         
+#         
+#         
+#       ), # End Column
+#       
+#       
+#       column (
+#         4,
+#         
+#         
+#       ), # End column
+#       
+#       
+#     ), # End fluidRow
+    
+    
+    
+  ), # End tabPanel
+  
+  
+#######################################################################X
+#### tabPanel "Einstellungen" -----
+
+
+tabPanel (
+  
+  strong ("Einstellungen"),
+  
+  style = Style_Height_Dashboard_MainPanel,  
+  
+  br (),
+  
+  ##### > Randbedingungen  -----
+  
+  box (
+    
+    status = "info",
+    solidHeader = TRUE, 
+    width = 6,
+    background = NULL,
+    
+    
+    style = "
+                              #margin-top: -20px;
+                              #margin-bottom: -10px;
+                              #margin-left: -20px;
+                              padding: 0 !important;
+                            ",
+    
+    
+    
+    fluidRow (
+      
+      box (
+        
+        div (
+          
+          strong ("Randbedingungen"), 
+          
+          style = "margin-top: -8px; margin-left: 10px;"
+          
+        ), # End div
+        
+        title =  NULL,
+        footer = NULL,
+        status = NULL,
+        solidHeader = TRUE, 
+        background = "light-blue", 
+        width = 12,
+        height = 25,
+        collapsible = FALSE, 
+        collapsed = FALSE,
+        
+        
+        # style = "
+        #   margin-top: 0px;
+        #   #margin-bottom: -10px;
+        #   margin-left: 0px;
+        #   padding: 0 !important;
+        # "
+        
+      ), # End box
+      
+    ), # End fluid row 
+    
+    
+    fluidRow (
+      
+      style = "margin-top: -20px; margin-left: 8px; padding:0 !important;",
       
       column (
-        4,
+        12,
         
-        textInput(
-          inputId = "TextInput_ID_Dataset",
-          label = "Datensatz-ID",
-          placeholder = "ID_Dataset"
+        selectInput (
+          inputId = "Code_BoundaryCond",
+          label = "Nutzungsdaten",
+          
+          choices = c (
+            "TABULA-Standard EFH (EU.SUH)"  = "EU.SUH",
+            "TABULA-Standard MFH (EU.MUH)"  = "EU.MUH",
+            "MOBASY-Standard EFH"  = "DE.MOBASY.Development.SUH",
+            "MOBASY-Standard MFH"  = "DE.MOBASY.Development.MUH"
+            # "MOBASY-Standard EFH 'DE.MOBASY.Development.SUH'"  = "DE.MOBASY.Development.SUH",
+            # "MOBASY-Standard MFH 'DE.MOBASY.Development.MUH'"  = "DE.MOBASY.Development.MUH"
+          ),
+          
+          selected = "EU.SUH",
+          width = '95%'
         ),
         
         
-        textInput(
-          inputId = "Name_Variant",
-          label = "Variante",
-          placeholder = "Name_Variant"
-        ),
+        # textInput (
+        #   inputId = "Code_BoundaryCond",
+        #   label = "Nutzungsdaten",
+        #   placeholder =  "Code_BoundaryCond",
+        #   value = "EU.SUH",
+        #   width = '95%'
+        # ),
         
-        numericInput (
-          inputId = "Year_State",
-          label = "Jahr der Erfassung",
-          value = 2001,
-          min = 0,
-          max = 9999
-          #width = 50
-        ), # End numeric input
-        
-        numericInput (
-          inputId = "Year_State_First",
-          label = "Zeitraum Zustand erstes Jahr",
-          value = 2001,
-          min = 0,
-          max = 9999
-          #width = 50
-        ), # End numeric input
-        
-        numericInput (
-          inputId = "Year_State_Last",
-          label = "Zeitraum Zustand letztes Jahr",
-          value = 2001,
-          min = 0,
-          max = 9999
-          #width = 50
-        ), # End numeric input
-        
-        numericInput (
-          inputId = "n_Block",
-          label = "Anzahl Blöcke",
-          value = 1,
-          min = 1,
-          max = 100
-          #width = 50
-        ), # End numeric input
-        
-        numericInput (
-          inputId = "n_House",
-          label = "Anzahl Häuser",
-          value = 1,
-          min = 1,
-          max = 100
-          #width = 50
-        ), # End numeric input
-        
-        
-        
+        #"Standardwerte (TABULA) = 'EU.SUH' für Einfamilienhäuser und 'EU.MUH' für Mehrfamilienhäuser)",
+        "Berechnungen mit TABULA-Randbedingungen sollten auf typisches Verbrauchsnviveau kalibriert werden.",
+        "Für Berechnungen mit MOBASY-Randbedingungen gibt es derzeit keine Parameter für die Kalibrierung.",
+        br (),
         br (),
         
         
+        ## In der Serverfunktion noch das hier integrieren
+        #                        
+        # "Code_BoundaryCond" = "EU.SUH" 
+        # observe event: wenn Wohnfläche>=200 m² oder 
+        # Anzahl WE>=3 
+        # dann die letzten 4 Buchstaben des Codes der Selektion ändern: ".SUH" --> ".MUH"
         
-      ), # End Column
+      ), # End column
       
       
       column (
-        4,
+        12,
         
-        strong ("Flächentyp für die Skalierung der Gebäudegröße"),
+        
+        selectInput (
+          inputId = "Code_Climate",
+          label = "Klima-Datensatz",
+          
+          choices = c (
+            "National (Potsdam, EnEV 2014)" = "DE.N",
+            "National (EnEV 2009)" = "DE.N-DIN4108-6",
+            "CR01 Bremerhaven" = "DE.KR01-Bremerhaven",
+            "CR02 Rostock" = "DE.KR02-Rostock",
+            "CR03 Hamburg" = "DE.KR03-Hamburg",
+            "CR04 Potsdam" = "DE.KR04-Potsdam",
+            "CR05 Essen" = "DE.KR05-Essen",
+            "CR06 Bad Marienberg" = "DE.KR06-BadMarienberg",
+            "CR07 Kassel" = "DE.KR07-Kassel",
+            "CR08 Braunlage" = "DE.KR08-Braunlage",
+            "CR09 Chemnitz" = "DE.KR09-Chemnitz",
+            "CR10 Hof" = "DE.KR10-Hof",
+            "CR11 Fichtelberg" = "DE.KR11-Fichtelberg",
+            "CR12 Mannheim" = "DE.KR12-Mannheim",
+            "CR13 Passau" = "DE.KR13-Passau",
+            "CR14 Stötten" = "DE.KR14-Stötten",
+            "CR15 Garmisch" = "DE.KR15-Garmisch"
+          ),
+          
+          selected = "DE.N",
+          width = '95%'
+        ),
+        
+        # textInput (
+        #   inputId = "Code_Climate",
+        #   label = "Klima-Datensatz",
+        #   placeholder = "Code_Climate",
+        #   value = "DE.N",
+        #   width = '95%' 
+        # ),
+        
+        "Standardwert = 'DE.N' (Standardklima Deutschland)",
         
         br (),
         br (),
+        
+      ),
+      
+      
+      
+    ), # End fluidRow
+    
+  ), # End box 
+  
+  
+  
+  
+  
+  
+  ##### > Darstellung der Eingabefelder  -----
+  
+  
+  box (
+    
+    status = "info",
+    solidHeader = TRUE, 
+    width = 6,
+    background = NULL,
+    
+    style = "
+                        #margin-top: -20px;
+                        #margin-bottom: -10px;
+                        #margin-left: -20px;
+                        padding: 0 !important;
+                      ",
+    
+    fluidRow (
+      
+      box (
+        
+        div (
+          
+          strong ("Darstellung Eingabefelder"), 
+          
+          style = "margin-top: -8px; margin-left: 10px;"
+          
+        ), # End div
+        
+        title =  NULL,
+        footer = NULL,
+        status = NULL,
+        solidHeader = TRUE, 
+        background = "light-blue", 
+        width = 12,
+        height = 25,
+        collapsible = FALSE, 
+        collapsed = FALSE,
+        
+      ), # End box
+      
+    ), # End fluid row 
+    
+    
+    fluidRow (
+      
+      style = "margin-top: -20px; margin-left: 8px; padding:0 !important;",
+      
+      column (
+        12,
+        
+        radioButtons(
+          inputId = "Code_Type_NumericQueries",
+          label = "Art der Eingabe numerischer Werte",
+          choices = NULL,
+          selected = "Slider",
+          inline = FALSE,
+          width = NULL,
+          choiceNames = c (
+            "numerische Eingaben",
+            "Skala (Standard)",
+            "beides"
+          ),
+          choiceValues = c (
+            "Numeric",
+            "Slider",
+            "Both"
+          )
+        )
+        
+      ), # End column
+      
+      
+      # column (
+      #   12,
+      #   "Leere Spalte",
+      #   
+      #   
+      #   br (),
+      #   br (),
+      #   
+      # ), # End column
+      
+    ) # End fluidRow
+    
+  ), # End box 
+  
+  
+  
+  ##### > Typ Energiebezugsfläche -----
+  
+  box (
+    
+    status = "info",
+    solidHeader = TRUE, 
+    width = 6,
+    background = NULL,
+    
+    style = "
+                        #margin-top: -20px;
+                        #margin-bottom: -10px;
+                        #margin-left: -20px;
+                        padding: 0 !important;
+                      ",
+    
+    fluidRow (
+      
+      box (
+        
+        div (
+          
+          strong ("Flächentyp für die Skalierung der Gebäudegröße"),
+          
+          style = "margin-top: -8px; margin-left: 10px;"
+          
+        ), # End div
+        
+        title =  NULL,
+        footer = NULL,
+        status = NULL,
+        solidHeader = TRUE, 
+        background = "light-blue", 
+        width = 12,
+        height = 25,
+        collapsible = FALSE, 
+        collapsed = FALSE,
+        
+        
+      ), # End box
+      
+    ), # End fluid row 
+    
+    
+    fluidRow (
+      
+      style = "margin-top: -20px; margin-left: 8px; padding:0 !important;",
+      
+      column (
+        12,
         
         radioButtons (
           inputId = "Code_TypeFloorArea_A_C_Floor_Intake",
@@ -7779,134 +9268,315 @@ www.iwu.de
           )
         ), # End radioButtons                           
         
+      ), # End column
+      
+      
+      # column (
+      #   12,
+      #   "Leere Spalte",
+      #   
+      #   
+      #   br (),
+      #   br (),
+      #   
+      # ), # End column
+      
+    ) # End fluidRow
+    
+  ), # End box 
+  
+  
+  
+  
+  ##### > Library dataset selection -----
+  
+  box (
+    
+    status = "info",
+    solidHeader = TRUE, 
+    width = 6,
+    background = NULL,
+    
+    style = "
+                        #margin-top: -20px;
+                        #margin-bottom: -10px;
+                        #margin-left: -20px;
+                        padding: 0 !important;
+                      ",
+    
+    fluidRow (
+      
+      box (
         
-      )
+        div (
+          
+          strong ("Auswahl Datensätze Bibliothek"), 
+          
+          style = "margin-top: -8px; margin-left: 10px;"
+          
+        ), # End div
+        
+        title =  NULL,
+        footer = NULL,
+        status = NULL,
+        solidHeader = TRUE, 
+        background = "light-blue", 
+        width = 12,
+        height = 25,
+        collapsible = FALSE, 
+        collapsed = FALSE,
+        
+        
+      ), # End box
+      
+    ), # End fluid row 
+    
+
+    
+    fluidRow (
+      
+      style = "margin-top: -20px; margin-left: 8px; padding:0 !important;",
+      
+      column (
+        12,
+        
+        selectInput (
+          inputId = "Code_U_Class_National",
+          label = "Tabellenwerte für Bauteile",
+          
+          choices = c (
+            "Generische Werte ('Gen', verwendet im TABULA WebTool)" = "Gen",
+            "MOBASY-Werte (derzeit Default-Einstellung)"            = "MOBASY",
+            "REWOTY-Werte (derzeit noch Baustelle)"                 = "REWOTY"
+          ),
+          
+          selected = "MOBASY",
+          width = '95%'
+        ),
+
+        "Spezifikation der Tabellenwerte für die Schätzung der Wärmedurchgangskoeffizienten von Bauteilen.",   
+        br (),
+        "Der Code bestimmt, welche Datensatz-Version verwendet wird.", 
+        br (),
+        "Dies betrifft die Tabellen 
+        'Tab.U.Class.Constr', 'Tab.Insulation.Default', 'Tab.Measure.f.Default', 'Tab.U.WindowType.Periods'
+        in der Datei 'tabula-values.xlsx', die im Shiny-Tool als Quelle für Defaultwerte dient.",
+        
+        br (),
+        br (),
+
+      ), # End column
+
+    ) # End fluidRow
+    
+  ), # End box 
+  
+  
+  
+  
+  
+  
+  
+  
+  #### >>> TEMPLATE FOR BOX -----
+  
+  box (
+    
+    status = "info",
+    solidHeader = TRUE, 
+    width = 6,
+    background = NULL,
+    
+    style = "
+                        #margin-top: -20px;
+                        #margin-bottom: -10px;
+                        #margin-left: -20px;
+                        padding: 0 !important;
+                      ",
+    
+    fluidRow (
+      
+      box (
+        
+        div (
+          
+          strong ("Neue Box"), 
+          
+          style = "margin-top: -8px; margin-left: 10px;"
+          
+        ), # End div
+        
+        title =  NULL,
+        footer = NULL,
+        status = NULL,
+        solidHeader = TRUE, 
+        background = "light-blue", 
+        width = 12,
+        height = 25,
+        collapsible = FALSE, 
+        collapsed = FALSE,
+        
+        
+      ), # End box
+      
+    ), # End fluid row 
+    
+    
+    fluidRow (
+      
+      style = "margin-top: -20px; margin-left: 8px; padding:0 !important;",
+      
+      column (
+        12,
+        
+        "Leere Spalte",
+        br (),
+        br (),
+        
+      ), # End column
       
       
-    ), # End fluidRow
+      column (
+        12,
+        "Leere Spalte",
+        
+        
+        br (),
+        br (),
+        
+      ), # End column
+      
+    ) # End fluidRow
     
-    
-    
-  ), # End tabPanel
+  ), # End box 
   
   
   
+  
+  
+  
+  
+  
+  
+  
+),  # End tabPanel "Einstellungen"           
+
                     
 
                     #######################################################################X
                     #### tabPanel "Testfeld" -----
                     
                     
-                    tabPanel (
-                      
-                      "Testfeld",
-
-                        fluidRow(
-                          
-                          style = Style_Height_Dashboard_MainPanel,
-                          
-                          #"height:75vh !important; overflow-y: scroll",
-                          #style = "height: 600px; overflow-y: scroll;",
-                          #style = "overflow-y: scroll"
-                          
-                          
-                          column (
-                            12,
-                            
-                            "erstes",
-                            br (),
-                            "Test",
-                            br (),
-                            "Test",
-                            br (),
-                            "Test",
-                            br (),
-                            "Test",
-                            br (),
-                            "Test",
-                            br (),
-                            "Test",
-                            br (),
-                            "Test",
-                            br (),
-                            "Test",
-                            br (),
-                            "Test",
-                            br (),
-                            "Test",
-                            br (),
-                            "Test",
-                            br (),
-                            "Test",
-                            br (),
-                            "Test",
-                            br (),
-                            "Test",
-                            br (),
-                            "Test",
-                            br (),
-                            "Test",
-                            br (),
-                            "Test",
-                            br (),
-                            "Test",
-                            br (),
-                            "Test",
-                            br (),
-                            "Test",
-                            br (),
-                            "Test",
-                            br (),
-                            "Test",
-                            br (),
-                            "Test",
-                            br (),
-                            "Test",
-                            br (),
-                            "Test",
-                            br (),
-                            "Test",
-                            br (),
-                            "Test",
-                            br (),
-                            "Test",
-                            br (),
-                            "Test",
-                            br (),
-                            "Test",
-                            br (),
-                            "Test",
-                            br (),
-                            "Test",
-                            br (),
-                            "Test",
-                            br (),
-                            "Test",
-                            br (),
-                            "Test",
-                            br (),
-                            "Test",
-                            br (),
-                            "Test",
-                            br (),
-                            "Test",
-                            br (),
-                            "Test",
-                            br (),
-                            "letztes",
-                            br (),
-                            
-                            
-                            
-                          ), # End Column
-                          
-                          
-                          
-                        ), # End fluidRow
-                          
-
-                      
-                    ), # End tabPanel
+                    # tabPanel (
+                    #   
+                    #   "Testfeld",
+                    # 
+                    #     fluidRow (
+                    #       
+                    #       style = Style_Height_Dashboard_MainPanel,
+                    #       
+                    #       #"height:75vh !important; overflow-y: scroll",
+                    #       #style = "height: 600px; overflow-y: scroll;",
+                    #       #style = "overflow-y: scroll"
+                    #       
+                    #       
+                    #       column (
+                    #         12,
+                    #         
+                    #         "erstes",
+                    #         br (),
+                    #         "Test",
+                    #         br (),
+                    #         "Test",
+                    #         br (),
+                    #         "Test",
+                    #         br (),
+                    #         "Test",
+                    #         br (),
+                    #         "Test",
+                    #         br (),
+                    #         "Test",
+                    #         br (),
+                    #         "Test",
+                    #         br (),
+                    #         "Test",
+                    #         br (),
+                    #         "Test",
+                    #         br (),
+                    #         "Test",
+                    #         br (),
+                    #         "Test",
+                    #         br (),
+                    #         "Test",
+                    #         br (),
+                    #         "Test",
+                    #         br (),
+                    #         "Test",
+                    #         br (),
+                    #         "Test",
+                    #         br (),
+                    #         "Test",
+                    #         br (),
+                    #         "Test",
+                    #         br (),
+                    #         "Test",
+                    #         br (),
+                    #         "Test",
+                    #         br (),
+                    #         "Test",
+                    #         br (),
+                    #         "Test",
+                    #         br (),
+                    #         "Test",
+                    #         br (),
+                    #         "Test",
+                    #         br (),
+                    #         "Test",
+                    #         br (),
+                    #         "Test",
+                    #         br (),
+                    #         "Test",
+                    #         br (),
+                    #         "Test",
+                    #         br (),
+                    #         "Test",
+                    #         br (),
+                    #         "Test",
+                    #         br (),
+                    #         "Test",
+                    #         br (),
+                    #         "Test",
+                    #         br (),
+                    #         "Test",
+                    #         br (),
+                    #         "Test",
+                    #         br (),
+                    #         "Test",
+                    #         br (),
+                    #         "Test",
+                    #         br (),
+                    #         "Test",
+                    #         br (),
+                    #         "Test",
+                    #         br (),
+                    #         "Test",
+                    #         br (),
+                    #         "Test",
+                    #         br (),
+                    #         "letztes",
+                    #         br (),
+                    #         
+                    #         
+                    #         
+                    #       ), # End Column
+                    #       
+                    #       
+                    #       
+                    #     ), # End fluidRow
+                    #       
+                    # 
+                    #   
+                    # ), # End tabPanel
                     
                     
                     
@@ -7915,534 +9585,610 @@ www.iwu.de
                     #### tabPanel "Reste"  -----
                     
                     
-                    tabPanel (
-                      "Reste",
-                      
-                      
-                      
-                      
-                      
-                      
-                      
-                      ## Version 2 Anfang                      
-                      
-                      
-                      
-                      
-                      #######################################################################X
-                      ##### Version 2: Input Opaque construction elements ----- 
-                      
-                      
-                      ###### Header row -----
-                      
-                      fluidRow (
-                        
-                        column (
-                          4,
-                          strong ("Thermische Hülle / nicht-transparente Elemente"),
-                          style = ColumnStyle_OpaqueElements_HeaderRow
-                        ), 
-                        
-                        column (
-                          2,
-                          strong ("Dach"),
-                          style = ColumnStyle_OpaqueElements_HeaderRow
-                        ), 
-                        
-                        column (
-                          2,
-                          strong ("oberste Geschossdecke"),
-                          style = ColumnStyle_OpaqueElements_HeaderRow
-                        ), 
-                        
-                        column (
-                          2,
-                          strong ("Außenwände"),
-                          style = ColumnStyle_OpaqueElements_HeaderRow
-                        ), 
-                        
-                        column (
-                          2,
-                          strong ("Kellerdecke / Fußboden gegen Erdreich"),
-                          style = ColumnStyle_OpaqueElements_HeaderRow
-                        ), 
-                        
-                      ), # End fluidRow
-                      
-                      
-                      
-                      ###### Construction type -----
-                      
-                      
-                      fluidRow (
-                        
-                        column (
-                          4,
-                          strong ("Art der Konstruktion"),
-                          style = ColumnStyle_OpaqueElements_ConstructionType,
-                          #   helpText (
-                          #     "hat bei einigen Baualtersklassen 
-                          #     Einfluss auf den typischen Wärmedurchgangskoeffzienten (U-Wer)"
-                          #     )
-                        ), 
-                        
-                        
-                        column ( # Checkboxes construction type roof
-                          2,
-                          
-                          fluidRow ( # fluidRow necessary to aline checkbox with header
-                            column ( # Single checkbox column used to reduce the height
-                              12,
-                              checkboxInput (
-                                inputId = "Indicator_Roof_Constr_Massive", 
-                                label = "massiv", 
-                                value = FALSE, 
-                                width = NULL
-                              ),
-                              style = ColumnStyle_Checkbox
-                            ), # End single checkbox column 
-                          ), # End fluidRow
-                          
-                          fluidRow ( # fluidRow necessary to aline checkbox with header
-                            column ( # Single checkbox column used to reduce the height
-                              12,
-                              checkboxInput (
-                                inputId = "Indicator_Roof_Constr_Wood", 
-                                label = "Holz", 
-                                value = FALSE, 
-                                width = NULL
-                              ),
-                              style = ColumnStyle_Checkbox
-                            ), # End single checkbox column 
-                          ), # End fluidRow
-                          
-                          style = ColumnStyle_OpaqueElements_ConstructionType
-                        ), # End column 
-                        
-                        
-                        column ( # Checkboxes construction type top ceiling
-                          2,
-                          
-                          fluidRow ( # fluidRow necessary to aline checkbox with header
-                            column ( # Single checkbox column used to reduce the height
-                              12,
-                              checkboxInput (
-                                inputId = "Indicator_Ceiling_Constr_Massive", 
-                                label = "massiv", 
-                                value = FALSE, 
-                                width = NULL
-                              ),
-                              style = ColumnStyle_Checkbox
-                            ), # End single checkbox column 
-                          ), # End fluidRow
-                          
-                          fluidRow ( # fluidRow necessary to aline checkbox with header
-                            column ( # Single checkbox column used to reduce the height
-                              12,
-                              checkboxInput (
-                                inputId = "Indicator_Ceiling_Constr_Wood", 
-                                label = "Holz", 
-                                value = FALSE, 
-                                width = NULL
-                              ),
-                              style = ColumnStyle_Checkbox
-                            ), # End single checkbox column 
-                          ), # End fluidRow
-                          
-                          style = ColumnStyle_OpaqueElements_ConstructionType
-                        ), 
-                        
-                        
-                        column ( # Checkboxes construction type walls
-                          2,
-                          
-                          fluidRow ( # fluidRow necessary to aline checkbox with header
-                            column ( # Single checkbox column used to reduce the height
-                              12,
-                              checkboxInput (
-                                inputId = "Indicator_Wall_Constr_Massive", 
-                                label = "massiv", 
-                                value = FALSE, 
-                                width = NULL
-                              ),
-                              style = ColumnStyle_Checkbox
-                            ), # End single checkbox column 
-                          ), # End fluidRow
-                          
-                          fluidRow ( # fluidRow necessary to aline checkbox with header
-                            column ( # Single checkbox column used to reduce the height
-                              12,
-                              checkboxInput (
-                                inputId = "Indicator_Wall_Constr_Wood", 
-                                label = "Holz", 
-                                value = FALSE, 
-                                width = NULL
-                              ),
-                              style = ColumnStyle_Checkbox
-                            ), # End single checkbox column 
-                          ), # End fluidRow
-                          
-                          style = ColumnStyle_OpaqueElements_ConstructionType
-                        ), 
-                        
-                        
-                        column ( # Checkboxes construction type floor
-                          2,
-                          
-                          fluidRow ( # fluidRow necessary to aline checkbox with header
-                            column ( # Single checkbox column used to reduce the height
-                              12,
-                              checkboxInput (
-                                inputId = "Indicator_Floor_Constr_Massive", 
-                                label = "massiv", 
-                                value = FALSE, 
-                                width = NULL
-                              ),
-                              style = ColumnStyle_Checkbox
-                            ), # End single checkbox column 
-                          ), # End fluidRow
-                          
-                          fluidRow ( # fluidRow necessary to aline checkbox with header
-                            column ( # Single checkbox column used to reduce the height
-                              12,
-                              checkboxInput (
-                                inputId = "Indicator_Floor_Constr_Wood", 
-                                label = "Holz", 
-                                value = FALSE, 
-                                width = NULL
-                              ),
-                              style = ColumnStyle_Checkbox
-                            ), # End single checkbox column 
-                          ), # End fluidRow
-                          
-                          style = ColumnStyle_OpaqueElements_ConstructionType
-                        ), 
-                        
-                      ), # End fluidRow
-                      
-                      br (),
-                      
-                      
-                      
-                      
-                      
-                      
-                      
-                      
-                      
-                      ## Version 2 Ende                      
-                      
-                      
-                      
-                      
-                      
-                      
-                      
-                      
-                      
-                      
-                      
-                      
-                      
-                      ## Version 3 Anfang                      
-                      
-                      
-                      br (),
-                      br (),
-                      
-                      fluidRow (
-                        column (
-                          1,
-                          style = "height: 150px; border: 1px solid grey;",
-                          box ("Bauteil",
-                               style = "width:150px; height:50px;
-                                                   line-height:15px;
-                                                   transform: rotate(-90deg) translate(-50px,-75px);
-                                                   vertical-align:bottom; 
-                                                   border: 1px dotted red;"
-                          )
-                        ), 
-                        column (
-                          1,
-                          style = "height: 150px; border: 1px solid grey;",
-                          box ("massiv",
-                               style = "width:150px; height:50px;
-                                                   line-height:15px;
-                                                   transform: rotate(-90deg) translate(-50px,-75px);
-                                                   vertical-align:bottom; 
-                                                   border: 1px dotted red;"
-                          )
-                        ), 
-                        column (
-                          1,
-                          style = "height: 150px; border: 1px solid grey;",
-                          box ("Holz",
-                               style = "width:150px; height:50px;
-                                                   line-height:15px;
-                                                   transform: rotate(-90deg) translate(-50px,-75px);
-                                                   vertical-align:bottom; 
-                                                   border: 1px dotted red;"
-                          )
-                        ), 
-                        column (
-                          1,
-                          style = "height: 150px; border: 1px solid grey;",
-                          box ("Original-Dämmung",
-                               style = "width:150px; height:50px;
-                                                   line-height:15px;
-                                                   transform: rotate(-90deg) translate(-50px,-75px);
-                                                   vertical-align:bottom; 
-                                                   border: 1px dotted red;"
-                          )
-                        ), 
-                        column (
-                          1,
-                          style = "height: 150px; border: 1px solid grey;",
-                          box ("Hülle nicht geändert",
-                               style = "width:150px; height:50px;
-                                                   line-height:15px;
-                                                   transform: rotate(-90deg) translate(-50px,-75px);
-                                                   vertical-align:bottom; 
-                                                   border: 1px dotted red;"
-                          )
-                        ), 
-                        column (
-                          1,
-                          style = "height: 150px; border: 1px solid grey;",
-                          box ("Original-Dämmung",
-                               style = "width:150px; height:50px;
-                                                   line-height:15px;
-                                                   transform: rotate(-90deg) translate(-50px,-75px);
-                                                   vertical-align:bottom; 
-                                                   border: 1px dotted red;"
-                          )
-                        ), 
-                        column (
-                          1,
-                          style = "height: 150px; border: 1px solid grey;",
-                          box ("Dämm-Maßnahmen",
-                               style = "width:150px; height:50px;
-                                                   line-height:15px;
-                                                   transform: rotate(-90deg) translate(-50px,-75px);
-                                                   vertical-align:bottom; 
-                                                   border: 1px dotted red;"
-                          )
-                        ), 
-                        column (
-                          1,
-                          style = "height: 150px; border: 1px solid grey;",
-                          box ("Stand Moderni-sierung unbekannt",
-                               style = "width:150px; height:50px;
-                                                   line-height:15px;
-                                                   transform: rotate(-90deg) translate(-50px,-75px);
-                                                   vertical-align:bottom; 
-                                                   border: 1px dotted red;"
-                          )
-                        ), 
-                        column (
-                          1,
-                          style = "height: 150px; border: 1px solid grey;",
-                          box ("Jahr der Modernisierung",
-                               style = "width:150px; height:50px;
-                                                   line-height:15px;
-                                                   transform: rotate(-90deg) translate(-50px,-75px);
-                                                   border: 1px dotted red;"
-                               
-                               # It tried to center the double lined text 
-                               # This did not work:
-                               #writing-mode: vertical-lr;
-                               #transform: translate(-50px,-75px) rotate(-90deg);
-                               #vertical-align:top; #keine Auswirkung
-                               #text-align:center;  #keine Auswirkung
-                               #margin:0; # keine Auswirkung
-                               #padding:5px; # keine Auswirkung
-                               
-                          )
-                        ), 
-                        column (
-                          2,
-                          style = "height: 150px; border: 1px solid grey;",
-                          box ("Dämmstärke in cm",
-                               style = "width:150px; height:50px;
-                                                   line-height:15px;
-                                                   transform: rotate(-90deg) translate(-50px,-50px);
-                                                   vertical-align:bottom; 
-                                                   border: 1px dotted red;"
-                          )
-                        ), 
-                        column (
-                          1,
-                          style = "height: 150px; border: 1px solid grey;",
-                          box ("% der Fläche",
-                               style = "width:150px; height:50px;
-                                                   line-height:15px;
-                                                   transform: rotate(-90deg) translate(-50px,-75px);
-                                                   vertical-align:bottom; 
-                                                   border: 1px dotted red;"
-                          )
-                        ), 
-                      ),
-                      
-                      
-                      
-                      
-                      
-                      br (),
-                      
-                      
-                      ## kann gelöscht werden
-                      ##   
-                      #     fluidRow (
-                      #       column (
-                      #         1,
-                      #         "Bauteil",
-                      #         #offset = 1,
-                      #         style = "width:100px;transform: rotate(-90deg);
-                      #         vertical-align:bottom;text-align:middle;border: 1px solid grey;"
-                      #         # "font-size: 12pt !important; transform: rotate(-90deg) translate(-30px);"
-                      #         #style = "height:300px;transform: rotate(-90deg);text-align: middle;"
-                      #         # style = "transform: rotate(-90deg);vertical-align:bottom;",
-                      #         #height = '100'
-                      #       ), 
-                      #       column (
-                      #         1,
-                      #         "massiv",
-                      #         style = "width:100px;transform: rotate(-90deg);
-                      #         vertical-align:bottom;text-align:middle;border: 1px solid grey;"
-                      #       ), 
-                      #       column (
-                      #         1,
-                      #         "Holz",
-                      #         style = "width:100px;transform: rotate(-90deg);
-                      #         vertical-align:bottom;text-align:middle;border: 1px solid grey;"
-                      #         # style = "height:300px;transform: rotate(-90deg);
-                      #         # vertical-align:bottom;text-align: middle;"
-                      #       ), 
-                      #       column (
-                      #         1,
-                      #         "Hülle nicht geändert",
-                      #         style = "width:100px;transform: rotate(-90deg);
-                      #         vertical-align:bottom;text-align:middle;border: 1px solid grey;"
-                      #       ), 
-                      #       column (
-                      #         1,
-                      #         "Original-Dämmung",
-                      #         style = "width:100px;transform: rotate(-90deg);
-                      #         vertical-align:bottom;text-align:middle;border: 1px solid grey;"
-                      #       ), 
-                      #       column (
-                      #         1,
-                      #         "Dämm-Maßnahmen",
-                      #         style = "width:100px;transform: rotate(-90deg);
-                      #         vertical-align:bottom;text-align:middle;border: 1px solid grey;"
-                      #       ), 
-                      #       column (
-                      #         1,
-                      #         "Stand Modernisierung unbekannt                         ",
-                      #         style = "width:100px;transform: rotate(-90deg);
-                      #         vertical-align:bottom;text-align:middle;border: 1px solid grey;"
-                      #       ), 
-                      #       column (
-                      #         1,
-                      # # box (
-                      # #   "Jahr der Modernisierung",
-                      # #   style = "height:40px; width:350px;transform: rotate(-90deg); 
-                      # #   vertical-align:bottom;
-                      # #   text-align: middle;border: 1px dotted grey;"
-                      # # ),        
-                      # #         style = "height: 300px; border: 1px solid grey;"
-                      #       ), 
-                      # # column (
-                      # #   1,
-                      # #   "Jahr der Modernisierung",
-                      # #   style = "height:300px;transform: rotate(-90deg);
-                      # #         vertical-align:bottom;text-align: middle;border: 1px solid grey;"
-                      # # ), 
-                      # column (
-                      #         1,
-                      #         "Dämmstärke in cm",
-                      #         style = "width:100px;transform: rotate(-90deg);
-                      #         vertical-align:bottom;text-align: middle; border: 1px solid grey;"
-                      #       ), 
-                      #       column (
-                      #         1,
-                      #         "% der Fläche",
-                      #         style = "height:300px;transform: rotate(-90deg);
-                      #         vertical-align:bottom;text-align: middle;"
-                      #       ), 
-                      #       
-                      #       style = "border: 1px dotted lightgrey"
-                      #       
-                      #     ), # End fluidRow
-                      
-                      # fluidRow (
-                      #   column(
-                      #     12,
-                      #     "Thermische Hülle (nicht-transparente Elemente)"
-                      #   )
-                      # ),
-                      
-                      fluidRow (
-                        
-                        column (
-                          1,
-                          "ob. Geschossd.",
-                          #style = "height:35px"
-                        ), # End column
-                        
-                        column (
-                          1,
-                          numericInput (
-                            inputId = "Year_Refurbishment_Ceiling",
-                            label = NULL,
-                            value = NA,
-                            min = 1970,
-                            max = 2030,
-                            #width = 500
-                          ),
-                        ),
-                        
-                        column (
-                          2,
-                          sliderInput (
-                            # numericInput (
-                            inputId = "d_Insulation_Ceiling",
-                            label = NULL,
-                            #label = "Dämmstärke Geschossdecke [cm]",
-                            value = 0,
-                            min = 0,
-                            max = 40,
-                            step = 1
-                            #width = 500
-                          ),
-                          #style = "height:35px"
-                        ), # End column
-                        
-                        column (
-                          1,
-                          sliderInput (
-                            inputId = "f_Insulation_Roof",
-                            label = NULL,
-                            value = 0,
-                            min = 0,
-                            max = 1,
-                            step = 0.2
-                            #width = 200
-                          ),
-                          #style = "height:35px"
-                        ), # End column
-                        
-                        style = "border: 1px dotted lightgrey"
-                        
-                      ), # End fluidRow
-                      
-                      ## Version 3 Ende                      
-                      
-                      
-                      
-                      
-                      
-                    )             
+                    
+
+                    # tabPanel (
+                    #   "Reste",
+                    #   
+                    #   
+                    #   #### >>> TEMPLATE FOR BOX -----
+                    #   
+                    #   
+                    #   box (
+                    #     
+                    #     status = "info",
+                    #     solidHeader = TRUE, 
+                    #     width = 12,
+                    #     background = NULL,
+                    #     
+                    #     
+                    #     style = "
+                    #                                             #margin-top: -20px;
+                    #                                             #margin-bottom: -10px;
+                    #                                             #margin-left: -20px;
+                    #                                             padding: 0 !important;
+                    #                                           ",
+                    #     
+                    #     
+                    #     
+                    #     fluidRow (
+                    #       
+                    #       box (
+                    #         
+                    #         div (
+                    #           
+                    #           strong ("Neue Box"), 
+                    #           
+                    #           style = "margin-top: -8px; margin-left: 10px;"
+                    #           
+                    #         ), # End div
+                    #         
+                    #         title =  NULL,
+                    #         footer = NULL,
+                    #         status = NULL,
+                    #         solidHeader = TRUE, 
+                    #         background = "light-blue", 
+                    #         width = 12,
+                    #         height = 25,
+                    #         collapsible = FALSE, 
+                    #         collapsed = FALSE,
+                    #         
+                    #         
+                    #       ), # End box
+                    #       
+                    #     ), # End fluid row 
+                    #     
+                    #     
+                    #     fluidRow (
+                    #       
+                    #       style = "margin-top: -20px; margin-left: 8px; padding:0 !important;",
+                    #       
+                    #       column (
+                    #         12,
+                    #         
+                    #         "Leere Spalte",
+                    #         br (),
+                    #         br (),
+                    #         
+                    #       ), # End column
+                    #       
+                    #       
+                    #       column (
+                    #         12,
+                    #         "Leere Spalte",
+                    #         
+                    #         
+                    #         br (),
+                    #         br (),
+                    #         
+                    #       ),
+                    #     ) # End fluidRow
+                    #     
+                    #   ), # End box 
+                    #   
+                    #   
+                    #   
+                    #   
+                    #   
+                    #   ## Version 2 Anfang                      
+                    #   
+                    #   
+                    #   
+                    #   
+                    #   #######################################################################X
+                    #   ##### Version 2: Input Opaque construction elements ----- 
+                    #   
+                    #   
+                    #   ###### Header row -----
+                    #   
+                    #   fluidRow (
+                    #     
+                    #     column (
+                    #       4,
+                    #       strong ("Thermische Hülle / nicht-transparente Elemente"),
+                    #       style = ColumnStyle_OpaqueElements_HeaderRow
+                    #     ), 
+                    #     
+                    #     column (
+                    #       2,
+                    #       strong ("Dach"),
+                    #       style = ColumnStyle_OpaqueElements_HeaderRow
+                    #     ), 
+                    #     
+                    #     column (
+                    #       2,
+                    #       strong ("oberste Geschossdecke"),
+                    #       style = ColumnStyle_OpaqueElements_HeaderRow
+                    #     ), 
+                    #     
+                    #     column (
+                    #       2,
+                    #       strong ("Außenwände"),
+                    #       style = ColumnStyle_OpaqueElements_HeaderRow
+                    #     ), 
+                    #     
+                    #     column (
+                    #       2,
+                    #       strong ("Kellerdecke / Fußboden gegen Erdreich"),
+                    #       style = ColumnStyle_OpaqueElements_HeaderRow
+                    #     ), 
+                    #     
+                    #   ), # End fluidRow
+                    #   
+                    #   
+                    #   
+                    #   ###### Construction type -----
+                    #   
+                    #   
+                    #   fluidRow (
+                    #     
+                    #     column (
+                    #       4,
+                    #       strong ("Art der Konstruktion"),
+                    #       style = ColumnStyle_OpaqueElements_ConstructionType,
+                    #       #   helpText (
+                    #       #     "hat bei einigen Baualtersklassen 
+                    #       #     Einfluss auf den typischen Wärmedurchgangskoeffzienten (U-Wer)"
+                    #       #     )
+                    #     ), 
+                    #     
+                    #     
+                    #     column ( # Checkboxes construction type roof
+                    #       2,
+                    #       
+                    #       fluidRow ( # fluidRow necessary to aline checkbox with header
+                    #         column ( # Single checkbox column used to reduce the height
+                    #           12,
+                    #           checkboxInput (
+                    #             inputId = "Indicator_Roof_Constr_Massive", 
+                    #             label = "massiv", 
+                    #             value = FALSE, 
+                    #             width = NULL
+                    #           ),
+                    #           style = ColumnStyle_Checkbox
+                    #         ), # End single checkbox column 
+                    #       ), # End fluidRow
+                    #       
+                    #       fluidRow ( # fluidRow necessary to aline checkbox with header
+                    #         column ( # Single checkbox column used to reduce the height
+                    #           12,
+                    #           checkboxInput (
+                    #             inputId = "Indicator_Roof_Constr_Wood", 
+                    #             label = "Holz", 
+                    #             value = FALSE, 
+                    #             width = NULL
+                    #           ),
+                    #           style = ColumnStyle_Checkbox
+                    #         ), # End single checkbox column 
+                    #       ), # End fluidRow
+                    #       
+                    #       style = ColumnStyle_OpaqueElements_ConstructionType
+                    #     ), # End column 
+                    #     
+                    #     
+                    #     column ( # Checkboxes construction type top ceiling
+                    #       2,
+                    #       
+                    #       fluidRow ( # fluidRow necessary to aline checkbox with header
+                    #         column ( # Single checkbox column used to reduce the height
+                    #           12,
+                    #           checkboxInput (
+                    #             inputId = "Indicator_Ceiling_Constr_Massive", 
+                    #             label = "massiv", 
+                    #             value = FALSE, 
+                    #             width = NULL
+                    #           ),
+                    #           style = ColumnStyle_Checkbox
+                    #         ), # End single checkbox column 
+                    #       ), # End fluidRow
+                    #       
+                    #       fluidRow ( # fluidRow necessary to aline checkbox with header
+                    #         column ( # Single checkbox column used to reduce the height
+                    #           12,
+                    #           checkboxInput (
+                    #             inputId = "Indicator_Ceiling_Constr_Wood", 
+                    #             label = "Holz", 
+                    #             value = FALSE, 
+                    #             width = NULL
+                    #           ),
+                    #           style = ColumnStyle_Checkbox
+                    #         ), # End single checkbox column 
+                    #       ), # End fluidRow
+                    #       
+                    #       style = ColumnStyle_OpaqueElements_ConstructionType
+                    #     ), 
+                    #     
+                    #     
+                    #     column ( # Checkboxes construction type walls
+                    #       2,
+                    #       
+                    #       fluidRow ( # fluidRow necessary to aline checkbox with header
+                    #         column ( # Single checkbox column used to reduce the height
+                    #           12,
+                    #           checkboxInput (
+                    #             inputId = "Indicator_Wall_Constr_Massive", 
+                    #             label = "massiv", 
+                    #             value = FALSE, 
+                    #             width = NULL
+                    #           ),
+                    #           style = ColumnStyle_Checkbox
+                    #         ), # End single checkbox column 
+                    #       ), # End fluidRow
+                    #       
+                    #       fluidRow ( # fluidRow necessary to aline checkbox with header
+                    #         column ( # Single checkbox column used to reduce the height
+                    #           12,
+                    #           checkboxInput (
+                    #             inputId = "Indicator_Wall_Constr_Wood", 
+                    #             label = "Holz", 
+                    #             value = FALSE, 
+                    #             width = NULL
+                    #           ),
+                    #           style = ColumnStyle_Checkbox
+                    #         ), # End single checkbox column 
+                    #       ), # End fluidRow
+                    #       
+                    #       style = ColumnStyle_OpaqueElements_ConstructionType
+                    #     ), 
+                    #     
+                    #     
+                    #     column ( # Checkboxes construction type floor
+                    #       2,
+                    #       
+                    #       fluidRow ( # fluidRow necessary to aline checkbox with header
+                    #         column ( # Single checkbox column used to reduce the height
+                    #           12,
+                    #           checkboxInput (
+                    #             inputId = "Indicator_Floor_Constr_Massive", 
+                    #             label = "massiv", 
+                    #             value = FALSE, 
+                    #             width = NULL
+                    #           ),
+                    #           style = ColumnStyle_Checkbox
+                    #         ), # End single checkbox column 
+                    #       ), # End fluidRow
+                    #       
+                    #       fluidRow ( # fluidRow necessary to aline checkbox with header
+                    #         column ( # Single checkbox column used to reduce the height
+                    #           12,
+                    #           checkboxInput (
+                    #             inputId = "Indicator_Floor_Constr_Wood", 
+                    #             label = "Holz", 
+                    #             value = FALSE, 
+                    #             width = NULL
+                    #           ),
+                    #           style = ColumnStyle_Checkbox
+                    #         ), # End single checkbox column 
+                    #       ), # End fluidRow
+                    #       
+                    #       style = ColumnStyle_OpaqueElements_ConstructionType
+                    #     ), 
+                    #     
+                    #   ), # End fluidRow
+                    #   
+                    #   br (),
+                    #   
+                    #   
+                    #   
+                    #   
+                    #   
+                    #   
+                    #   
+                    #   
+                    #   
+                    #   ## Version 2 Ende                      
+                    #   
+                    #   
+                    #   
+                    #   
+                    #   
+                    #   
+                    #   
+                    #   
+                    #   
+                    #   
+                    #   
+                    #   
+                    #   
+                    #   ## Version 3 Anfang                      
+                    #   
+                    #   
+                    #   br (),
+                    #   br (),
+                    #   
+                    #   fluidRow (
+                    #     column (
+                    #       1,
+                    #       style = "height: 150px; border: 1px solid grey;",
+                    #       box ("Bauteil",
+                    #            style = "width:150px; height:50px;
+                    #                                line-height:15px;
+                    #                                transform: rotate(-90deg) translate(-50px,-75px);
+                    #                                vertical-align:bottom; 
+                    #                                border: 1px dotted red;"
+                    #       )
+                    #     ), 
+                    #     column (
+                    #       1,
+                    #       style = "height: 150px; border: 1px solid grey;",
+                    #       box ("massiv",
+                    #            style = "width:150px; height:50px;
+                    #                                line-height:15px;
+                    #                                transform: rotate(-90deg) translate(-50px,-75px);
+                    #                                vertical-align:bottom; 
+                    #                                border: 1px dotted red;"
+                    #       )
+                    #     ), 
+                    #     column (
+                    #       1,
+                    #       style = "height: 150px; border: 1px solid grey;",
+                    #       box ("Holz",
+                    #            style = "width:150px; height:50px;
+                    #                                line-height:15px;
+                    #                                transform: rotate(-90deg) translate(-50px,-75px);
+                    #                                vertical-align:bottom; 
+                    #                                border: 1px dotted red;"
+                    #       )
+                    #     ), 
+                    #     column (
+                    #       1,
+                    #       style = "height: 150px; border: 1px solid grey;",
+                    #       box ("Original-Dämmung",
+                    #            style = "width:150px; height:50px;
+                    #                                line-height:15px;
+                    #                                transform: rotate(-90deg) translate(-50px,-75px);
+                    #                                vertical-align:bottom; 
+                    #                                border: 1px dotted red;"
+                    #       )
+                    #     ), 
+                    #     column (
+                    #       1,
+                    #       style = "height: 150px; border: 1px solid grey;",
+                    #       box ("Hülle nicht geändert",
+                    #            style = "width:150px; height:50px;
+                    #                                line-height:15px;
+                    #                                transform: rotate(-90deg) translate(-50px,-75px);
+                    #                                vertical-align:bottom; 
+                    #                                border: 1px dotted red;"
+                    #       )
+                    #     ), 
+                    #     column (
+                    #       1,
+                    #       style = "height: 150px; border: 1px solid grey;",
+                    #       box ("Original-Dämmung",
+                    #            style = "width:150px; height:50px;
+                    #                                line-height:15px;
+                    #                                transform: rotate(-90deg) translate(-50px,-75px);
+                    #                                vertical-align:bottom; 
+                    #                                border: 1px dotted red;"
+                    #       )
+                    #     ), 
+                    #     column (
+                    #       1,
+                    #       style = "height: 150px; border: 1px solid grey;",
+                    #       box ("Dämm-Maßnahmen",
+                    #            style = "width:150px; height:50px;
+                    #                                line-height:15px;
+                    #                                transform: rotate(-90deg) translate(-50px,-75px);
+                    #                                vertical-align:bottom; 
+                    #                                border: 1px dotted red;"
+                    #       )
+                    #     ), 
+                    #     column (
+                    #       1,
+                    #       style = "height: 150px; border: 1px solid grey;",
+                    #       box ("Stand Moderni-sierung unbekannt",
+                    #            style = "width:150px; height:50px;
+                    #                                line-height:15px;
+                    #                                transform: rotate(-90deg) translate(-50px,-75px);
+                    #                                vertical-align:bottom; 
+                    #                                border: 1px dotted red;"
+                    #       )
+                    #     ), 
+                    #     column (
+                    #       1,
+                    #       style = "height: 150px; border: 1px solid grey;",
+                    #       box ("Jahr der Modernisierung",
+                    #            style = "width:150px; height:50px;
+                    #                                line-height:15px;
+                    #                                transform: rotate(-90deg) translate(-50px,-75px);
+                    #                                border: 1px dotted red;"
+                    #            
+                    #            # It tried to center the double lined text 
+                    #            # This did not work:
+                    #            #writing-mode: vertical-lr;
+                    #            #transform: translate(-50px,-75px) rotate(-90deg);
+                    #            #vertical-align:top; #keine Auswirkung
+                    #            #text-align:center;  #keine Auswirkung
+                    #            #margin:0; # keine Auswirkung
+                    #            #padding:5px; # keine Auswirkung
+                    #            
+                    #       )
+                    #     ), 
+                    #     column (
+                    #       2,
+                    #       style = "height: 150px; border: 1px solid grey;",
+                    #       box ("Dämmstärke in cm",
+                    #            style = "width:150px; height:50px;
+                    #                                line-height:15px;
+                    #                                transform: rotate(-90deg) translate(-50px,-50px);
+                    #                                vertical-align:bottom; 
+                    #                                border: 1px dotted red;"
+                    #       )
+                    #     ), 
+                    #     column (
+                    #       1,
+                    #       style = "height: 150px; border: 1px solid grey;",
+                    #       box ("% der Fläche",
+                    #            style = "width:150px; height:50px;
+                    #                                line-height:15px;
+                    #                                transform: rotate(-90deg) translate(-50px,-75px);
+                    #                                vertical-align:bottom; 
+                    #                                border: 1px dotted red;"
+                    #       )
+                    #     ), 
+                    #   ),
+                    #   
+                    #   
+                    #   
+                    #   
+                    #   
+                    #   br (),
+                    #   
+                    #   
+                    #   ## kann gelöscht werden
+                    #   ##   
+                    #   #     fluidRow (
+                    #   #       column (
+                    #   #         1,
+                    #   #         "Bauteil",
+                    #   #         #offset = 1,
+                    #   #         style = "width:100px;transform: rotate(-90deg);
+                    #   #         vertical-align:bottom;text-align:middle;border: 1px solid grey;"
+                    #   #         # "font-size: 12pt !important; transform: rotate(-90deg) translate(-30px);"
+                    #   #         #style = "height:300px;transform: rotate(-90deg);text-align: middle;"
+                    #   #         # style = "transform: rotate(-90deg);vertical-align:bottom;",
+                    #   #         #height = '100'
+                    #   #       ), 
+                    #   #       column (
+                    #   #         1,
+                    #   #         "massiv",
+                    #   #         style = "width:100px;transform: rotate(-90deg);
+                    #   #         vertical-align:bottom;text-align:middle;border: 1px solid grey;"
+                    #   #       ), 
+                    #   #       column (
+                    #   #         1,
+                    #   #         "Holz",
+                    #   #         style = "width:100px;transform: rotate(-90deg);
+                    #   #         vertical-align:bottom;text-align:middle;border: 1px solid grey;"
+                    #   #         # style = "height:300px;transform: rotate(-90deg);
+                    #   #         # vertical-align:bottom;text-align: middle;"
+                    #   #       ), 
+                    #   #       column (
+                    #   #         1,
+                    #   #         "Hülle nicht geändert",
+                    #   #         style = "width:100px;transform: rotate(-90deg);
+                    #   #         vertical-align:bottom;text-align:middle;border: 1px solid grey;"
+                    #   #       ), 
+                    #   #       column (
+                    #   #         1,
+                    #   #         "Original-Dämmung",
+                    #   #         style = "width:100px;transform: rotate(-90deg);
+                    #   #         vertical-align:bottom;text-align:middle;border: 1px solid grey;"
+                    #   #       ), 
+                    #   #       column (
+                    #   #         1,
+                    #   #         "Dämm-Maßnahmen",
+                    #   #         style = "width:100px;transform: rotate(-90deg);
+                    #   #         vertical-align:bottom;text-align:middle;border: 1px solid grey;"
+                    #   #       ), 
+                    #   #       column (
+                    #   #         1,
+                    #   #         "Stand Modernisierung unbekannt                         ",
+                    #   #         style = "width:100px;transform: rotate(-90deg);
+                    #   #         vertical-align:bottom;text-align:middle;border: 1px solid grey;"
+                    #   #       ), 
+                    #   #       column (
+                    #   #         1,
+                    #   # # box (
+                    #   # #   "Jahr der Modernisierung",
+                    #   # #   style = "height:40px; width:350px;transform: rotate(-90deg); 
+                    #   # #   vertical-align:bottom;
+                    #   # #   text-align: middle;border: 1px dotted grey;"
+                    #   # # ),        
+                    #   # #         style = "height: 300px; border: 1px solid grey;"
+                    #   #       ), 
+                    #   # # column (
+                    #   # #   1,
+                    #   # #   "Jahr der Modernisierung",
+                    #   # #   style = "height:300px;transform: rotate(-90deg);
+                    #   # #         vertical-align:bottom;text-align: middle;border: 1px solid grey;"
+                    #   # # ), 
+                    #   # column (
+                    #   #         1,
+                    #   #         "Dämmstärke in cm",
+                    #   #         style = "width:100px;transform: rotate(-90deg);
+                    #   #         vertical-align:bottom;text-align: middle; border: 1px solid grey;"
+                    #   #       ), 
+                    #   #       column (
+                    #   #         1,
+                    #   #         "% der Fläche",
+                    #   #         style = "height:300px;transform: rotate(-90deg);
+                    #   #         vertical-align:bottom;text-align: middle;"
+                    #   #       ), 
+                    #   #       
+                    #   #       style = "border: 1px dotted lightgrey"
+                    #   #       
+                    #   #     ), # End fluidRow
+                    #   
+                    #   # fluidRow (
+                    #   #   column(
+                    #   #     12,
+                    #   #     "Thermische Hülle (nicht-transparente Elemente)"
+                    #   #   )
+                    #   # ),
+                    #   
+                    #   fluidRow (
+                    #     
+                    #     column (
+                    #       1,
+                    #       "ob. Geschossd.",
+                    #       #style = "height:35px"
+                    #     ), # End column
+                    #     
+                    #     column (
+                    #       1,
+                    #       numericInput (
+                    #         inputId = "Year_Refurbishment_Ceiling",
+                    #         label = NULL,
+                    #         value = NA,
+                    #         min = 1970,
+                    #         max = 2030,
+                    #         #width = 500
+                    #       ),
+                    #     ),
+                    #     
+                    #     column (
+                    #       2,
+                    #       sliderInput (
+                    #         # numericInput (
+                    #         inputId = "d_Insulation_Ceiling",
+                    #         label = NULL,
+                    #         #label = "Dämmstärke Geschossdecke [cm]",
+                    #         value = 0,
+                    #         min = 0,
+                    #         max = 40,
+                    #         step = 1
+                    #         #width = 500
+                    #       ),
+                    #       #style = "height:35px"
+                    #     ), # End column
+                    #     
+                    #     column (
+                    #       1,
+                    #       sliderInput (
+                    #         inputId = "f_Insulation_Roof",
+                    #         label = NULL,
+                    #         value = 0,
+                    #         min = 0,
+                    #         max = 1,
+                    #         step = 0.2
+                    #         #width = 200
+                    #       ),
+                    #       #style = "height:35px"
+                    #     ), # End column
+                    #     
+                    #     style = "border: 1px dotted lightgrey"
+                    #     
+                    #   ), # End fluidRow
+                    #   
+                    #   ## Version 3 Ende                      
+                    #   
+                    #   
+                    #   
+                    #   
+                    #   
+                    # )             
 
 
 
@@ -8525,37 +10271,410 @@ www.iwu.de
                 
                 tabPanel (
                   "Diagramme", 
+
+                  # Header 
+                  fluidRow ( 
+
+                    style = "background-color: white; color: black;",
+                    #style = "background-color: white; color: black; text-align: center;",
+                    #style = "background-color: grey; color: white; height:10px",
+                    
+                    column (
+                      12,
+                      style = "text-align: center",
+                      "Energiekennwerte | aktueller Datensatz"
+                    ), # End column
+
+                  ), # End fluidRow
                   
+                  # # Header 
+                  # column ( 
+                  #   12,
+                  #   strong ("Energiebilanz"),
+                  #   
+                  #   style = "background-color: white; color: black; text-align: center;"
+                  #   #style = "background-color: grey; color: white;",
+                  #   
+                  # ), # End header column
+                  
+                  
+                  fluidRow (
+                    style = "margin-top: -5px",
+                    #style = "margin-top: -5px; height:25px",
+                    
+
+                    column (
+                      6,
+                      
+                     # style = "margin-top: -0px; height:35px",
+                      #style = "margin-top: -10px; padding:0",
+                      
+                      checkboxInput (
+                        inputId = "Checkbox_ApplyCalibrationFactor",
+                        label = "auf typisches Verbrauchsniveau kalibrieren",
+                        value = FALSE,
+                        width = NULL
+                      )
+                    ), # End column
+                    
+                    # column (
+                    #   6,
+                    # ),
+                    
+                    column (
+                      6,
+                      
+                      #style = "margin-top: -0px; height:35px",
+                      #style = "margin-top: -10px; height:10px",
+                      
+                      checkboxInput (
+                        inputId = "Checkbox_ReferToLivingSpace",
+                        label = "auf Wohnflächenbezug umrechnen",
+                        value = FALSE,
+                        width = NULL
+                      )
+                    ), # End column
+                    
+                    
+                  ), # End fluidRow
+                  
+                  
+                  
+                                    
                   fluidRow (
                     
                     style = Style_Height_Dashboard_MainPanel,
                     #"height:75vh !important; overflow-y: scroll",
                     
-                    column (12,
+                    column (
+                      12,
 
+                    
+                    #br (),
+                    
+                    #######################################################################X
+                    ###### "Diagram heat need"  -----
+                    
+                    fluidRow (
+                      style = "height:30px;",
+                      #style = "height:30px; padding:0",
+                      #style = "height:30px; padding:0; width:120%", # I didn't find out the reason, why the width extension is necessary
+                      
+                      column (
+                        4,
+                        strong ("Heizwärme")
+                      ), # End column
+                      
+                      column (
+                        2,
+                        style = "text-align:right",
+                        "Skalierung:"
+                      ),
+                      
+                      column (
+                        6,
+                        
+                        
+                        column (
+                          2,
+                          
+                          fluidRow (
+                            style = "margin-top: -10px",
+                            #style = "height:10px; padding:0",
                             
-                            br (),
+                            checkboxInput (
+                              inputId = "Checkbox_AutoScaling_ChartHeatNeed",
+                              label = "auto",
+                              value = Set_MaxY_Auto_ChartHeatNeed,
+                              width = NULL
+                            )
+                          ) # End fluidRow                       
+                          
+                        ), # End column
+                        
+                        column (
+                          10,
+                          # style = "text-align:middle; margin-top:-5px;",
+                          
+                          conditionalPanel (
+                            condition = "!input.Checkbox_AutoScaling_ChartHeatNeed",
                             
-                            "Energiebilanz Raumheizung",
-                            echarts4rOutput (
-                              outputId = "Chart_HeatNeed", 
-                              height = "400px"
+                            column (
+                              3,
+                              style = "text-align:right;",
+                              "max:"
+                            ),
+                             
+                            column (
+                               9,
+                               style = "margin-top:-7px;",
+                               #style = "text-align:middle; margin-top:-7px;",
+                               
+                               numericInput (
+                                 inputId = "NumericInput_MaxValue_Scale_ChartHeatNeed",
+                                 label = NULL,
+                                 value = y_Max_ManualInput_ChartHeatNeed,
+                                 min = 0,
+                                 max = 1000,
+                                 step = 50,
+                                 width = "70px"
+                               )
+                             )
+                            
+                          ), # end condidtional panel
+                          
+                          # 
+                          # fluidRow (
+                          #   style = "text-align:middle; margin-top: -10px; height:10px",
+                          #   
+                          # ), # End fluidRow
+                          
+                          
+                          
+                          
+                          # actionButton (
+                          #   inputId = "Do_UpsizeScale_ChartHeatNeed",
+                          #   label = "+",
+                          #   icon = NULL,
+                          #   width = NULL,
+                          #   disabled = FALSE,
+                          #   style = "height:20px; width:20px; padding:0"
+                          # ),
+                          # 
+                          # actionButton (
+                          #   inputId = "Do_DownsizeScale_ChartHeatNeed",
+                          #   label = "-",
+                          #   icon = NULL,
+                          #   width = NULL,
+                          #   disabled = FALSE,
+                          #   style = "height:20px; width:20px; padding:0" 
+                          # ),  
+                          # 
+                          # textInput (
+                          #   inputId = "TextInput_MaxValue_Scale_ChartHeatNeed",
+                          #   label = NULL,
+                          #   value = y_Max_ManualInput_ChartHeatNeed,
+                          #   width = NULL
+                          # ),
+                          # 
+                        ), # End column
+                        
+                        
+                      ), # End column
+                      
+                    ), # End fluidRow
+                    
+
+                    fluidRow (
+                      
+                      style =   "border: 1px dotted grey; background-color: white;",                    
+                      
+                      echarts4rOutput (
+                        outputId = "Chart_HeatNeed", 
+                        height = "400px"
+                      ),
+                      
+                      ),
+
+                    
+                    br (),
+                    
+                    
+                    
+                    
+                    #######################################################################X
+                    ###### "Diagram final energy"  -----
+                    
+                    fluidRow (
+                      #style = "height:30px; padding:0; width:120%", # I didn't find out the reason, why the width extension is necessary
+                      style = "height:30px;",
+                      #style = "height:30px; padding:0",
+                      
+                      column (
+                        4,
+                        strong ("Endenergie")
+                      ), # End column
+                      
+                      column (
+                        2,
+                        style = "text-align:right",
+                        "Skalierung:"
+                      ),
+                      
+                      column (
+                        6,
+                        
+                        
+                        column (
+                          2,
+                          
+                          fluidRow (
+                            style = "margin-top: -10px",
+                            #style = "height:10px; padding:0",
+                            
+                            checkboxInput (
+                              inputId = "Checkbox_AutoScaling_ChartFinalEnergy",
+                              label = "auto",
+                              value = Set_MaxY_Auto_ChartFinalEnergy,
+                              width = NULL
+                            )
+                          ) # End fluidRow                       
+                          
+                        ), # End column
+                        
+                        column (
+                          10,
+                          #style = "text-align:middle; margin-top:-10px;",
+                          
+                          conditionalPanel (
+                            condition = "!input.Checkbox_AutoScaling_ChartFinalEnergy",
+                            
+                            column (
+                              3,
+                              style = "text-align:right;",
+                              "max:"
                             ),
                             
-                            "Endenergie",
-                            echarts4rOutput (
-                              outputId = "Chart_FinalEnergy", 
-                              height = "400px"
+                            column(
+                              9,
+                              style = "margin-top:-7px;",
+                              #style = "text-align:middle; margin-top:-7px;",
+                              numericInput (
+                                inputId = "NumericInput_MaxValue_Scale_ChartFinalEnergy",
+                                label = NULL,
+                                value = y_Max_ManualInput_ChartFinalEnergy,
+                                min = 0,
+                                max = 1000,
+                                step = 50,
+                                width = "70px"
+                              )
+                            )
+                            
+                            
+                          ), # end condidtional panel
+                          
+                        ), # End column
+                        
+                        
+                      ), # End column
+                      
+                    ), # End fluidRow
+                    
+                    
+                    fluidRow (
+                      
+                      style =   "border: 1px dotted grey; background-color: white;",                    
+                      
+                      echarts4rOutput (
+                        outputId = "Chart_FinalEnergy", 
+                        height = "400px"
+                      ),
+                      
+                    ),
+                    
+                    
+                    br (),
+                    
+                    
+                    
+                    
+                    #######################################################################X
+                    ###### "Diagram expectation ranges"  -----
+                    
+                    fluidRow (
+                      #style = "height:30px; padding:0; width:120%", # I didn't find out the reason, why the width extension is necessary
+                      style = "height:30px;",
+                      #style = "height:30px; padding:0",
+                      
+                      column (
+                        4,
+                        strong ("Erwartungsbereiche")
+                      ), # End column
+                      
+                      column (
+                        2,
+                        style = "text-align:right",
+                        "Skalierung:"
+                      ),
+                      
+                      column (
+                        6,
+                        
+                        
+                        column (
+                          2,
+                          
+                          fluidRow (
+                            style = "margin-top: -10px",
+                            #style = "height:10px; padding:0",
+                            
+                            checkboxInput (
+                              inputId = "Checkbox_AutoScaling_ChartExpectationRanges",
+                              label = "auto",
+                              value = Set_MaxY_Auto_ChartExpectationRanges,
+                              width = NULL
+                            )
+                          ) # End fluidRow                       
+                          
+                        ), # End column
+                        
+                        column (
+                          10,
+                          #style = "text-align:middle; margin-top:-10px;",
+                          
+                          conditionalPanel (
+                            condition = "!input.Checkbox_AutoScaling_ChartExpectationRanges",
+                            
+                            
+                            column (
+                              3,
+                              style = "text-align:right;",
+                              "max:"
                             ),
                             
-                            "Erwartungsbereiche",
-                            echarts4rOutput (
-                              outputId = "Chart_ExpectationRanges", 
-                              height = "400px"
-                            ),
+                            column (
+                              9,
+                              style = "margin-top:-7px;",
+                              #style = "text-align:middle; margin-top:-7px;",
+                              
+                              numericInput (
+                                inputId = "NumericInput_MaxValue_Scale_ChartExpectationRanges",
+                                label = NULL,
+                                value = y_Max_ManualInput_ChartExpectationRanges,
+                                min = 0,
+                                max = 1000,
+                                step = 50,
+                                width = "70px"
+                              )
+                              
+                            )
                             
-                            
-                            ) # End Column
+                          ), # end condidtional panel
+                          
+                        ), # End column
+                        
+                        
+                      ), # End column
+                      
+                    ), # End fluidRow
+                    
+                    
+                    fluidRow (
+                      
+                      style =   "border: 1px dotted grey; background-color: white;",                    
+                      
+                      echarts4rOutput (
+                        outputId = "Chart_ExpectationRanges", 
+                        height = "400px"
+                      ),
+                      
+                    ),
+                    
+                    
+                    br (),
+                    
+                    
+                    ) # End Column
                     
                   ), # End Row
                   
@@ -8569,7 +10688,21 @@ www.iwu.de
                 tabPanel (
                   "Eingaben", 
                   
-                  br (),
+                  # Header 
+                  fluidRow ( 
+                    
+                    style = "background-color: white; color: black;",
+                    #style = "background-color: white; color: black; text-align: center;",
+                    #style = "background-color: grey; color: white; height:10px",
+                    
+                    column (
+                      12,
+                      style = "text-align: center",
+                      "Daten-Tabelle 'Calc_Input' | aktueller Datensatz"
+                    ), # End column
+                    
+                  ), # End fluidRow
+                  
                   
                   fluidRow (
                     
@@ -8600,7 +10733,21 @@ www.iwu.de
                 tabPanel (
                   "Ergebnisse", 
                   
-                  br (),
+                  # Header 
+                  fluidRow ( 
+                    
+                    style = "background-color: white; color: black;",
+                    #style = "background-color: white; color: black; text-align: center;",
+                    #style = "background-color: grey; color: white; height:10px",
+                    
+                    column (
+                      12,
+                      style = "text-align: center",
+                      "Daten-Tabelle 'Calc_Output' | aktueller Datensatz"
+                    ), # End column
+                    
+                  ), # End fluidRow
+                  
                   
                   fluidRow (
                     
@@ -8638,9 +10785,22 @@ www.iwu.de
                 tabPanel (
                   "Details", 
                   
-                  br (),
+                  # Header 
+                  fluidRow ( 
+                    
+                    style = "background-color: white; color: black;",
+                    #style = "background-color: white; color: black; text-align: center;",
+                    #style = "background-color: grey; color: white; height:10px",
+                    
+                    column (
+                      12,
+                      style = "text-align: center",
+                      "Daten-Tabelle 'Calc_InterimResults' | aktueller Datensatz"
+                    ), # End column
+                    
+                  ), # End fluidRow
                   
-                  
+
                   fluidRow (
                     column (
                       12,
@@ -8674,8 +10834,21 @@ www.iwu.de
                 tabPanel (
                   "Energie", 
                   
-                  br (),
-                  
+                  # Header 
+                  fluidRow ( 
+                    
+                    style = "background-color: white; color: black;",
+                    #style = "background-color: white; color: black; text-align: center;",
+                    #style = "background-color: grey; color: white; height:10px",
+                    
+                    column (
+                      12,
+                      style = "text-align: center",
+                      "Daten-Tabelle 'Calc_ChartEnergy' | aktueller Datensatz"
+                    ), # End column
+                    
+                  ), # End fluidRow
+
                   
                   fluidRow (
                     
@@ -8683,8 +10856,23 @@ www.iwu.de
                     #"height:75vh !important; overflow-y: scroll",
                     #style = "height: 1200px; overflow-y: scroll;",
                     
+                    br(),
+                    br(),
                     column (
                       12,
+                      strong ("Korrekturfaktor"),
+                      "(nicht angewendet auf die Kennwerte unten)",
+                      tableOutput (
+                        "Calc_ChartEnergy_CorrectionFactors"
+                      ),
+                    ),
+                    
+                    br(),
+                    
+                    column (
+                      12,
+                      strong ("Energiemengen in kWh/(m²a)"),
+                      "(Bezugsfläche: A_C_Ref)",
                       tableOutput (
                         "Calc_ChartEnergy"
                       ),
@@ -8826,6 +11014,498 @@ www.iwu.de
         
       ), # End tabItem "Tab_Dashboard"
       
+
+
+#######################################################################X
+## tabItem "Tab_Comparison"  -----
+
+shinydashboard::tabItem (
+  
+  tabName = "Tab_Comparison",
+  
+  
+  
+  # fluidRow (
+  #   
+  #   column (
+  #     6,
+  #     
+  #     style =   "border: 1px dotted grey; background-color: white;",                    
+  #     
+  #     echarts4rOutput (
+  #       outputId = "Chart_CompareHeatNeed", 
+  #       height = "800px"
+  #     )
+  #     
+  #   ), # End column
+  #   
+  # 
+  #   column (
+  #     6,
+  #     
+  #     style =   "border: 1px dotted grey; background-color: white;",                    
+  #     
+  #     echarts4rOutput (
+  #       outputId = "Chart_CompareFinalEnergy", 
+  #       height = "800px"
+  #     )
+  #     
+  #   ) # End column
+  #   
+  #   
+  #   
+  #   
+  # ), # end fluidRow
+  
+  
+
+  sidebarLayout (
+
+
+    ### Sidebar (left area of sidebarLayout) -----
+
+
+    mainPanel (
+    #sidebarPanel (
+      width = 6,
+
+
+      tabsetPanel (
+        type = "tabs",
+
+
+        #######################################################################X
+        ## tabItem "Floor area related heat need"
+
+        tabPanel (
+
+          strong ("Heizwärme"),
+
+          fluidRow (
+
+            #style = Style_Height_Dashboard_MainPanel,
+
+            column (
+              12,
+
+
+              #######################################################################X
+              ###### "Diagram compare heat need"  -----
+
+              fluidRow (
+                style = "background-color: white; color: black; text-align: center;",
+
+                column (
+                  12,
+                  strong ("flächenbezogener Heizwärmebedarf"),
+                ),
+
+
+              ), # End fluidRow
+
+              #br (),
+
+              
+              
+              fluidRow (
+                style = "margin-top: -5px; height:25px",
+                
+                column (
+                  6,
+                  
+                  checkboxInput (
+                    inputId = "Checkbox_ApplyCalibrationFactor_ChartCompareLeft",
+                    label = "auf typisches Verbrauchsniveau kalibrieren",
+                    value = FALSE,
+                    width = NULL
+                  )
+                ), # End column
+
+                                
+                column (
+                  6,
+                  
+                  #style = "margin-top: -0px; height:35px",
+                  #style = "margin-top: -10px; height:10px",
+                  
+                  checkboxInput (
+                    inputId = "Checkbox_ReferToLivingSpace_ChartCompareLeft",
+                    label = "auf Wohnflächenbezug umrechnen",
+                    value = FALSE,
+                    width = NULL
+                  )
+                ), # End column
+                
+                
+              ), # End fluidRow
+              
+              
+              
+              fluidRow (
+
+                column (
+                  12,
+
+                  style =   "border: 1px dotted grey; background-color: white;",
+
+                  echarts4rOutput (
+                    outputId = "Chart_CompareHeatNeed",
+                    height = paste0 (Height_ChartCompareLeft, "px") #"600px"
+                  )
+
+                ) # End column
+
+              ), # end fluidRow
+
+              
+              br (),
+              
+              
+              fluidRow (
+                style = "height:30px;",
+
+                ## I did not find a method to apply this
+                #                  
+                # column (
+                #   2,
+                #   style = "text-align:right",
+                #   "Diagrammhöhe:"
+                # ),
+                # 
+                # column (
+                #   2,
+                #   style = "margin-top:-7px;",
+                # 
+                #   numericInput (
+                #     inputId = "NumericInput_Height_ChartCompareLeft",
+                #     label = NULL,
+                #     value = Height_ChartCompare_Default,
+                #     min = 0,
+                #     max = 1000,
+                #     step = 50,
+                #     width = "70px"
+                #   )
+                #   
+                # ), # End column
+                
+                column (
+                  2,
+                  style = "text-align:right",
+                  "Skalierung:"
+                ),
+                
+                
+                column (
+                  6,
+                  
+                  
+                  column (
+                    2,
+                    
+                    fluidRow (
+                      style = "margin-top: -10px",
+                      #style = "height:10px; padding:0",
+                      
+                      checkboxInput (
+                        inputId = "Checkbox_AutoScaling_ChartCompareLeft",
+                        label = "auto",
+                        value = Set_MaxY_Auto_ChartCompareLeft,
+                        width = NULL
+                      )
+                      
+                    ) # End fluidRow                       
+                    
+                  ), # End column
+                  
+                  column (
+                    10,
+                    # style = "text-align:middle; margin-top:-5px;",
+                    
+                    conditionalPanel (
+                      condition = "!input.Checkbox_AutoScaling_ChartCompareLeft",
+                      
+                      column (
+                        3,
+                        style = "text-align:right;",
+                        "max:"
+                      ),
+                      
+                      column (
+                        9,
+                        style = "margin-top:-7px;",
+                        #style = "text-align:middle; margin-top:-7px;",
+                        
+                        numericInput (
+                          inputId = "NumericInput_MaxValue_Scale_ChartCompareLeft",
+                          label = NULL,
+                          value = y_Max_ManualInput_ChartCompareLeft,
+                          min = 0,
+                          max = 1000,
+                          step = 50,
+                          width = "70px"
+                        )
+                      )
+                      
+                    ), # end condidtional panel
+                    
+                    
+                  ), # End column
+                  
+                  
+                ), # End column
+                
+                column (
+                  6,
+                  
+                )
+                
+                
+              ), # End fluidRow
+              
+              
+
+            ) # End column
+
+          ), # End fluidRow
+
+
+        ) # End tabPanel
+
+
+      ) # End tabSetPanel
+
+
+
+      # tabsetPanel (
+      #   type = "tabs",
+      #
+      #
+      #   #######################################################################X
+      #   ## tabItem "Energy need for heating"
+      #
+      #   tabPanel (
+      #
+      #     strong ("Heizwärmebedarf"),
+      #
+      #     fluidRow (
+      #
+      #       style = Style_Height_Dashboard_MainPanel,
+      #
+      #       column (
+      #         12,
+      #
+      #
+      #         br (),
+      #       ) # End column
+      #
+      #     ) # End fluidRow
+      #
+      #   ) # End tabPanel
+      #
+      #
+      #
+      # ) # End tabSetPanel
+
+
+
+
+
+    ), # End left mainPanel
+
+    
+    
+    mainPanel (
+      width = 6,
+
+      
+      tabsetPanel (
+        type = "tabs",
+        
+        
+        #######################################################################X
+        ## tabItem "Floor area related final energy demand"
+        
+        tabPanel (
+          
+          strong ("Endenergie"),
+          
+          fluidRow (
+            
+            #style = Style_Height_Dashboard_MainPanel,
+            
+            column (
+              12,
+              
+              
+              #######################################################################X
+              ###### "Diagram compare final energy"  -----
+              
+              fluidRow (
+                style = "background-color: white; color: black; text-align: center;",
+                
+                column (
+                  12,
+                  strong ("flächenbezogener Endenergiebedarf"),
+                ),
+                
+                
+              ), # End fluidRow
+              
+              #br (),
+              
+              fluidRow (
+                style = "margin-top: -5px; height:25px",
+                
+                column (
+                  6,
+                  
+                  checkboxInput (
+                    inputId = "Checkbox_ApplyCalibrationFactor_ChartCompareRight",
+                    label = "auf typisches Verbrauchsniveau kalibrieren",
+                    value = FALSE,
+                    width = NULL
+                  )
+                ), # End column
+                
+                
+                column (
+                  6,
+                  
+                  #style = "margin-top: -0px; height:35px",
+                  #style = "margin-top: -10px; height:10px",
+                  
+                  checkboxInput (
+                    inputId = "Checkbox_ReferToLivingSpace_ChartCompareRight",
+                    label = "auf Wohnflächenbezug umrechnen",
+                    value = FALSE,
+                    width = NULL
+                  )
+                ), # End column
+                
+                
+              ), # End fluidRow
+              
+              
+              
+              fluidRow (
+                
+                column (
+                  12,
+                  
+                  style =   "border: 1px dotted grey; background-color: white;",
+                  
+                  echarts4rOutput (
+                    outputId = "Chart_CompareFinalEnergy",
+                    height = Height_ChartCompare_Default #"600px"
+                  )
+                  
+                ) # End column
+                
+              ), # end fluidRow
+              
+              br (),
+              
+              
+              fluidRow (
+                style = "height:30px;",
+                
+
+                column (
+                  2,
+                  style = "text-align:right",
+                  "Skalierung:"
+                ),
+                
+                
+                column (
+                  6,
+                  
+                  
+                  column (
+                    2,
+                    
+                    fluidRow (
+                      style = "margin-top: -10px",
+                      #style = "height:10px; padding:0",
+                      
+                      checkboxInput (
+                        inputId = "Checkbox_AutoScaling_ChartCompareRight",
+                        label = "auto",
+                        value = Set_MaxY_Auto_ChartCompareRight,
+                        width = NULL
+                      )
+                      
+                    ) # End fluidRow                       
+                    
+                  ), # End column
+                  
+                  column (
+                    10,
+                    # style = "text-align:middle; margin-top:-5px;",
+                    
+                    conditionalPanel (
+                      condition = "!input.Checkbox_AutoScaling_ChartCompareRight",
+                      
+                      column (
+                        3,
+                        style = "text-align:right;",
+                        "max:"
+                      ),
+                      
+                      column (
+                        9,
+                        style = "margin-top:-7px;",
+                        #style = "text-align:middle; margin-top:-7px;",
+                        
+                        numericInput (
+                          inputId = "NumericInput_MaxValue_Scale_ChartCompareRight",
+                          label = NULL,
+                          value = y_Max_ManualInput_ChartCompareRight,
+                          min = 0,
+                          max = 1000,
+                          step = 50,
+                          width = "70px"
+                        )
+                      )
+                      
+                    ), # end condidtional panel
+                    
+                    
+                  ), # End column
+                  
+                  
+                ), # End column
+                
+                column (
+                  6,
+                  
+                )
+                
+                
+              ), # End fluidRow
+              
+
+              
+              
+              
+            ) # End column
+            
+          ), # End fluidRow
+
+        ) # End tabPanel
+
+        
+      ) # End tabSetPanel
+
+      
+    ), # End main panel
+  ) # End sideBarLayout
+  
+  
+  
+), # End tabItem
+
+
       
       #######################################################################X
       ## tabItem "Tab_Data"  -----
@@ -8834,130 +11514,900 @@ www.iwu.de
         
         tabName = "Tab_Data",
         
-        h2("Daten-Tabellen"),
+        #h2("Daten-Interface"),
         
         
         fluidPage (
           
           #titlePanel ("Daten-Tabellen"),
           
-          
-          
-          
-          
-          
-          fluidRow (
+          tabsetPanel (
+            selected = 2, 
+            type = "tabs",
 
 
-            # Choose Output tables ----
-            selectInput (
-              "myOutputSelection",
-              "Choose an output table:",
-              choices = c(
+            
+            #######################################################################X
+            #### > tabPanel 1 Stack_Input ----
+            
+            tabPanel (
+              
+              strong ("'Stack_Input'"), 
+              value = 1,
+              
+              fluidRow (
                 
-                "Calc_Input",
-                "Calc_Output",
-                "Calc_ChartEnergy",
-                "Calc_InterimResults",
-                "Stack_Input",
-                "Stack_Output"
+                #br (),
                 
-                # "ResultTable_Year",
-                # "DF_ClimCalc_1",
-                # "DF_ClimCalc_2",
-                # "DF_ClimCalc_Both",
-                # "DF_Evaluation_1",
-                # "DF_Evaluation_2",
-                # "DF_EvaluationByYear_1",
-                # "DF_EvaluationByYear_2"
-                # # "Data.TA.HD"
+                # Header 
+                column ( 
+                  12,
+                  strong ("Datentabelle 'Stack_Input' - Daten-Ansicht und -Export"),
+                  style = "background-color: white; color: black; text-align: center;"
+
+                ), # End header column
+                
+                # br (),
+                # br (),
+                
+              ), # End fluidRow
+
+              # fluidRow (
+              #   
+              #   column (
+              #     3,
+              # 
+              #   ), # End column
+              #   
+              #   style =   "border: 7px solid lightblue; background-color: lightblue"
+              # 
+              # ), # End fluidRow
+              # 
+              # br (),
+              
+              column (
+                12,
+
+                fluidRow (
+
+                  checkboxInput(
+                    inputId =  "TransposeOutputTable_Stack_Input",
+                    label = "Zeilen und Spalten vertauschen",
+                    value = FALSE,
+                    width = NULL
+                  ),
+                  
+                  DT::DTOutput (
+                    "myOutputTable_Stack_Input",
+                    #height = 600,
+                    fill = TRUE # FALSE doesn't change the appearance
+                  ),
+                  
+                  style = "overflow-x: scroll;"
+                  
+                ) # End fluidRow
+                
+              ) # End column
+
+            ), # End tabPanel "Stack_Input"
+            
+            
+            
+            #######################################################################X
+            #### > tabPanel 2 Stack_Output ----
+            
+            tabPanel (
+              
+              strong ("'Stack_Output'"), 
+              value = 2,
+              
+              fluidRow (
+                
+                #br (),
+                
+                # Header 
+                column ( 
+                  12,
+                  strong ("Datentabelle 'Stack_Output' - Daten-Ansicht und -Export"),
+                  style = "background-color: white; color: black; text-align: center;"
+                  
+                ), # End header column
+                
+                br (),
+                br (),
+                
+              ), # End fluidRow
+              
+              fluidRow (
+                
+
+                #br (),
+                
+                column (
+                  2,
+
+                  actionButton (
+                    inputId = "Button_CalculateStack",
+                    label = "Gesamten Stack neu berechnen"
+                  )
+
+                ), # End column
+                
+                column (
+                  4,
+                  
+                  actionButton (
+                    inputId = "Button_CalculateStack_IncludeTargetActualComparison",
+                    label = "Gesamten Stack inkl. V/B-Vergleich berechnen (lange Rechenzeit!)"
+                  )
+                  
+                ), # End column
+                
+                column (
+                  6,
+                  
+                  "Hinweis: Der Verbrauch/Bedarf-Vergleich ist in der Einzelberechnung derzeit nicht enhalten (geht nur im Stack).",
+                  br (),
+                  "Datensätze mit Verbrauchsdaten müssen über den Daten-Import in den Stack geladen werden.",
+                  
+
+                ), # End column
+                
+                
+                style =   "border: 7px solid lightblue; background-color: lightblue"
+                
+              ), # End fluidRow
+              
+              br (),
+              
+              column (
+                12,
+                
+                fluidRow (
+                  
+                  checkboxInput(
+                    inputId =  "TransposeOutputTable_Stack_Output",
+                    label = "Zeilen und Spalten vertauschen",
+                    value = FALSE,
+                    width = NULL
+                  ),
+                  
+                  DT::DTOutput (
+                    "myOutputTable_Stack_Output",
+                    #height = 600,
+                    fill = TRUE # FALSE doesn't change the appearance
+                  ),
+                  
+                  style = "overflow-x: scroll;"
+                  
+                ) # End fluidRow
+                
+              ) # End column
+              
+            ), # End tabPanel "Stack_Output"
+            
+            
+            
+            
+            #######################################################################X
+            #### > tabPanel 3 Stack_ChartEnergyData ----
+            
+            tabPanel (
+              
+              strong ("'Stack_ChartEnergyData'"), 
+              value = 3,
+              
+              fluidRow (
+                
+                #br (),
+                
+                # Header 
+                column ( 
+                  12,
+                  strong ("Datentabelle 'Stack_ChartEnergyData' - Daten-Ansicht und -Export"),
+                  style = "background-color: white; color: black; text-align: center;"
+                  
+                ), # End header column
+                
+                # br (),
+                # br (),
+                
+              ), # End fluidRow
+              
+              # fluidRow (
+              #   
+              #   column (
+              #     3,
+              #     
+              #     
+              #   ), # End column
+              #   
+              #   style =   "border: 7px solid lightblue; background-color: lightblue"
+              #   
+              # ), # End fluidRow
+              
+              #br (),
+              
+              column (
+                12,
+                
+                fluidRow (
+                  
+                  checkboxInput(
+                    inputId =  "TransposeOutputTable_Stack_ChartEnergyData",
+                    label = "Zeilen und Spalten vertauschen",
+                    value = FALSE,
+                    width = NULL
+                  ),
+                  
+                  DT::DTOutput (
+                    "myOutputTable_Stack_ChartEnergyData",
+                    #height = 600,
+                    fill = TRUE # FALSE doesn't change the appearance
+                  ),
+                  
+                  style = "overflow-x: scroll;"
+                  
+                ) # End fluidRow
+                
+              ) # End column
+              
+            ), # End tabPanel "Stack_ChartEnergyData"
+            
+            
+            
+            
+            #######################################################################X
+            #### > tabPanel 4 Stack_InterimResults ----
+            
+            tabPanel (
+              
+              strong ("'Stack_InterimResults'"), 
+              value = 4,
+              
+              fluidRow (
+                
+                #br (),
+                
+                # Header 
+                column ( 
+                  12,
+                  strong ("Datentabelle 'Stack_InterimResults' - Daten-Ansicht und -Export"),
+                  style = "background-color: white; color: black; text-align: center;"
+                  
+                ), # End header column
+                
+                #br (),
+                #br (),
+                
+              ), # End fluidRow
+              
+              # fluidRow (
+              #   
+              #   column (
+              #     3,
+              #     
+              #     
+              #   ), # End column
+              #   
+              #   style =   "border: 7px solid lightblue; background-color: lightblue"
+              #   
+              # ), # End fluidRow
+              
+              #br (),
+              
+              column (
+                12,
+                
+                fluidRow (
+                  
+                  checkboxInput(
+                    inputId =  "TransposeOutputTable_Stack_InterimResults",
+                    label = "Zeilen und Spalten in der Ansicht vertauschen",
+                    value = FALSE,
+                    width = NULL
+                  ),
+                  
+                  DT::DTOutput (
+                    "myOutputTable_Stack_InterimResults",
+                    #height = 600,
+                    fill = TRUE # FALSE doesn't change the appearance
+                  ),
+                  
+                  style = "overflow-x: scroll;"
+                  
+                ) # End fluidRow
+                
+              ) # End column
+              
+            ), # End tabPanel "Stack_InterimResults"
+            
+            
+            
+            
+            
+            
+            
+            #######################################################################X
+            #### > tabPanel 5 Calc_Input ----
+            
+            tabPanel (
+              
+              strong ("'Calc_Input'"), 
+              value = 5,
+              
+              fluidRow (
+                
+                #br (),
+                
+                # Header 
+                column ( 
+                  12,
+                  strong ("Datentabelle 'Calc_Input' - Daten-Ansicht und -Export"),
+                  style = "background-color: white; color: black; text-align: center;"
+                  
+                ), # End header column
+                
+                # br (),
+                # br (),
+                
+              ), # End fluidRow
+              
+              # fluidRow (
+              #   
+              #   column (
+              #     3,
+              #     
+              #     
+              #   ), # End column
+              #   
+              #   style =   "border: 7px solid lightblue; background-color: lightblue"
+              #   
+              # ), # End fluidRow
+              
+              #br (),
+              
+              column (
+                3,
+              ),
+              
+              
+              column (
+                6,
+                
+                fluidRow (
+                  
+                  # checkboxInput(
+                  #   inputId =  "TransposeOutputTable_Calc_Input",
+                  #   label = "Zeilen und Spalten vertauschen",
+                  #   value = TRUE,
+                  #   width = NULL
+                  # ),
+                  
+                  DT::DTOutput (
+                    "myOutputTable_Calc_Input",
+                    #height = 600,
+                    fill = TRUE # FALSE doesn't change the appearance
+                  ),
+                  
+                  style = "overflow-x: scroll;"
+                  
+                ) # End fluidRow
+                
+              ), # End column
+              
+              column (
+                3,
               )
-            ),
-
-            checkboxInput(
-              inputId =  "TransposeOutputTable",
-              label = "Zeilen und Spalten vertauschen",
-              value = TRUE,
-              width = NULL
-
-            ),
-
-
-
-
-            # # Button
-            # downloadButton (
-            #   outputId = "downloadData",
-            #   class = "Download",
-            #   icon = shiny::icon("download")
-            # )
-
-          ), # End fluidRow
-
-          column (
-            12,
-
+              
+              
+            ), # End tabPanel "Calc_Input"
             
             
-            fluidRow (
-
-    
-              # ## 2025-05-09 ausprobiert und wieder abgeschaltet 
-              #           
-              # ## CSS doubleScroll (2025-05-09)
-              # 
-              # # The following lines provide a scrollbar at the top and at the bottom of a large table 
-              # # The CSS is defined above
-              # # Source: https://stackoverflow.com/questions/62703411/r-shiny-table-with-horizontal-scrollbar-both-at-the-top-and-at-the-bottom
-              # 
-              # tags$head(
-              #   tags$script(src = "jquery.doubleScroll.js"),
-              #   tags$script(HTML(js)),
-              #   tags$style(HTML(CSS))
-              # ),
-              # br(),
+            
+            #######################################################################X
+            #### > tabPanel 6 Calc_Output ----
+            
+            tabPanel (
+              
+              strong ("'Calc_Output'"), 
+              value = 6,
+              
+              fluidRow (
+                
+                #br (),
+                
+                # Header 
+                column ( 
+                  12,
+                  strong ("Datentabelle 'Calc_Output' - Daten-Ansicht und -Export"),
+                  style = "background-color: white; color: black; text-align: center;"
+                  
+                ), # End header column
+                
+                # br (),
+                # br (),
+                
+              ), # End fluidRow
+              
+              # fluidRow (
+              #   
+              #   column (
+              #     3,
+              #     
+              #     
+              #   ), # End column
+              #   
+              #   style =   "border: 7px solid lightblue; background-color: lightblue"
+              #   
+              # ), # End fluidRow
+              
+              #br (),
               
               
+              column (
+                3,
+              ),
+              
+              column (
+                6,
+                
+                fluidRow (
+                  
+                  # checkboxInput(
+                  #   inputId =  "TransposeOutputTable_Calc_Output",
+                  #   label = "Zeilen und Spalten vertauschen",
+                  #   value = TRUE,
+                  #   width = NULL
+                  # ),
+                  
+                  DT::DTOutput (
+                    "myOutputTable_Calc_Output",
+                    #height = 600,
+                    fill = TRUE # FALSE doesn't change the appearance
+                  ),
+                  
+                  style = "overflow-x: scroll;"
+                  
+                ) # End fluidRow
+                
+              ), # End column
+              
+              column (
+                3,
+              )
               
               
-              DT::DTOutput (
-                "myTable",
-                #height = 600,
-                fill = TRUE # FALSE doesn't change the appearance
-                ),
-
-              style = "overflow-x: scroll;"
+            ), # End tabPanel "Calc_Output"
+            
+            
+            
+            
+            
+            
+            #######################################################################X
+            #### > tabPanel 7 Calc_ChartEnergyData ----
+            
+            tabPanel (
+              
+              strong ("'Calc_ChartEnergyData'"), 
+              value = 7,
+              
+              fluidRow (
+                
+                #br (),
+                
+                # Header 
+                column ( 
+                  12,
+                  strong ("Datentabelle 'Calc_ChartEnergyData' - Daten-Ansicht und -Export"),
+                  style = "background-color: white; color: black; text-align: center;"
+                  
+                ), # End header column
+                
+                # br (),
+                # br (),
+                
+              ), # End fluidRow
+              
+              # fluidRow (
+              #   
+              #   column (
+              #     3,
+              #     
+              #     
+              #   ), # End column
+              #   
+              #   style =   "border: 7px solid lightblue; background-color: lightblue"
+              #   
+              # ), # End fluidRow
+              
+              #br (),
+              
+              column (
+                3,
+              ),
+              
+              column (
+                6,
+                
+                fluidRow (
+                  
+                  # checkboxInput(
+                  #   inputId =  "TransposeOutputTable_Calc_ChartEnergyData",
+                  #   label = "Zeilen und Spalten vertauschen",
+                  #   value = TRUE,
+                  #   width = NULL
+                  # ),
+                  
+                  DT::DTOutput (
+                    "myOutputTable_Calc_ChartEnergyData",
+                    #width = "40%",
+                    #height = 600,
+                    fill = FALSE # FALSE doesn't change the appearance
+                  ),
+                  
+                  style = "overflow-x: scroll;"
+                  
+                ) # End fluidRow
+                
+              ), # End column
+              
+              column (
+                3,
+              )
               
               
-              # box (
-              #   width = 12,
-              #   collapsible = TRUE,
-              # 
-              #   title = "Ausgabe-Box",
-              # 
-              #   div (
-              #     style = 'overflow-x: scroll; overflow-y: scroll',
-              #     DT::DTOutput ("myTable")
-              #     ),
-              # 
-              #   #style = "overflow-x: scroll"
-              # 
-              # )
+            ), # End tabPanel "Calc_ChartEnergyData"
+            
+            
+            
+            
+            #######################################################################X
+            #### > tabPanel 8 Calc_InterimResults ----
+            
+            tabPanel (
               
-
-              # tableOutput (
-              #   "myTable"
-              # )
-
+              strong ("'Calc_InterimResults'"), 
+              value = 8,
               
-                            
-            ) # End fluidRow
+              fluidRow (
+                
+                #br (),
+                
+                # Header 
+                column ( 
+                  12,
+                  strong ("Datentabelle 'Calc_InterimResults' - Daten-Ansicht und -Export"),
+                  style = "background-color: white; color: black; text-align: center;"
+                  
+                ), # End header column
+                
+                #br (),
+                #br (),
+                
+              ), # End fluidRow
+              
+              # fluidRow (
+              #   
+              #   column (
+              #     3,
+              #     
+              #     
+              #   ), # End column
+              #   
+              #   style =   "border: 7px solid lightblue; background-color: lightblue"
+              #   
+              # ), # End fluidRow
+              
+              #br (),
+              
+              column (
+                3,
+              ),
+              
+              
+              column (
+                6,
+                
+                fluidRow (
+                  
+                  # checkboxInput(
+                  #   inputId =  "TransposeOutputTable_Calc_InterimResults",
+                  #   label = "Zeilen und Spalten in der Ansicht vertauschen",
+                  #   value = TRUE,
+                  #   width = NULL
+                  # ),
+                  
+                  DT::DTOutput (
+                    "myOutputTable_Calc_InterimResults",
+                    #height = 600,
+                    fill = TRUE # FALSE doesn't change the appearance
+                  ),
+                  
+                  style = "overflow-x: scroll;"
+                  
+                ) # End fluidRow
+                
+              ), # End column
+              
+              column (
+                3,
+              )
+              
+              
+            ), # End tabPanel "Calc_InterimResults"
+            
+            
+            
+            
+            
+                        
+            #######################################################################X
+            #### > tabPanel 9 Selectable ----
 
-          ) # End column
+            tabPanel (
+              
+              strong ("Auswahl"), 
+              value = 9,
+              
+              fluidRow (
+                
+                #br (),
+                
+                # Header 
+                column ( 
+                  12,
+                  strong ("Daten-Ansicht und -Export"),
+                  style = "background-color: white; color: black; text-align: center;"
+                  #style = "background-color: grey; color: white;",
+                  #style = "background-color: orange",
+                  
+                ), # End header column
+                
+                br (),
+                br (),
+                
+              ), # End fluidRow
+              
+              
+              fluidRow (
+                
+                column (
+                  3,
+                  
+                  
+                  selectInput (
+                    inputId = "myOutputSelection",
+                    label = "Wähle eine Input- oder Output-Tabelle:",
+                    choices = c(
+                      
+                      "Calc_Input",
+                      "Calc_Output",
+                      "Calc_ChartEnergy",
+                      "Calc_InterimResults",
+                      "Stack_Input",
+                      "Stack_Output"
+                      
+                      # "ResultTable_Year",
+                      # "DF_ClimCalc_1",
+                      # "DF_ClimCalc_2",
+                      # "DF_ClimCalc_Both",
+                      # "DF_Evaluation_1",
+                      # "DF_Evaluation_2",
+                      # "DF_EvaluationByYear_1",
+                      # "DF_EvaluationByYear_2"
+                      # # "Data.TA.HD"
+                    ),
+                    
+                    selected = "Stack_Output"
 
+                  ),
+                  
+                  # # Button
+                  # downloadButton (
+                  #   outputId = "downloadData",
+                  #   class = "Download",
+                  #   icon = shiny::icon("download")
+                  # )
+                  
+                  
+                ), # End column
+                
+                # column (
+                #   3,
+                #   
+                #   actionButton (
+                #     inputId = "Button_CalculateStack",
+                #     label = strong ("Gesamten Stack neu berechnen")
+                #   )
+                #   
+                # ), # End column
+                
+                
+                style =   "border: 7px solid lightblue; background-color: lightblue"
+                
+                
+              ), # End fluidRow
+              
+              #br (),
+              
+              column (
+                12,
+                
+                
+                fluidRow (
+                  
+                  
+                  # ## 2025-05-09 ausprobiert und wieder abgeschaltet 
+                  #           
+                  # ## CSS doubleScroll (2025-05-09)
+                  # 
+                  # # The following lines provide a scrollbar at the top and at the bottom of a large table 
+                  # # The CSS is defined above
+                  # # Source: https://stackoverflow.com/questions/62703411/r-shiny-table-with-horizontal-scrollbar-both-at-the-top-and-at-the-bottom
+                  # 
+                  # tags$head(
+                  #   tags$script(src = "jquery.doubleScroll.js"),
+                  #   tags$script(HTML(js)),
+                  #   tags$style(HTML(CSS))
+                  # ),
+                  # br(),
 
+                                    
+                  checkboxInput(
+                    inputId =  "TransposeOutputTable_Selectable",
+                    label = "Zeilen und Spalten in der Ansicht vertauschen",
+                    value = FALSE,
+                    width = NULL
+                  ),
 
+                  
+                  DT::DTOutput (
+                    "myOutputTable_Selectable",
+                    #height = 600,
+                    fill = TRUE # FALSE doesn't change the appearance
+                  ),
+                  
+                  style = "overflow-x: scroll;"
+                  
+                  
+                  # box (
+                  #   width = 12,
+                  #   collapsible = TRUE,
+                  # 
+                  #   title = "Ausgabe-Box",
+                  # 
+                  #   div (
+                  #     style = 'overflow-x: scroll; overflow-y: scroll',
+                  #     DT::DTOutput ("myOutputTable_Selectable")
+                  #     ),
+                  # 
+                  #   #style = "overflow-x: scroll"
+                  # 
+                  # )
+                  
+                  
+                  # tableOutput (
+                  #   "myOutputTable_Selectable"
+                  # )
+                  
+                ) # End fluidRow
+                
+              ) # End column
 
+            ), # End tabPanel Selectable
+            
+            
+            
+            #######################################################################X
+            #### > tabPanel 10 Data import ----
+            
+            
+            tabPanel (
+              
+              strong ("Daten-Import"), 
+              value = 10,
+              
+              fluidRow (
+                
+                #br (),
+                
+                # Header 
+                column ( 
+                  12,
+                  strong ("Hochladen von Eingangsdatensätzen in den Stack"),
+                  style = "background-color: white; color: black; text-align: center;"
+                  #style = "background-color: grey; color: white;",
+                  #style = "background-color: orange",
+                  
+                ), # End header column
+                
+                br (),
+                br (),
+                
+              ), # End fluidRow
+              
+              fluidRow (
+                
+                br (),
+                
+                column (
+                  4,
+                  
+                  fileInput (
+                    'ImportFile', 
+                    'Excel-Import: Bitte xlsx-Datei-Auswählen',
+                    accept = c(".xlsx")
+                  ),
+                  
+                ), # End column
+                
+                column (
+                  4,
+                  strong ("Importierte Input-Daten in den Stack übertragen"),
+                  actionButton (
+                    inputId = "Button_TransferImportToStack",
+                    label = "In die Tabelle 'Stack_Input' Übertragen"
+                  ),
+                  
+                  checkboxInput(
+                    inputId =  "Checkbox_KeepExistingDatasets",
+                    label = "vorhandene Datensätze bleiben erhalten",
+                    value = TRUE,
+                    width = NULL
+                  ),
+                  
+                  
+
+                ), # End column
+
+                style =   "border: 7px solid lightblue; background-color: lightblue",
+                
+                #style = "background-color: white;"
+                
+              ), # End fluidRow
+              
+              
+              fluidRow (
+                
+                column (
+                  12,
+                  
+                  
+                  checkboxInput(
+                    inputId =  "TransposeImportTable",
+                    label = "Zeilen und Spalten in der Ansicht vertauschen",
+                    value = TRUE,
+                    width = NULL
+                    
+                  ),
+                  
+                  
+                  DT::DTOutput (
+                    "myImportTable",
+                    #height = 600,
+                    fill = TRUE # FALSE doesn't change the appearance
+                  ),
+                  
+                  style = "overflow-x: scroll;"
+                  
+                  
+                  
+                  
+                ) # End column
+                
+                
+                
+              ) # End fluidRow
+              
+            ) # End tabPanel
+            
+          ), # End tabsetPanel
+          
+          
+          
+          
 
           
           
@@ -8968,76 +12418,84 @@ www.iwu.de
         
       ), # End tabItem "Tab_Data" 
       
+
+
+
+
       #######################################################################X
       ## tabItem "Tab_Expert"  -----
       
+
+
+
       shinydashboard::tabItem (
-        
+
         tabName = "Tab_Expert",
-        
+
         h2 ("Expertenbereich"),
-        
-        
+
+
         fluidPage (
           # p("The time is ", textOutput("current_time", inline=TRUE)),
           # hr(),
-          
- 
-          
-          
-          
+
+
+
+
+
           ## Selection of building datasets from pool for calculation stack  -----
-          
+
           fluidRow (
-            
-            
+
+
             column (
               4,
               "Datensatz aus der MOBASY-Gebäudedatenbank"
             ),
-            
+
             column (
               4,
-              selectInput (
+              selectizeInput (
                 inputId = "ID_Dataset_Pool",
                 label = NULL,
                 # label   = "Jahr",
                 choices = SelectionList_ID_Pool_Initialise, # MobasyBuildingData::Data_Output$ID_Dataset ,
                 selected = ID_Pool_Initialise, # "Example.01",
+                multiple = TRUE,
                 width = 500
               ),
-              style = "height:35px"
+              #style = "height:35px"
             ),
-            
+
             column (
               4,
               actionButton ("Button_Pool_AddToStack", "Add selected dataset to calculation stack")
             ),
-            
-            
-            
+
+
+
             style = "border: 1px dotted lightgrey"
-            
-            
+
+
           ),
-          
-          
+
+
           ## Selection of building datasets from calculation stack for energy performance calculation -----
-          
+
           fluidRow (
-            
+
             column (
               4,
               "Datensatz vom Calculation stack"
             ),
-            
+
             column (
               4,
               selectInput (
                 inputId = "SelectInput_ID_Dataset_Stack_2",
                 label = NULL,
                 # label   = "Jahr",
-                choices = SelectionList_ID_Stack_Initialise, 
+                choices = SelectionList_ID_Stack_Initialise,
                                    # MobasyBuildingData::Data_Output$ID_Dataset ,
                 #choices = c (1995:2023),
                 selected = ID_Stack_Initialise, # ID_Dataset_Initialise_Stack,  # "Example.01",
@@ -9045,35 +12503,35 @@ www.iwu.de
               ),
               style = "height:35px"
             ),
-            
+
             column (
               4,
               actionButton ("Button_Calculate", "Calculate selected dataset")
             ),
-            
+
             #input_task_button("Do_PushToStack", "Push to calculation stack"),
             #input_task_button("Do_AddToStack",  "Add to calculation stack"),
-            
-            
+
+
             # column (
             #   7,
             #   "Energiebezugsfläche"
             # ),
-            # 
+            #
             # column (
             #   5,
             #   textOutput("A_C_Ref"),
             #   style = "height:35px"
             # ),
-            
+
             style = "border: 1px dotted lightgrey"
-            
+
           ), # End fluidRow
-          
+
           fluidRow (
-            
-            
-            
+
+
+
             # column (
             #   4,
             #   actionButton ("Button_AddToStack", "Add current dataset to calculation stack / step 1")
@@ -9086,24 +12544,24 @@ www.iwu.de
             #   4,
             #   actionButton ("Button_SaveToStack", "Save current dataset to calculation stack")
             # )
-            
+
           ), # End fluidRow
-          
-          
+
+
           fluidRow(
-            
+
             column (
               8,
               "Test"
             ),
-            
+
             column (
               4,
               actionButton ("Button_Edit_CalcStack", "Edit values of calculation stack")
             ),
-            
+
           ),
-          
+
 
           fluidRow (
             "Data Editor",
@@ -9112,53 +12570,53 @@ www.iwu.de
               DT::dataTableOutput ('MyDataTable'),
               style = "overflow-x: scroll;"
               #style = "overflow-y: scroll;overflow-x: scroll;"
-              
+
             )
           ),
-                
+
           fluidRow (
             column (
               12,
               "Data Viewer",
-              
-              
-              
-              # ## 2025-05-09 ausprobiert und wieder abgeschaltet 
-              # 
+
+
+
+              # ## 2025-05-09 ausprobiert und wieder abgeschaltet
+              #
               # ## CSS doubleScroll (2025-05-09)
-              # 
-              # # The following lines provide a scrollbar at the top and at the bottom of a large table 
+              #
+              # # The following lines provide a scrollbar at the top and at the bottom of a large table
               # # The CSS is defined above
               # # Source: https://stackoverflow.com/questions/62703411/r-shiny-table-with-horizontal-scrollbar-both-at-the-top-and-at-the-bottom
-              # 
+              #
               # tags$head(
               #   tags$script(src = "jquery.doubleScroll.js"),
               #   tags$script(HTML(js)),
               #   tags$style(HTML(CSS))
               # ),
               # br(),
-              
-              
-              
-              
+
+
+
+
               tableOutput ("Stack_Input"),
-              
+
               tableOutput ("Stack_Output"),
-              
+
               tableOutput ("Stack_ChartEnergy"),
-              
+
               style = "overflow-x: scroll;"
               #style = "overflow-x: scroll; overflow-y: scroll;" doesn't work
             ),
-            
+
             style = "overflow-y: scroll;"
-          ),    
-          
-          
-          
-          
+          ),
+
+
+
+
 # Das musste ich hier abschalten, weil es nur einmal ausgegeben werden kann, jetzt im Dashboard
-          
+
           # fluidRow (
           #   column (
           #     4,
@@ -9173,34 +12631,34 @@ www.iwu.de
           #     tableOutput ("Calc_ChartEnergy")
           #   )
           # ) # End fluidRow
-          
-          
 
 
 
 
-          
+
+
+
           # tableOutput ("Stack_Input"),
           # tableOutput ("Stack_Output")
-          
+
           #tableOutput ("ResultTable_1")
-          
-          
-          
-          
-          
+
+
+
+
+
           # numericInput("x", "x", value = 1),
           # numericInput("y", "y", value = 2),
           # input_task_button("btn", "Add numbers"),
           # textOutput("sum")
-          
-          
+
+
         ) # End fluid page
-        
-        
-        
-        
-      ) # End tabItem "Tab_Expert" 
+
+
+
+
+      ) # End tabItem "Tab_Expert"
       
       
     ) # End tabItems
@@ -9422,6 +12880,8 @@ server <- function (input, output, session) {
 
   js$backgroundCol (List_UI_InputFields_Text [1],"ivory") 
   js$backgroundCol (List_UI_InputFields_Text [2],"ivory") 
+  js$backgroundCol (List_UI_InputFields_Text [3],"ivory") 
+  js$backgroundCol (List_UI_InputFields_Text [4],"ivory") 
   
   js$backgroundCol (List_UI_InputFields_Numeric [1],"ivory") 
   js$backgroundCol (List_UI_InputFields_Numeric [2],"ivory") 
@@ -9450,8 +12910,19 @@ server <- function (input, output, session) {
   js$backgroundCol (List_UI_InputFields_Numeric_Percent [3],"ivory") 
   js$backgroundCol (List_UI_InputFields_Numeric_Percent [4],"ivory") 
   js$backgroundCol (List_UI_InputFields_Numeric_Percent [5],"ivory") 
+
+  js$backgroundCol ("NumericInput_MaxValue_Scale_ChartHeatNeed","transparent")
+  js$backgroundCol ("NumericInput_MaxValue_Scale_ChartFinalEnergy","transparent")
+  js$backgroundCol ("NumericInput_MaxValue_Scale_ChartExpectationRanges","transparent")
+  
+  # js$backgroundCol ("NumericInput_MaxValue_Scale_ChartHeatNeed","ivory")
+  # js$backgroundCol ("NumericInput_MaxValue_Scale_ChartFinalEnergy","ivory")
+  # js$backgroundCol ("NumericInput_MaxValue_Scale_ChartExpectationRanges","ivory")
   
   
+  
+  
+  #myImportDataframe  <- reactive ({ c(c(NA,NA),c(NA,NA)) })
   
   
   #####################################################################################X
@@ -9466,8 +12937,9 @@ server <- function (input, output, session) {
 
   MobasyBuildingDataTables <- reactive ({
       MobasyModel::GetBuildingData_RDataPackage (
-        #myFilterName = "All"
-        myFilterName = "Typologie-Beispielgebäude"
+        myFilterName = "All"
+        #myFilterName = "EnergyProfileShinyApp"
+        #myFilterName = "Typology-DE_Example-Buildings"
         #myFilterName = "Examples"
         #      myFilterName = "WebTool"
       )
@@ -9583,6 +13055,8 @@ server <- function (input, output, session) {
   rv <- reactiveValues (
     DF_Stack_Input  = data.frame (matrix (nrow = 1, ncol = 2)),
     DF_Stack_Output = data.frame (matrix (nrow = 1, ncol = 2)),
+    DF_Stack_InterimResults = data.frame (matrix (nrow = 1, ncol = 2)),
+    DF_Stack_ChartEnergyData  = data.frame (matrix (nrow = 1, ncol = 2)),
     DF_Calc_Input   = data.frame (matrix (nrow = 1, ncol = 2)),
     DF_Calc_Output  = data.frame (matrix (nrow = 1, ncol = 2)),
     DF_Calc_InterimResults = data.frame (matrix (nrow = 1, ncol = 2)),
@@ -9616,8 +13090,20 @@ server <- function (input, output, session) {
   # DF_Stack_Output = data.frame (DF_Pool_Output () ["DE.MOBASY.Template.0001.01", ] ), 
   # DF_Calc_Input   = (DF_Pool_Input () ["DE.MOBASY.Template.0001.01", ] ), 
   # DF_Calc_Output  = (DF_Pool_Output () ["DE.MOBASY.Template.0001.01", ] ), 
+
   
   
+    
+  # #####################################################################################X
+  # ## Last part of initialisation: Calsulate and save the initialisation dataset to the stack  -----
+  # 
+  # # rownames (rv$DF_Stack_Input[1,]) <- reactive ({
+  # #   rownames (rv$DF_Calc_Input[1,])
+  # #   })  
+  # shinyjs::click("Button_Calculate")
+  # shinyjs::click("Button_SaveCalculationToStack")
+  # 
+  # 
   
   
   #####################################################################################X
@@ -9689,11 +13175,61 @@ server <- function (input, output, session) {
       
       # 2024-09-27 abgeschaltet 
       #UpdateInputFieldsFromStack (session, input, rv)    
+
       
+      updateSelectizeInput(
+        session = session,
+        inputId = "ID_Dataset_Pool",
+        selected = ID_Pool_Initialise,
+      )
+      
+      shinyjs::click ("Button_CalculateStack")
+
+            
       
     }, ignoreInit = TRUE
   ) # End observeEvent input$Button_Pool_AddToStack
   
+  
+  
+  #####################################################################################X
+  ## Observe "Button_AddAllTypologyExamplesToStack"  -----
+  
+  
+  observeEvent (
+    input$Button_AddAllTypologyExamplesToStack,{
+      
+      
+      
+      updateSelectizeInput (
+        session = session,
+        inputId = "ID_Dataset_Pool",
+        selected = SelectionList_ID_TypologyExampleBuildings, #[2:4], # "DE.N.SFH.02.Gen.ReEx.001.001",  
+        server = FALSE
+      )
+      
+      # Das hat nicht funktioniert, nur mit einem zusätzlichen Knopf, völlig unklar warum!
+      #shinyjs::click ("Button_Pool_AddToStack")
+
+      shinyjs::click ("Button_AddAllTypologyExamplesToStack_Step2")
+      
+      
+    }, ignoreInit = TRUE
+    
+  ) # End observeEvent input$Button_AddAllTypologyExamplesToStack
+
+
+  
+  observeEvent (
+    input$Button_AddAllTypologyExamplesToStack_Step2,{
+      
+
+      shinyjs::click ("Button_Pool_AddToStack")
+      
+      
+    }, ignoreInit = TRUE
+    
+  ) # End observeEvent input$Button_AddAllTypologyExamplesToStack
   
   
   
@@ -10163,6 +13699,16 @@ server <- function (input, output, session) {
     SuffixInputField = "",
     input = input, rv = rv)
 
+  # ObserveInputField_UpdateDFCalcVariable (
+  #   Name_InputField = List_UI_InputFields_Text [3],
+  #   SuffixInputField = "",
+  #   input = input, rv = rv)
+  # 
+  # ObserveInputField_UpdateDFCalcVariable (
+  #   Name_InputField = List_UI_InputFields_Text [4],
+  #   SuffixInputField = "",
+  #   input = input, rv = rv)
+  
   
     
   ## Numeric
@@ -10582,6 +14128,90 @@ server <- function (input, output, session) {
     input = input, rv = rv)
   
   
+  ObserveInputField_UpdateDFCalcVariable (
+    Name_InputField = List_UI_InputFields_CheckBox [49],
+    SuffixInputField = "",
+    input = input, rv = rv)
+  
+  
+  ObserveInputField_UpdateDFCalcVariable (
+    Name_InputField = List_UI_InputFields_CheckBox [50],
+    SuffixInputField = "",
+    input = input, rv = rv)
+  
+  ObserveInputField_UpdateDFCalcVariable (
+    Name_InputField = List_UI_InputFields_CheckBox [51],
+    SuffixInputField = "",
+    input = input, rv = rv)
+  
+  ObserveInputField_UpdateDFCalcVariable (
+    Name_InputField = List_UI_InputFields_CheckBox [52],
+    SuffixInputField = "",
+    input = input, rv = rv)
+  
+  ObserveInputField_UpdateDFCalcVariable (
+    Name_InputField = List_UI_InputFields_CheckBox [53],
+    SuffixInputField = "",
+    input = input, rv = rv)
+  
+  
+  ObserveInputField_UpdateDFCalcVariable (
+    Name_InputField = List_UI_InputFields_CheckBox [54],
+    SuffixInputField = "",
+    input = input, rv = rv)
+  
+  ObserveInputField_UpdateDFCalcVariable (
+    Name_InputField = List_UI_InputFields_CheckBox [55],
+    SuffixInputField = "",
+    input = input, rv = rv)
+  
+  ObserveInputField_UpdateDFCalcVariable (
+    Name_InputField = List_UI_InputFields_CheckBox [56],
+    SuffixInputField = "",
+    input = input, rv = rv)
+  
+  ObserveInputField_UpdateDFCalcVariable (
+    Name_InputField = List_UI_InputFields_CheckBox [57],
+    SuffixInputField = "",
+    input = input, rv = rv)
+  
+  
+  ObserveInputField_UpdateDFCalcVariable (
+    Name_InputField = List_UI_InputFields_CheckBox [58],
+    SuffixInputField = "",
+    input = input, rv = rv)
+  
+  
+  ObserveInputField_UpdateDFCalcVariable (
+    Name_InputField = List_UI_InputFields_CheckBox [59],
+    SuffixInputField = "",
+    input = input, rv = rv)
+  
+  ObserveInputField_UpdateDFCalcVariable (
+    Name_InputField = List_UI_InputFields_CheckBox [60],
+    SuffixInputField = "",
+    input = input, rv = rv)
+  
+  ObserveInputField_UpdateDFCalcVariable (
+    Name_InputField = List_UI_InputFields_CheckBox [61],
+    SuffixInputField = "",
+    input = input, rv = rv)
+  
+  
+  ObserveInputField_UpdateDFCalcVariable (
+    Name_InputField = List_UI_InputFields_CheckBox [62],
+    SuffixInputField = "",
+    input = input, rv = rv)
+  
+  
+  
+  ObserveInputField_UpdateDFCalcVariable (
+    Name_InputField = List_UI_InputFields_CheckBox [63],
+    SuffixInputField = "",
+    input = input, rv = rv)
+  
+  
+  
   
   
   ## RadioButton
@@ -10708,6 +14338,35 @@ server <- function (input, output, session) {
     input = input, rv = rv)
   
   
+  ObserveInputField_UpdateDFCalcVariable (
+    Name_InputField = List_UI_InputFields_RadioButton [24],
+    SuffixInputField = "",
+    input = input, rv = rv)
+  
+  
+  ObserveInputField_UpdateDFCalcVariable (
+    Name_InputField = List_UI_InputFields_RadioButton [25],
+    SuffixInputField = "",
+    input = input, rv = rv)
+
+    
+  ObserveInputField_UpdateDFCalcVariable (
+    Name_InputField = List_UI_InputFields_RadioButton [26],
+    SuffixInputField = "",
+    input = input, rv = rv)
+  
+  ObserveInputField_UpdateDFCalcVariable (
+    Name_InputField = List_UI_InputFields_RadioButton [27],
+    SuffixInputField = "",
+    input = input, rv = rv)
+  
+  ObserveInputField_UpdateDFCalcVariable (
+    Name_InputField = List_UI_InputFields_RadioButton [28],
+    SuffixInputField = "",
+    input = input, rv = rv)
+  
+  
+    
   
   ## List_UI_Checkbox_InputNotAvailable ----
   
@@ -11227,11 +14886,14 @@ server <- function (input, output, session) {
 
   observeEvent (input$TextInput_ID_Calc, {
     
-    rv$DF_Calc_Input [1,1] <- input$TextInput_ID_Calc
+    rv$DF_Calc_Input  [1,1] <- input$TextInput_ID_Calc
+    rv$DF_Calc_Output [1,1] <- input$TextInput_ID_Calc
     
-    rownames (rv$DF_Calc_Input) <- rv$DF_Calc_Input [ ,1]
+    rownames (rv$DF_Calc_Input)  <- rv$DF_Calc_Input  [ ,1]
+    rownames (rv$DF_Calc_Output) <- rv$DF_Calc_Output [ ,1]
     
-    Index_Dataset <- which (rv$DF_Calc_Input [1,1] == rv$DF_Stack_Input  [ ,1])
+    Index_Dataset <- which (rownames (rv$DF_Calc_Input) == rownames (rv$DF_Stack_Input))
+    #Index_Dataset <- which (rv$DF_Calc_Input [1,1] == rv$DF_Stack_Input  [ ,1])
 
     if (length (Index_Dataset) > 0) {
       updateTextInput (
@@ -11244,10 +14906,16 @@ server <- function (input, output, session) {
         value = "-"
       )
     }
+
+    #rv$DF_Calc_Output <- rv$DF_Calc_Input [ ,1]
+    #rownames (rv$DF_Calc_Output) <- rv$DF_Calc_Output [ ,1]
     
+    # rownames (rv$DF_Calc_Output)           <- rownames (rv$DF_Calc_Input)
+    # rownames (rv$DF_Calc_ChartEnergyData)  <- rownames (rv$DF_Calc_Input)
+    # rownames (rv$DF_Calc_InterimResult)    <- rownames (rv$DF_Calc_Input)
 
   },
-  
+
   ignoreInit = TRUE
   
   ) # End: observe event selection "TextInput_ID_Calc"
@@ -11443,6 +15111,35 @@ server <- function (input, output, session) {
   observeEvent (
     input$Button_SaveCalculationToStack, {
       
+      
+      ## Initialisation: At the first call create empty dataframes with the necessary structure 
+      
+      if (is.na (rv$DF_Stack_ChartEnergyData [1,1])) {
+        # Only Structure and rowname of first dataset is established
+        rv$DF_Stack_ChartEnergyData  <-
+          data.frame (
+            rv$DF_Calc_ChartEnergyData,
+            row.names = rownames (rv$DF_Calc_Input)
+          )
+        
+        #colnames(rv$DF_Stack_ChartEnergyData [ ,1]) <- "ID_Dataset" 
+        
+        rv$DF_Stack_ChartEnergyData [ , ] <- NA 
+      }
+      
+      if (is.na (rv$DF_Stack_InterimResults [1,1])) {
+        # Only Structure and rowname of first dataset is established
+        rv$DF_Stack_InterimResults  <-
+          data.frame (
+            rv$DF_Calc_InterimResults,
+            row.names =  rownames (rv$DF_Calc_Input)
+          )
+        rv$DF_Stack_InterimResults [ , ]  <- NA
+      }
+      
+      
+      
+
       # In case of an empty stack do nothing
       if (!is.na (rv$DF_Stack_Input [1,1])) {
         
@@ -11451,7 +15148,8 @@ server <- function (input, output, session) {
           #which (rv$DF_Calc_Input [1,1] == rv$DF_Stack_Input  [ ,1])
 
         if (length (Index_Dataset) > 0) {  
-            ## Case: Calculation dataset rowname matches one of the rownames of the stack dataframe
+            
+          ## Case: Calculation dataset rowname matches one of the rownames of the stack dataframe
 
           SelectedDataset <- input$SelectInput_ID_Dataset_Stack 
           
@@ -11466,6 +15164,21 @@ server <- function (input, output, session) {
             data.frame (
               rv$DF_Calc_Output [1, ]
             )  
+          
+          
+          
+          rv$DF_Stack_ChartEnergyData [SelectedDataset, ] <-
+            data.frame (
+              rv$DF_Calc_ChartEnergyData
+            )
+
+          
+          rv$DF_Stack_InterimResults [SelectedDataset, ] <-
+            data.frame (
+              rv$DF_Calc_InterimResults
+            )
+          
+          
           
           #rownames (rv$DF_Stack_Output) <- rv$DF_Stack_Output [ ,1]
           
@@ -11499,7 +15212,11 @@ server <- function (input, output, session) {
           
                   
           } else {
+            
             ## Case: Calculation dataset rowname cannot be found in the rownames of the stack dataframe
+            
+            
+            Index_NewDataset <- nrow (rv$DF_Stack_Input) + 1
             
             rv$DF_Stack_Input  <- 
               data.frame (
@@ -11517,7 +15234,34 @@ server <- function (input, output, session) {
                 )
               )
             
-            # führt zu doppelten Rownames und damit zum Abbruch
+            
+            rv$DF_Stack_ChartEnergyData [Index_NewDataset, ] <-
+                rv$DF_Calc_ChartEnergyData
+
+            rv$DF_Stack_InterimResults [Index_NewDataset, ] <-
+                rv$DF_Calc_InterimResults
+
+
+                        
+            rv$DF_Stack_ChartEnergyData [ ,1] <- 
+              rownames (rv$DF_Stack_Output)
+            
+            rv$DF_Stack_InterimResults [ ,1] <- 
+              rownames (rv$DF_Stack_Output)
+          
+
+            
+            rownames (rv$DF_Stack_ChartEnergyData) <- 
+              rownames (rv$DF_Stack_Output)
+            
+            rownames (rv$DF_Stack_InterimResults) <- 
+              rownames (rv$DF_Stack_Output)
+            
+            
+            
+            
+            
+            # führt zu doppelten Rownames und damit zum Abbruch:
             # rownames (rv$DF_Stack_Input) <- rv$DF_Stack_Input [ ,1]
             # rownames (rv$DF_Stack_Output) <- rv$DF_Stack_Output [ ,1]
             
@@ -11576,13 +15320,10 @@ server <- function (input, output, session) {
             
 
                     
-            }
+            } # End else
         
 
       } # End if stack is not empty
-      
-      
-      
       
       
     }, 
@@ -11593,7 +15334,7 @@ server <- function (input, output, session) {
   ## 2025-05-23 Now overwrite and new are included in one single button (see above)
   #    
   # #####################################################################################X
-  # ## Button_SaveCalculationToStackOverwrite -----
+  # ## Button_SaveCalculationToStackOverwrite 
   # 
   # observeEvent (
   #   input$Button_SaveCalculationToStackOverwrite, {
@@ -11657,7 +15398,7 @@ server <- function (input, output, session) {
   # 
   # 
   # #####################################################################################X
-  # ## Button_SaveCalculationToStackAsNew -----
+  # ## Button_SaveCalculationToStackAsNew 
   # 
   # observeEvent (
   #   input$Button_SaveCalculationToStackAsNew, {
@@ -11985,8 +15726,502 @@ server <- function (input, output, session) {
     DF_PoolData_Output = DF_Pool_Output ()
   )
   
+
+  
+  #####################################################################################X
+  ## Button_Load_Example_Type Row 6 / Col 1:4 -----
+  
+  ObserveMatrixButton_LoadDatasetFromPoolToCalculation (
+    i_Row = 6,
+    i_Col = 1,
+    input = input,
+    rv = rv,
+    session = session,
+    DF_PoolData_Input = DF_Pool_Input (),
+    DF_PoolData_Output = DF_Pool_Output ()
+  )
+  
+  ObserveMatrixButton_LoadDatasetFromPoolToCalculation (
+    i_Row = 6,
+    i_Col = 2,
+    input = input,
+    rv = rv,
+    session = session,
+    DF_PoolData_Input = DF_Pool_Input (),
+    DF_PoolData_Output = DF_Pool_Output ()
+  )
+  
+  ObserveMatrixButton_LoadDatasetFromPoolToCalculation (
+    i_Row = 6,
+    i_Col = 3,
+    input = input,
+    rv = rv,
+    session = session,
+    DF_PoolData_Input = DF_Pool_Input (),
+    DF_PoolData_Output = DF_Pool_Output ()
+  )
+  
+  ObserveMatrixButton_LoadDatasetFromPoolToCalculation (
+    i_Row = 6,
+    i_Col = 4,
+    input = input,
+    rv = rv,
+    session = session,
+    DF_PoolData_Input = DF_Pool_Input (),
+    DF_PoolData_Output = DF_Pool_Output ()
+  )
+  
   
 
+  
+  
+  #####################################################################################X
+  ## Button_Load_Example_Type Row 7 / Col 1:4 -----
+  
+  ObserveMatrixButton_LoadDatasetFromPoolToCalculation (
+    i_Row = 7,
+    i_Col = 1,
+    input = input,
+    rv = rv,
+    session = session,
+    DF_PoolData_Input = DF_Pool_Input (),
+    DF_PoolData_Output = DF_Pool_Output ()
+  )
+  
+  ObserveMatrixButton_LoadDatasetFromPoolToCalculation (
+    i_Row = 7,
+    i_Col = 2,
+    input = input,
+    rv = rv,
+    session = session,
+    DF_PoolData_Input = DF_Pool_Input (),
+    DF_PoolData_Output = DF_Pool_Output ()
+  )
+  
+  ObserveMatrixButton_LoadDatasetFromPoolToCalculation (
+    i_Row = 7,
+    i_Col = 3,
+    input = input,
+    rv = rv,
+    session = session,
+    DF_PoolData_Input = DF_Pool_Input (),
+    DF_PoolData_Output = DF_Pool_Output ()
+  )
+  
+  ObserveMatrixButton_LoadDatasetFromPoolToCalculation (
+    i_Row = 7,
+    i_Col = 4,
+    input = input,
+    rv = rv,
+    session = session,
+    DF_PoolData_Input = DF_Pool_Input (),
+    DF_PoolData_Output = DF_Pool_Output ()
+  )
+  
+  
+  #####################################################################################X
+  ## Button_Load_Example_Type Row 8 / Col 1:4 -----
+  
+  ObserveMatrixButton_LoadDatasetFromPoolToCalculation (
+    i_Row = 8,
+    i_Col = 1,
+    input = input,
+    rv = rv,
+    session = session,
+    DF_PoolData_Input = DF_Pool_Input (),
+    DF_PoolData_Output = DF_Pool_Output ()
+  )
+  
+  ObserveMatrixButton_LoadDatasetFromPoolToCalculation (
+    i_Row = 8,
+    i_Col = 2,
+    input = input,
+    rv = rv,
+    session = session,
+    DF_PoolData_Input = DF_Pool_Input (),
+    DF_PoolData_Output = DF_Pool_Output ()
+  )
+  
+  ObserveMatrixButton_LoadDatasetFromPoolToCalculation (
+    i_Row = 8,
+    i_Col = 3,
+    input = input,
+    rv = rv,
+    session = session,
+    DF_PoolData_Input = DF_Pool_Input (),
+    DF_PoolData_Output = DF_Pool_Output ()
+  )
+  
+  ObserveMatrixButton_LoadDatasetFromPoolToCalculation (
+    i_Row = 8,
+    i_Col = 4,
+    input = input,
+    rv = rv,
+    session = session,
+    DF_PoolData_Input = DF_Pool_Input (),
+    DF_PoolData_Output = DF_Pool_Output ()
+  )
+  
+  
+  #####################################################################################X
+  ## Button_Load_Example_Type Row 9 / Col 1:4 -----
+  
+  ObserveMatrixButton_LoadDatasetFromPoolToCalculation (
+    i_Row = 9,
+    i_Col = 1,
+    input = input,
+    rv = rv,
+    session = session,
+    DF_PoolData_Input = DF_Pool_Input (),
+    DF_PoolData_Output = DF_Pool_Output ()
+  )
+  
+  ObserveMatrixButton_LoadDatasetFromPoolToCalculation (
+    i_Row = 9,
+    i_Col = 2,
+    input = input,
+    rv = rv,
+    session = session,
+    DF_PoolData_Input = DF_Pool_Input (),
+    DF_PoolData_Output = DF_Pool_Output ()
+  )
+  
+  ObserveMatrixButton_LoadDatasetFromPoolToCalculation (
+    i_Row = 9,
+    i_Col = 3,
+    input = input,
+    rv = rv,
+    session = session,
+    DF_PoolData_Input = DF_Pool_Input (),
+    DF_PoolData_Output = DF_Pool_Output ()
+  )
+  
+  ObserveMatrixButton_LoadDatasetFromPoolToCalculation (
+    i_Row = 9,
+    i_Col = 4,
+    input = input,
+    rv = rv,
+    session = session,
+    DF_PoolData_Input = DF_Pool_Input (),
+    DF_PoolData_Output = DF_Pool_Output ()
+  )
+  
+  
+  
+  #####################################################################################X
+  ## Button_Load_Example_Type Row 10 / Col 1:4 -----
+  
+  ObserveMatrixButton_LoadDatasetFromPoolToCalculation (
+    i_Row = 10,
+    i_Col = 1,
+    input = input,
+    rv = rv,
+    session = session,
+    DF_PoolData_Input = DF_Pool_Input (),
+    DF_PoolData_Output = DF_Pool_Output ()
+  )
+  
+  ObserveMatrixButton_LoadDatasetFromPoolToCalculation (
+    i_Row = 10,
+    i_Col = 2,
+    input = input,
+    rv = rv,
+    session = session,
+    DF_PoolData_Input = DF_Pool_Input (),
+    DF_PoolData_Output = DF_Pool_Output ()
+  )
+  
+  ObserveMatrixButton_LoadDatasetFromPoolToCalculation (
+    i_Row = 10,
+    i_Col = 3,
+    input = input,
+    rv = rv,
+    session = session,
+    DF_PoolData_Input = DF_Pool_Input (),
+    DF_PoolData_Output = DF_Pool_Output ()
+  )
+  
+  ObserveMatrixButton_LoadDatasetFromPoolToCalculation (
+    i_Row = 10,
+    i_Col = 4,
+    input = input,
+    rv = rv,
+    session = session,
+    DF_PoolData_Input = DF_Pool_Input (),
+    DF_PoolData_Output = DF_Pool_Output ()
+  )
+  
+  
+  #####################################################################################X
+  ## Button_Load_Example_Type Row 11 / Col 1:4 -----
+  
+  ObserveMatrixButton_LoadDatasetFromPoolToCalculation (
+    i_Row = 11,
+    i_Col = 1,
+    input = input,
+    rv = rv,
+    session = session,
+    DF_PoolData_Input = DF_Pool_Input (),
+    DF_PoolData_Output = DF_Pool_Output ()
+  )
+  
+  ObserveMatrixButton_LoadDatasetFromPoolToCalculation (
+    i_Row = 11,
+    i_Col = 2,
+    input = input,
+    rv = rv,
+    session = session,
+    DF_PoolData_Input = DF_Pool_Input (),
+    DF_PoolData_Output = DF_Pool_Output ()
+  )
+  
+  ObserveMatrixButton_LoadDatasetFromPoolToCalculation (
+    i_Row = 11,
+    i_Col = 3,
+    input = input,
+    rv = rv,
+    session = session,
+    DF_PoolData_Input = DF_Pool_Input (),
+    DF_PoolData_Output = DF_Pool_Output ()
+  )
+  
+  ObserveMatrixButton_LoadDatasetFromPoolToCalculation (
+    i_Row = 11,
+    i_Col = 4,
+    input = input,
+    rv = rv,
+    session = session,
+    DF_PoolData_Input = DF_Pool_Input (),
+    DF_PoolData_Output = DF_Pool_Output ()
+  )
+  
+  
+  # #####################################################################################X
+  # ## Button_Load_Example_Type Row 12 / Col 1:4 -----
+  # 
+  # ObserveMatrixButton_LoadDatasetFromPoolToCalculation (
+  #   i_Row = 12,
+  #   i_Col = 1,
+  #   input = input,
+  #   rv = rv,
+  #   session = session,
+  #   DF_PoolData_Input = DF_Pool_Input (),
+  #   DF_PoolData_Output = DF_Pool_Output ()
+  # )
+  # 
+  # ObserveMatrixButton_LoadDatasetFromPoolToCalculation (
+  #   i_Row = 12,
+  #   i_Col = 2,
+  #   input = input,
+  #   rv = rv,
+  #   session = session,
+  #   DF_PoolData_Input = DF_Pool_Input (),
+  #   DF_PoolData_Output = DF_Pool_Output ()
+  # )
+  # 
+  # ObserveMatrixButton_LoadDatasetFromPoolToCalculation (
+  #   i_Row = 12,
+  #   i_Col = 3,
+  #   input = input,
+  #   rv = rv,
+  #   session = session,
+  #   DF_PoolData_Input = DF_Pool_Input (),
+  #   DF_PoolData_Output = DF_Pool_Output ()
+  # )
+  # 
+  # ObserveMatrixButton_LoadDatasetFromPoolToCalculation (
+  #   i_Row = 12,
+  #   i_Col = 4,
+  #   input = input,
+  #   rv = rv,
+  #   session = session,
+  #   DF_PoolData_Input = DF_Pool_Input (),
+  #   DF_PoolData_Output = DF_Pool_Output ()
+  # )
+  
+  
+  
+  # 
+  # #####################################################################################X
+  # ## Button_Load_Example_Type Row 13 / Col 1:4 -----
+  # 
+  # ObserveMatrixButton_LoadDatasetFromPoolToCalculation (
+  #   i_Row = 13,
+  #   i_Col = 1,
+  #   input = input,
+  #   rv = rv,
+  #   session = session,
+  #   DF_PoolData_Input = DF_Pool_Input (),
+  #   DF_PoolData_Output = DF_Pool_Output ()
+  # )
+  # 
+  # ObserveMatrixButton_LoadDatasetFromPoolToCalculation (
+  #   i_Row = 13,
+  #   i_Col = 2,
+  #   input = input,
+  #   rv = rv,
+  #   session = session,
+  #   DF_PoolData_Input = DF_Pool_Input (),
+  #   DF_PoolData_Output = DF_Pool_Output ()
+  # )
+  # 
+  # ObserveMatrixButton_LoadDatasetFromPoolToCalculation (
+  #   i_Row = 13,
+  #   i_Col = 3,
+  #   input = input,
+  #   rv = rv,
+  #   session = session,
+  #   DF_PoolData_Input = DF_Pool_Input (),
+  #   DF_PoolData_Output = DF_Pool_Output ()
+  # )
+  # 
+  # ObserveMatrixButton_LoadDatasetFromPoolToCalculation (
+  #   i_Row = 13,
+  #   i_Col = 4,
+  #   input = input,
+  #   rv = rv,
+  #   session = session,
+  #   DF_PoolData_Input = DF_Pool_Input (),
+  #   DF_PoolData_Output = DF_Pool_Output ()
+  # )
+  # 
+  # 
+  # #####################################################################################X
+  # ## Button_Load_Example_Type Row 14 / Col 1:4 -----
+  # 
+  # ObserveMatrixButton_LoadDatasetFromPoolToCalculation (
+  #   i_Row = 14,
+  #   i_Col = 1,
+  #   input = input,
+  #   rv = rv,
+  #   session = session,
+  #   DF_PoolData_Input = DF_Pool_Input (),
+  #   DF_PoolData_Output = DF_Pool_Output ()
+  # )
+  # 
+  # ObserveMatrixButton_LoadDatasetFromPoolToCalculation (
+  #   i_Row = 14,
+  #   i_Col = 2,
+  #   input = input,
+  #   rv = rv,
+  #   session = session,
+  #   DF_PoolData_Input = DF_Pool_Input (),
+  #   DF_PoolData_Output = DF_Pool_Output ()
+  # )
+  # 
+  # ObserveMatrixButton_LoadDatasetFromPoolToCalculation (
+  #   i_Row = 14,
+  #   i_Col = 3,
+  #   input = input,
+  #   rv = rv,
+  #   session = session,
+  #   DF_PoolData_Input = DF_Pool_Input (),
+  #   DF_PoolData_Output = DF_Pool_Output ()
+  # )
+  # 
+  # ObserveMatrixButton_LoadDatasetFromPoolToCalculation (
+  #   i_Row = 14,
+  #   i_Col = 4,
+  #   input = input,
+  #   rv = rv,
+  #   session = session,
+  #   DF_PoolData_Input = DF_Pool_Input (),
+  #   DF_PoolData_Output = DF_Pool_Output ()
+  # )
+  # 
+  # 
+  # #####################################################################################X
+  # ## Button_Load_Example_Type Row 15 / Col 1:4 -----
+  # 
+  # ObserveMatrixButton_LoadDatasetFromPoolToCalculation (
+  #   i_Row = 15,
+  #   i_Col = 1,
+  #   input = input,
+  #   rv = rv,
+  #   session = session,
+  #   DF_PoolData_Input = DF_Pool_Input (),
+  #   DF_PoolData_Output = DF_Pool_Output ()
+  # )
+  # 
+  # ObserveMatrixButton_LoadDatasetFromPoolToCalculation (
+  #   i_Row = 15,
+  #   i_Col = 2,
+  #   input = input,
+  #   rv = rv,
+  #   session = session,
+  #   DF_PoolData_Input = DF_Pool_Input (),
+  #   DF_PoolData_Output = DF_Pool_Output ()
+  # )
+  # 
+  # ObserveMatrixButton_LoadDatasetFromPoolToCalculation (
+  #   i_Row = 15,
+  #   i_Col = 3,
+  #   input = input,
+  #   rv = rv,
+  #   session = session,
+  #   DF_PoolData_Input = DF_Pool_Input (),
+  #   DF_PoolData_Output = DF_Pool_Output ()
+  # )
+  # 
+  # ObserveMatrixButton_LoadDatasetFromPoolToCalculation (
+  #   i_Row = 15,
+  #   i_Col = 4,
+  #   input = input,
+  #   rv = rv,
+  #   session = session,
+  #   DF_PoolData_Input = DF_Pool_Input (),
+  #   DF_PoolData_Output = DF_Pool_Output ()
+  # )
+  # 
+  # 
+  # #####################################################################################X
+  # ## Button_Load_Example_Type Row 16 / Col 1:4 -----
+  # 
+  # ObserveMatrixButton_LoadDatasetFromPoolToCalculation (
+  #   i_Row = 16,
+  #   i_Col = 1,
+  #   input = input,
+  #   rv = rv,
+  #   session = session,
+  #   DF_PoolData_Input = DF_Pool_Input (),
+  #   DF_PoolData_Output = DF_Pool_Output ()
+  # )
+  # 
+  # ObserveMatrixButton_LoadDatasetFromPoolToCalculation (
+  #   i_Row = 16,
+  #   i_Col = 2,
+  #   input = input,
+  #   rv = rv,
+  #   session = session,
+  #   DF_PoolData_Input = DF_Pool_Input (),
+  #   DF_PoolData_Output = DF_Pool_Output ()
+  # )
+  # 
+  # ObserveMatrixButton_LoadDatasetFromPoolToCalculation (
+  #   i_Row = 16,
+  #   i_Col = 3,
+  #   input = input,
+  #   rv = rv,
+  #   session = session,
+  #   DF_PoolData_Input = DF_Pool_Input (),
+  #   DF_PoolData_Output = DF_Pool_Output ()
+  # )
+  # 
+  # ObserveMatrixButton_LoadDatasetFromPoolToCalculation (
+  #   i_Row = 16,
+  #   i_Col = 4,
+  #   input = input,
+  #   rv = rv,
+  #   session = session,
+  #   DF_PoolData_Input = DF_Pool_Input (),
+  #   DF_PoolData_Output = DF_Pool_Output ()
+  # )
+  # 
+  # 
+  
+  
+  
+  
     
   #####################################################################################X
   ## Automatic calculation -----
@@ -12024,6 +16259,8 @@ server <- function (input, output, session) {
   #####################################################################################X
   ## Button_Calculate -----
   
+  ## Calculates the "Calc" datasets, Input: rv$DF_Calc_Input Result: rv$DF_Calc_Output
+  
   observeEvent (
     input$Button_Calculate, {
       
@@ -12039,12 +16276,11 @@ server <- function (input, output, session) {
         
       } else {
         
-
         
         ResultList <- 
-          Calculate_Stack  (
-            myDF_Stack_Input  = rv$DF_Calc_Input   [1, ] ,
-            myDF_Stack_Output = rv$DF_Calc_Output  [1, ] ,
+          Calculate_EnergyDemand  (
+            myDF_BuildingData_Input  = rv$DF_Calc_Input   [1, ] ,
+            myDF_BuildingData_Output = rv$DF_Calc_Output  [1, ] ,
             TabulaTables = TabulaTables (),
             ID_Calculate = 1
           )
@@ -12057,29 +16293,169 @@ server <- function (input, output, session) {
         
         
         rv$DF_Calc_Output [ ,"Date_Change"] <- 
-          as.character (Sys.time ())    
+          format (
+            x = Sys.time (),
+            format = "%Y-%m-%d %H:%M"
+          )    
+        
+        #  as.character (Sys.time ())    
         # !!! Aufgabe: Format verbessern, außerdem beim Einlesen von Excel schon in Tag/Zeit-Format verwandeln, 
         # dabei as.POSIXct() verwenden (diesbezüglich GTZ-Skript anschauen)     
         
         
-        rv$DF_Calc_ChartEnergyData <-
-          data.frame(
-            ResultList$DF_Calc_ChartEnergyData
-            )
-        
-        
-        rv$DF_Calc_InterimResults <- # all interim results from the original dataframe "Data_Calc"
-          data.frame (
-            ResultList$DF_Calc_InterimResults
+        F_CalcAdapt <- 
+          as.numeric (
+            rv$DF_Calc_Output [1 ,"F_CalcAdapt_M_Model1"]
           )
         
+        F_ReferenceAreaToLivingSpace <-  1.1
         
+        # A_Model1_C_Living is currently not being calculated
+        # as.numeric (rv$DF_Calc_Output [1 ,"A_Model1_C_Ref"]) /
+        #   as.numeric (rv$DF_Calc_Output [1 ,"A_Model1_C_Living"])
+
+                
+        rv$DF_Calc_ChartEnergyData <-
+          
+          as.data.frame (
+            
+            as.list (
+                
+              cbind (
+                ResultList$DF_Calc_ChartEnergyData [1, 1],
+                F_CalcAdapt,
+                F_ReferenceAreaToLivingSpace,
+                ResultList$DF_Calc_ChartEnergyData [1, 2:ncol(ResultList$DF_Calc_ChartEnergyData)]
+              )
+              
+            ),
+            
+            col.names =  c (
+              "ID_Dataset", 
+              "F_CalcAdapt",
+              "F_ReferenceAreaToLivingSpace",
+              colnames (ResultList$DF_Calc_ChartEnergyData [ ,-1]))
+            
+          )
+        
+      
+
+        
+        
+        ## 2025-10-24 changed
+        #
+        # F_Calc_Correction_EnergyDemandIndicators <- 
+        #   if (input$Checkbox_ApplyCalibrationFactor == TRUE) {
+        #     as.numeric (
+        #       rv$DF_Calc_Output [1 ,"F_CalcAdapt_M_Model1"]
+        #     )
+        #   } else {
+        #     1
+        #   } 
+        # 
+        # F_Calc_Correction_EnergyDemandIndicators <- 
+        #   F_Calc_Correction_EnergyDemandIndicators *
+        #   if (input$Checkbox_ReferToLivingSpace == TRUE) {
+        #     1.1
+        #     # A_Model1_C_Living is currently not being calculated
+        #     # as.numeric (rv$DF_Calc_Output [1 ,"A_Model1_C_Ref"]) /
+        #     #   as.numeric (rv$DF_Calc_Output [1 ,"A_Model1_C_Living"])
+        #   } else {
+        #     1
+        #   } 
+        # 	
+        # 
+        # rv$DF_Calc_ChartEnergyData <-
+        #   
+        #   as.data.frame (
+        #     
+        #     as.list (
+        #       cbind (
+        #         ResultList$DF_Calc_ChartEnergyData [1, 1],
+        #         F_Calc_Correction_EnergyDemandIndicators * 
+        #           ResultList$DF_Calc_ChartEnergyData [1, 2:ncol(ResultList$DF_Calc_ChartEnergyData)]
+        #       )
+        #     ),
+        #     
+        #     col.names =  c ("ID_Dataset", colnames (ResultList$DF_Calc_ChartEnergyData [ ,-1]))
+        #     
+        #     
+        #   )
+        
+          # data.frame (
+          #   
+          #   cbind (
+          #     ResultList$DF_Calc_ChartEnergyData [1, 1],
+          #     F_Calc_Correction_EnergyDemandIndicators * 
+          #     ResultList$DF_Calc_ChartEnergyData [1, 2:ncol(ResultList$DF_Calc_ChartEnergyData)]
+          #     )
+          #   
+          #   )
+        
+        # 2025-10-24 abgeschaltet, da dies zu einer ständigen Neuberechnung führt, 
+        # stattdessen oben in as.data.frame () direkt die col.names angelegt, col.names funktioniert aber nur, 
+        # wenn man aus dem Dataframe vorher eine Liste macht  
+        # colnames (rv$DF_Calc_ChartEnergyData) <- c ("ID_Dataset", colnames (rv$DF_Calc_ChartEnergyData [ ,-1]))
+        #colnames (rv$DF_Calc_ChartEnergyData) <- c ("ID_Stack", colnames (rv$DF_Calc_ChartEnergyData [ ,-1]))
+        
+        
+        rv$DF_Calc_InterimResults <- as.data.frame (
+          
+          as.list (
+            
+            cbind (
+              rv$DF_Calc_Input   [1,1],
+              ResultList$DF_Calc_InterimResults [1, -9] # "Date_Change" removed, caused contious update of screen in output table ("Daten")
+            )
+            
+          ),
+          
+          col.names =  c (
+            "ID_Stack", 
+            colnames (ResultList$DF_Calc_InterimResults [ , -9]))
+          # "Date_Change" removed, caused contious update of screen in output table ("Daten")
+          
+        )
+        
+        
+        
+        
+        
+                
+        # rv$DF_Calc_InterimResults <- # all interim results from the original dataframe "Data_Calc"
+        #   data.frame (
+        #     cbind (
+        #       rv$DF_Calc_Input   [1,1],
+        #       ResultList$DF_Calc_InterimResults [1, ]
+        #       )
+        #     #ResultList$DF_Calc_InterimResults
+        #   )
+        # 
+        # colnames (rv$DF_Calc_InterimResults) <- c ("ID_Stack", colnames (rv$DF_Calc_InterimResults [ ,-1]))
+        # 
+        # 
+        # rv$DF_Calc_InterimResults [ ,"Date_Change"] <- 
+        #   format (
+        #     x = Sys.time (),
+        #     format = "%Y-%m-%d %H:%M"
+        #   )    
+        
+                
         # Update the specific rows in the calculation stack
         # As a condition an "Automatic update" option should be included in the settings 
         if (TRUE == FALSE){   # not used
           
           rv$DF_Stack_Output  [input$SelectInput_ID_Dataset_Stack, ] <-
             rv$DF_Calc_Output
+          
+          rv$DF_Stack_ChartEnergyData [input$SelectInput_ID_Dataset_Stack, ] <-
+              ResultList$DF_Calc_ChartEnergyData
+          
+          #colnames(rv$DF_Stack_ChartEnergyData [ ,1]) <- "ID_Dataset" 
+          
+          
+          rv$DF_Stack_InterimResults [input$SelectInput_ID_Dataset_Stack, ] <- 
+              ResultList$DF_Calc_InterimResults
           
         } # End if
         
@@ -12095,6 +16471,275 @@ server <- function (input, output, session) {
   
   
   
+  
+  
+  #####################################################################################X
+  ## Button_CalculateStack -----
+  
+  ## Calculates all stack datasets, input: rv$DF_Stack_Input / result:  rv$DF_Stack_Output
+  ## Additionally the result of the currently selected Calc dataset will be updated: rv$DF_Calc_Output 
+  
+  observeEvent (
+    input$Button_CalculateStack, {
+
+        
+        ResultList <- 
+          Calculate_EnergyDemand  (
+            myDF_BuildingData_Input  = rv$DF_Stack_Input   [,] ,
+            myDF_BuildingData_Output = rv$DF_Stack_Output  [,] ,
+            TabulaTables = TabulaTables (),
+            ID_Calculate = NA # NA = all datasets are being calculated
+          )
+        
+        rv$DF_Stack_Output <-
+          data.frame (
+            ResultList$DF_Stack_Output [ , ]
+          )
+
+        rv$DF_Stack_Output [ ,"Date_Change"] <- 
+          format (
+            x = Sys.time (),
+            format = "%Y-%m-%d %H:%M"
+          )    
+        
+ 
+                
+        # rv$DF_Calc_Input <-
+        #   data.frame (
+        #     ResultList$DF_Stack_Input [1, ]
+        #   )
+        
+        
+        ## 2025-09-05 abgeschaltet, der Calc-Datensatz bleibt von der Stack-Berechnung unberührt 
+        # rv$DF_Calc_Output <-
+        #   data.frame (
+        #     ResultList$DF_Stack_Output [input$SelectInput_ID_Dataset_Stack, ]
+        #   )
+        # 
+        # rv$DF_Calc_Output [1 ,"Date_Change"] <- 
+        #   as.character (Sys.time ())    
+        # !!! Aufgabe: Format verbessern, außerdem beim Einlesen von Excel schon in Tag/Zeit-Format verwandeln, 
+        # dabei as.POSIXct() verwenden (diesbezüglich GTZ-Skript anschauen)     
+        
+        
+        
+        
+        F_CalcAdapt <- 
+          as.data.frame(
+            as.numeric (
+              rv$DF_Stack_Output [ ,"F_CalcAdapt_M_Model1"]
+            )
+          )
+        
+        F_ReferenceAreaToLivingSpace <-  1.1
+        
+        # A_Model1_C_Living is currently not being calculated
+        # as.numeric (rv$DF_Calc_Output [1 ,"A_Model1_C_Ref"]) /
+        #   as.numeric (rv$DF_Calc_Output [1 ,"A_Model1_C_Living"])
+        
+        
+        
+        rv$DF_Stack_ChartEnergyData <-
+          
+          as.data.frame (
+            
+            as.list (
+              
+              cbind (
+                ResultList$DF_Calc_ChartEnergyData [ , 1],
+                F_CalcAdapt [ , ],
+                F_ReferenceAreaToLivingSpace,
+                ResultList$DF_Calc_ChartEnergyData [ , 2:ncol(ResultList$DF_Calc_ChartEnergyData)]
+              )
+              
+            ),
+            
+            col.names =  c (
+              "ID_Dataset", 
+              "F_CalcAdapt",
+              "F_ReferenceAreaToLivingSpace",
+              colnames (ResultList$DF_Calc_ChartEnergyData [ ,-1]))
+            
+          )
+        
+        ## 2025-10-24 changed
+        # 
+        # rv$DF_Stack_ChartEnergyData <-
+        #   data.frame(
+        #     ResultList$DF_Calc_ChartEnergyData
+        #     # cbind (
+        #     #   rv$DF_Calc_Input [ ,1],
+        #     #   ResultList$DF_Calc_ChartEnergyData
+        #     # )
+        #   )
+        
+        
+        # colnames(rv$DF_Stack_ChartEnergyData [ ,1]) <- "ID_Dataset" 
+        
+        
+        rv$DF_Stack_InterimResults <- 
+          data.frame (
+            cbind (
+              rv$DF_Calc_Input [ ,1],
+              ResultList$DF_Calc_InterimResults
+            )
+          )
+        
+        
+
+      
+      
+    } #, ignoreInit = TRUE
+  ) # End observe event Button_CalculateStack
+  
+  
+  
+  
+  
+  
+  
+  #####################################################################################X
+  ## Button_CalculateStack_IncludeTargetActualComparison -----
+  
+  ## Calculates all stack datasets, input: rv$DF_Stack_Input / result:  rv$DF_Stack_Output
+  ## Additionally the result of the currently selected Calc dataset will be updated: rv$DF_Calc_Output 
+  
+  observeEvent (
+    input$Button_CalculateStack_IncludeTargetActualComparison, {
+
+            
+      if (input$Checkbox_AutomaticCalculation == TRUE) {
+        Status_AutomaticCalculation <- TRUE 
+      } else {
+        Status_AutomaticCalculation <- FALSE 
+      }
+      
+      updateCheckboxInput (
+        session = session,
+        inputId = "Checkbox_AutomaticCalculation",
+        value = FALSE 
+      )  
+
+      ResultList <- 
+        Calculate_EnergyDemand  (
+          myDF_BuildingData_Input  = rv$DF_Stack_Input   [,] ,
+          myDF_BuildingData_Output = rv$DF_Stack_Output  [,] ,
+          TabulaTables = TabulaTables (),
+          ID_Calculate = NA, # NA = all datasets are being calculated
+          Include_TargetActualComparison = TRUE
+        )
+      
+      rv$DF_Stack_Output <-
+        data.frame (
+          ResultList$DF_Stack_Output [ , ]
+        )
+      
+      rv$DF_Stack_Output [ ,"Date_Change"] <- 
+        format (
+          x = Sys.time (),
+          format = "%Y-%m-%d %H:%M"
+        )    
+      
+      
+      
+      # rv$DF_Calc_Input <-
+      #   data.frame (
+      #     ResultList$DF_Stack_Input [1, ]
+      #   )
+      
+      
+      ## 2025-09-05 abgeschaltet, der Calc-Datensatz bleibt von der Stack-Berechnung unberührt 
+      # rv$DF_Calc_Output <-
+      #   data.frame (
+      #     ResultList$DF_Stack_Output [input$SelectInput_ID_Dataset_Stack, ]
+      #   )
+      # 
+      # rv$DF_Calc_Output [1 ,"Date_Change"] <- 
+      #   as.character (Sys.time ())    
+      # !!! Aufgabe: Format verbessern, außerdem beim Einlesen von Excel schon in Tag/Zeit-Format verwandeln, 
+      # dabei as.POSIXct() verwenden (diesbezüglich GTZ-Skript anschauen)     
+      
+      
+      
+      
+      F_CalcAdapt <- 
+        as.data.frame(
+          as.numeric (
+            rv$DF_Stack_Output [ ,"F_CalcAdapt_M_Model1"]
+          )
+        )
+      
+      F_ReferenceAreaToLivingSpace <-  1.1
+      
+      # A_Model1_C_Living is currently not being calculated
+      # as.numeric (rv$DF_Calc_Output [1 ,"A_Model1_C_Ref"]) /
+      #   as.numeric (rv$DF_Calc_Output [1 ,"A_Model1_C_Living"])
+      
+      
+      
+      rv$DF_Stack_ChartEnergyData <-
+        
+        as.data.frame (
+          
+          as.list (
+            
+            cbind (
+              ResultList$DF_Calc_ChartEnergyData [ , 1],
+              F_CalcAdapt [ , ],
+              F_ReferenceAreaToLivingSpace,
+              ResultList$DF_Calc_ChartEnergyData [ , 2:ncol(ResultList$DF_Calc_ChartEnergyData)]
+            )
+            
+          ),
+          
+          col.names =  c (
+            "ID_Dataset", 
+            "F_CalcAdapt",
+            "F_ReferenceAreaToLivingSpace",
+            colnames (ResultList$DF_Calc_ChartEnergyData [ ,-1]))
+          
+        )
+      
+      ## 2025-10-24 changed
+      # 
+      # rv$DF_Stack_ChartEnergyData <-
+      #   data.frame(
+      #     ResultList$DF_Calc_ChartEnergyData
+      #     # cbind (
+      #     #   rv$DF_Calc_Input [ ,1],
+      #     #   ResultList$DF_Calc_ChartEnergyData
+      #     # )
+      #   )
+      
+      
+      # colnames(rv$DF_Stack_ChartEnergyData [ ,1]) <- "ID_Dataset" 
+      
+      
+      rv$DF_Stack_InterimResults <- 
+        data.frame (
+          cbind (
+            rv$DF_Calc_Input [ ,1],
+            ResultList$DF_Calc_InterimResults
+          )
+        )
+      
+      
+      if (Status_AutomaticCalculation == TRUE) {
+        
+        updateCheckboxInput (
+          session = session,
+          inputId = "Checkbox_AutomaticCalculation",
+          value = TRUE 
+        )  
+        
+      } 
+      
+     
+      
+      
+      
+    } #, ignoreInit = TRUE
+  ) # End observe event Button_CalculateStack_IncludeTargetActualComparison
   
   
   
@@ -12119,7 +16764,7 @@ server <- function (input, output, session) {
   #       
   #       
   #       ResultList <- 
-  #         Calculate_Stack  (
+  #         Calculate_EnergyDemand  (
   #           myDF_Stack_Input  = rv$DF_Stack_Input   [input$SelectInput_ID_Dataset_Stack, ] ,
   #           myDF_Stack_Output = rv$DF_Stack_Output  [input$SelectInput_ID_Dataset_Stack, ] ,
   #           TabulaTables = TabulaTables (),
@@ -12169,13 +16814,13 @@ server <- function (input, output, session) {
 
   
   #####################################################################################X
-  ## Output tables -----
+  ## Old stack output tables -----
   #####################################################################################X
 
   
 
   output$Stack_Input <- renderTable ({
-    rv$DF_Stack_Input [ , -c(5:8,11:20) ]
+    rv$DF_Stack_Input [ , -c(5:16,11:20) ]
     },
     rownames = FALSE,
     align = "r",
@@ -12190,9 +16835,9 @@ server <- function (input, output, session) {
     bordered = TRUE
   )
   
-
   output$Stack_ChartEnergy <- renderTable ({
-    rv$DF_Calc_ChartEnergyData [ , -1]
+    
+    rv$DF_Calc_ChartEnergyData [ , ]
     
     # geht nicht 
     #round (rv$DF_Calc_ChartEnergyData [1 , 2:4], 1)
@@ -12213,8 +16858,15 @@ server <- function (input, output, session) {
   rownames = FALSE,
   align = "r",
   bordered = TRUE,
-  digits = 1
+  digits = 2
   )
+  
+  
+  
+  #####################################################################################X
+  ## Dashboard: calc output tables -----
+  #####################################################################################X
+  
   
       
       output$Calc_Input <-
@@ -12224,6 +16876,10 @@ server <- function (input, output, session) {
         },
         rownames = TRUE,
         colnames = FALSE,
+        striped = TRUE,
+        hover = TRUE,
+        spacing = "xs",
+        width = "100%",
         align = "r",
         bordered = TRUE
         )
@@ -12235,6 +16891,10 @@ server <- function (input, output, session) {
         },
         rownames = TRUE,
         colnames = FALSE,
+        striped = TRUE,
+        hover = TRUE,
+        spacing = "xs",
+        width = "100%",
         align = "r",
         bordered = TRUE
         )
@@ -12245,17 +16905,47 @@ server <- function (input, output, session) {
         },
         rownames = TRUE,
         colnames = FALSE,
+        striped = TRUE,
+        hover = TRUE,
+        spacing = "xs",
+        width = "100%",
         align = "r",
         bordered = TRUE
+        )
+      
+      
+      output$Calc_ChartEnergy_CorrectionFactors <-
+        renderTable ({
+          t (
+            cbind (
+              rv$DF_Calc_ChartEnergyData [ ,c("F_CalcAdapt", "F_ReferenceAreaToLivingSpace")],
+              F_CorrectionTotal = rv$DF_Calc_ChartEnergyData [ , "F_CalcAdapt"] *
+                rv$DF_Calc_ChartEnergyData [ ,"F_ReferenceAreaToLivingSpace"]
+                )
+            )
+        },
+        rownames = TRUE,
+        colnames = FALSE,
+        striped = TRUE,
+        hover = TRUE,
+        spacing = "xs",
+        width = "100%",
+        align = "r",
+        bordered = TRUE,
+        digits = 3        
         )
       
             
       output$Calc_ChartEnergy <-
         renderTable ({
-          t (rv$DF_Calc_ChartEnergyData [ ,-1])
+          t (rv$DF_Calc_ChartEnergyData [ ,-c(1,2,3)])
         },
         rownames = TRUE,
         colnames = FALSE,
+        striped = TRUE,
+        hover = TRUE,
+        spacing = "xs",
+        width = "100%",
         align = "r",
         bordered = TRUE,
         digits = 1        
@@ -12265,6 +16955,8 @@ server <- function (input, output, session) {
       #####################################################################################X
       ## Output charts -----
       #####################################################################################X
+      
+      
       
       
       #####################################################################################X
@@ -12306,53 +16998,262 @@ server <- function (input, output, session) {
         ShowBarChart  (
           myChartSettings = ChartSettings_HeatNeed  [4, ],
           myChartData     = ChartData_HeatNeed ,
-          DF_EnergyData   = rv$DF_Calc_ChartEnergyData [1, ],
+          DF_EnergyData   = if (is.na (rv$DF_Calc_ChartEnergyData [1,1])) {
+            NULL
+          } else {
+            cbind (
+              rv$DF_Calc_ChartEnergyData [1,1],
+              rv$DF_Calc_ChartEnergyData [1,c(-1,-2,-3)] * 
+                if (input$Checkbox_ApplyCalibrationFactor == TRUE) {
+                  as.numeric (
+                    rv$DF_Calc_ChartEnergyData [1 ,"F_CalcAdapt"]
+                  )
+                } else {
+                  1
+                } * 
+                if (input$Checkbox_ReferToLivingSpace == TRUE) {
+                  rv$DF_Calc_ChartEnergyData [1 ,"F_ReferenceAreaToLivingSpace"]
+                } else {
+                  1
+                } 
+            )
+          },
+#          DF_EnergyData   = rv$DF_Calc_ChartEnergyData [1, ],
           Index_Dataset   = 1,
           Code_Language   = "GER",
           #Code_Language  = "ENG",
-          Set_MaxY_Auto   = TRUE,
+          Type_LegendLabel = "Short", 
           Do_FlipChart    = FALSE,
           stackStrategy   = 'samesign',
-          ScalingFactor_FontSize = 0.5
-        )
+          ScalingFactor_FontSize = 0.5,
+          Set_MaxY_Auto          = input$Checkbox_AutoScaling_ChartHeatNeed, # Set_MaxY_Auto_ChartHeatNeed,
+          y_Max_ManualInput      = input$NumericInput_MaxValue_Scale_ChartHeatNeed #y_Max_ManualInput_ChartHeatNeed #        
+          )
       }) 
+      
+      
       
       output$Chart_FinalEnergy <- renderEcharts4r ({
         ShowBarChart  (
           myChartSettings = ChartSettings_FinalEnergy  [3, ],
           myChartData     = ChartData_FinalEnergy ,
-          DF_EnergyData   = rv$DF_Calc_ChartEnergyData [1, ],
+          DF_EnergyData   = if (is.na (rv$DF_Calc_ChartEnergyData [1,1])) {
+            NULL
+          } else {
+            cbind (
+              rv$DF_Calc_ChartEnergyData [1,1],
+              rv$DF_Calc_ChartEnergyData [1,c(-1,-2,-3)] * 
+                if (input$Checkbox_ApplyCalibrationFactor == TRUE) {
+                  as.numeric (
+                    rv$DF_Calc_ChartEnergyData [1 ,"F_CalcAdapt"]
+                  )
+                } else {
+                  1
+                } * 
+                if (input$Checkbox_ReferToLivingSpace == TRUE) {
+                  rv$DF_Calc_ChartEnergyData [1 ,"F_ReferenceAreaToLivingSpace"]
+                } else {
+                  1
+                } 
+            )
+          },
+          #DF_EnergyData   = rv$DF_Calc_ChartEnergyData [1, ],
           Index_Dataset   = 1,
           Code_Language   = "GER",
           #Code_Language  = "ENG",
-          Set_MaxY_Auto   = TRUE,
+          Type_LegendLabel = "Standard", 
           Do_FlipChart    = FALSE,
           stackStrategy   = 'samesign',
-          ScalingFactor_FontSize = 0.5
+          ScalingFactor_FontSize = 0.5,
+          Set_MaxY_Auto          = input$Checkbox_AutoScaling_ChartFinalEnergy,
+          y_Max_ManualInput      = input$NumericInput_MaxValue_Scale_ChartFinalEnergy         
         )
       }) 
+      
+      
       
       output$Chart_ExpectationRanges <- renderEcharts4r ({
         ShowBarChart  (
           myChartSettings = ChartSettings_ExpectationRanges  [4, ],
           myChartData     = ChartData_ExpectationRanges ,
-          DF_EnergyData   = rv$DF_Calc_ChartEnergyData [1, ],
+          DF_EnergyData   = if (is.na (rv$DF_Calc_ChartEnergyData [1,1])) {
+            NULL
+          } else {
+            cbind (
+              rv$DF_Calc_ChartEnergyData [1,1],
+              rv$DF_Calc_ChartEnergyData [1,c(-1,-2,-3)] * 
+                if (input$Checkbox_ApplyCalibrationFactor == TRUE) {
+                  as.numeric (
+                    rv$DF_Calc_ChartEnergyData [1 ,"F_CalcAdapt"]
+                  )
+                } else {
+                  1
+                } * 
+                if (input$Checkbox_ReferToLivingSpace == TRUE) {
+                  rv$DF_Calc_ChartEnergyData [1 ,"F_ReferenceAreaToLivingSpace"]
+                } else {
+                  1
+                } 
+            )
+          },
+          #DF_EnergyData   = rv$DF_Calc_ChartEnergyData [1, ],
           Index_Dataset   = 1,
           Code_Language   = "GER",
           #Code_Language  = "ENG",
-          Set_MaxY_Auto   = TRUE,
+          Type_LegendLabel = "Short", 
           Do_FlipChart    = TRUE,
           stackStrategy   = 'all',
-          ScalingFactor_FontSize = 0.5
+          ScalingFactor_FontSize = 0.5,
+          Set_MaxY_Auto          = input$Checkbox_AutoScaling_ChartExpectationRanges,
+          y_Max_ManualInput      = input$NumericInput_MaxValue_Scale_ChartExpectationRanges         
         )
       }) 
       
       
+      
+      output$Chart_CompareHeatNeed <- renderEcharts4r ({
+        ShowBarChart_DataComparison  (
+          myChartSettings        = ChartSettings_HeatNeed  [5, ],
+          myChartData            = ChartData_HeatNeed ,
+          DF_EnergyData   = if (is.na (rv$DF_Stack_ChartEnergyData [1,1])) {
+            NULL
+          } else {
+            cbind (
+              ID_Dataset = rv$DF_Stack_ChartEnergyData [ ,1],
+              rv$DF_Stack_ChartEnergyData [ ,c(-1,-2,-3)] * 
+                ifelse (input$Checkbox_ApplyCalibrationFactor_ChartCompareLeft == TRUE,
+                        as.numeric (rv$DF_Stack_ChartEnergyData [ ,"F_CalcAdapt"]),
+                        1) * 
+                ifelse (input$Checkbox_ReferToLivingSpace_ChartCompareLeft == TRUE,
+                        rv$DF_Stack_ChartEnergyData [ ,"F_ReferenceAreaToLivingSpace"],
+                        1)
+            )
+          },
+          #DF_EnergyData          = rv$DF_Stack_ChartEnergyData [ , ],
+          Index_Dataset          = NA,
+          Code_Language          = "GER",
+          #Code_Language         = "ENG",
+          Type_LegendLabel       = "Short", 
+          Do_FlipChart           = TRUE,
+          stackStrategy          = 'samesign',
+          ScalingFactor_FontSize = 0.7,
+          Set_MaxY_Auto          = input$Checkbox_AutoScaling_ChartCompareLeft, # Set_MaxY_Auto_ChartCompareLeft,
+          y_Max_ManualInput      = input$NumericInput_MaxValue_Scale_ChartCompareLeft, #y_Max_ManualInput_ChartCompareLeft #        
+          Filter_VarName         = "q_h_nd_net" # c("q_int", "q_sol")   # 
+        )
+      }) 
+      
+      output$Chart_CompareFinalEnergy <- renderEcharts4r ({
+        ShowBarChart_DataComparison  (
+          myChartSettings        = ChartSettings_FinalEnergy  [5, ],
+          myChartData            = ChartData_FinalEnergy ,
+          DF_EnergyData   = if (is.na (rv$DF_Stack_ChartEnergyData [1,1])) {
+            NULL
+          } else {
+            cbind (
+              ID_Dataset = rv$DF_Stack_ChartEnergyData [ ,1],
+              rv$DF_Stack_ChartEnergyData [ ,c(-1,-2,-3)] * 
+                ifelse (input$Checkbox_ApplyCalibrationFactor_ChartCompareRight == TRUE,
+                        as.numeric (rv$DF_Stack_ChartEnergyData [ ,"F_CalcAdapt"]),
+                        1) * 
+                ifelse (input$Checkbox_ReferToLivingSpace_ChartCompareRight == TRUE,
+                        rv$DF_Stack_ChartEnergyData [ ,"F_ReferenceAreaToLivingSpace"],
+                        1)
+            )
+          },
+          #DF_EnergyData          = rv$DF_Stack_ChartEnergyData [ , ],
+          Index_Dataset          = NA,
+          Code_Language          = "GER",
+          #Code_Language         = "ENG",
+          Type_LegendLabel       = "Standard", 
+          Do_FlipChart           = TRUE,
+          stackStrategy          = 'samesign',
+          ScalingFactor_FontSize = 0.7,
+          Set_MaxY_Auto          = input$Checkbox_AutoScaling_ChartCompareRight, # Set_MaxY_Auto_ChartCompareLeft,
+          y_Max_ManualInput      = input$NumericInput_MaxValue_Scale_ChartCompareRight, #y_Max_ManualInput_ChartCompareLeft #        
+          Filter_VarName         = c("q_del_sum_gas", 
+                                     "q_del_sum_oil", 
+                                     "q_del_sum_coal", 
+                                     "q_del_sum_bio",
+                                     "q_del_sum_el",
+                                     "q_del_sum_dh",
+                                     "q_del_sum_other"  
+          )  
+          
+        )
+      }) 
+      
 
+      
+      observeEvent (
+        input$NumericInput_Height_ChartCompareLeft, {
+          Height_ChartCompareLeft <- input$NumericInput_Height_ChartCompareLeft
+        },
+        ignoreInit = TRUE
+        
+      )
+      
+      
+            
+
+      # observeEvent (
+      #   input$Checkbox_AutoScaling_ChartHeatNeed, {
+      #     Set_MaxY_Auto_ChartHeatNeed <- input$Checkbox_AutoScaling_ChartHeatNeed
+      #   }
+      # )
+      
+      
+            
+      #####################################################################################X
+      ## Do_UpsizeScale_ChartHeatNeed -----
+      
+      # 
+      # observeEvent (
+      #   input$NumericInput_MaxValue_Scale_ChartHeatNeed, {
+      #     y_Max_ManualInput_ChartHeatNeed <- input$TextInput_MaxValue_Scale_ChartHeatNeed
+      #   } )
+      # 
+      
+      # observeEvent (
+      #   input$TextInput_MaxValue_Scale_ChartHeatNeed, {
+      #     y_Max_ManualInput_ChartHeatNeed <- input$TextInput_MaxValue_Scale_ChartHeatNeed
+      #   } )
+      # 
+      # 
+      # updateTextInput (
+      #   inputId = "TextInput_MaxValue_Scale_ChartHeatNeed",
+      #   value   = y_Max_ManualInput_ChartHeatNeed
+      # )
+      # 
+      # 
+      # 
+      # observeEvent (
+      #   input$Do_UpsizeScale_ChartHeatNeed, {
+      #     
+      #     #Set_MaxY_Auto_ChartHeatNeed <- FALSE
+      #     
+      #     y_Max_ManualInput_ChartHeatNeed <- 
+      #       as.integer (input$TextInput_MaxValue_Scale_ChartHeatNeed)  + 50 
+      #     #y_Max_ManualInput_ChartHeatNeed <- y_Max_ManualInput_ChartHeatNeed + 50 
+      #     
+      #   }
+      # )
+      # 
+      # observeEvent (
+      #   input$Do_DownsizeScale_ChartHeatNeed, {
+      #     
+      #     #Set_MaxY_Auto_ChartHeatNeed <- FALSE
+      # 
+      #     y_Max_ManualInput_ChartHeatNeed <- 
+      #       as.integer (input$TextInput_MaxValue_Scale_ChartHeatNeed) - 50 
+      #     #y_Max_ManualInput_ChartHeatNeed <- y_Max_ManualInput_ChartHeatNeed - 50 
+      #     
+      #   }
+      # )
       
       
       #######################################################################X
-      ## Select and download data table  -----
+      ## Data: Display, download and import data tables  -----
       
       # Script section from CliDaMonDisplay ()
       
@@ -12403,13 +17304,49 @@ server <- function (input, output, session) {
       #                                   
       #               
       #  ) # End observeEvent
-      
-      
-      
-      
-      
 
-      myOutputDataframe <- reactive ({
+      
+      
+      
+      
+      myOutputDataframe_Stack_Input <- reactive ({
+        rv$DF_Stack_Input
+      })
+      
+      myOutputDataframe_Stack_Output <- reactive ({
+        rv$DF_Stack_Output
+      })
+      
+      myOutputDataframe_Stack_ChartEnergyData <- reactive ({
+        rv$DF_Stack_ChartEnergyData
+      })
+      
+      myOutputDataframe_Stack_InterimResults <- reactive ({
+        rv$DF_Stack_InterimResults
+      })
+      
+      myOutputDataframe_Calc_Input <- reactive ({
+        rv$DF_Calc_Input
+      })
+      
+      myOutputDataframe_Calc_Output <- reactive ({
+        rv$DF_Calc_Output
+      })
+      
+      myOutputDataframe_Calc_ChartEnergyData <- reactive ({
+        round (
+          rv$DF_Calc_ChartEnergyData [ ,-1],
+          2
+        )
+          
+      })
+      
+      myOutputDataframe_Calc_InterimResults <- reactive ({
+        rv$DF_Calc_InterimResults
+      })
+      
+      
+      myOutputDataframe_Selectable <- reactive ({
 
         switch (
 
@@ -12425,40 +17362,300 @@ server <- function (input, output, session) {
           
           "Stack_Input"          = rv$DF_Stack_Input,
 
-          "Stack_Output"         = rv$DF_Stack_Output
+          "Stack_Output"         = rv$DF_Stack_Output,
 
-
-          # "ResultTable_Year" = ResultTable_Year (),
-          #
-          # "DF_ClimCalc_1"    = DF_ClimCalc_1 (),
-          #
-          # "DF_ClimCalc_2"    = DF_ClimCalc_2 (),
-          #
-          # "DF_ClimCalc_Both" = DF_ClimCalc_Both (),
-          #
-          # "DF_Evaluation_1"  = DF_Evaluation_1 (),
-          #
-          # "DF_Evaluation_2"  = DF_Evaluation_2 (),
-          #
-          # "DF_EvaluationByYear_1"  = DF_EvaluationByYear_1 (),
-          #
-          # "DF_EvaluationByYear_2"  = DF_EvaluationByYear_2 ()
-          #
-          # # "Data.TA.HD"  = clidamonger::data.ta.hd
-          # # Doesn't work, too large?
-
+          "Stack_ChartEnergy"    = rv$DF_Stack_ChartEnergyData,
+          
+          "Stack_InterimResults" = rv$DF_Stack_InterimResults
+          
         )
       })
 
-      
-      
-      output$myTable <-
+
+      output$myOutputTable_Stack_Input <-
         DT::renderDataTable  ({
-          if (input$TransposeOutputTable == TRUE) {
-            t (myOutputDataframe ()  )
+          if (input$TransposeOutputTable_Stack_Input == TRUE) {
+            t (myOutputDataframe_Stack_Input ()  )
           } else {
-            myOutputDataframe () 
+            myOutputDataframe_Stack_Input () 
           }
+        },
+        extensions = 'Buttons',
+        options =
+          list (
+            dom = 'Blfrtip',
+            lengthMenu = list(c(10, 20, 50, 100, -1),
+                              c('10',  '20',  '50', '100', 'All')),
+            # lengthMenu = list(c(-1, 100, 50, 20, 10),
+            #                   c('All', '100', '50', '20', '10')),
+            buttons = c('copy', 'csv', 'excel', 'pdf'),
+            paging = TRUE 
+          )
+        )
+      
+      
+      output$myOutputTable_Stack_Output <-
+        DT::renderDataTable  ({
+          if (input$TransposeOutputTable_Stack_Output == TRUE) {
+            t (myOutputDataframe_Stack_Output ()  )
+          } else {
+            myOutputDataframe_Stack_Output () 
+          }
+        },
+        extensions = 'Buttons',
+        options =
+          list (
+            dom = 'Blfrtip',
+            lengthMenu = list(c(10, 20, 50, 100, -1),
+                              c('10',  '20',  '50', '100', 'All')),
+            buttons = c('copy', 'csv', 'excel', 'pdf'),
+            paging = TRUE 
+          )
+        )
+      
+
+      
+      output$myOutputTable_Stack_ChartEnergyData <-
+        DT::renderDataTable  ({
+          if (input$TransposeOutputTable_Stack_ChartEnergyData == TRUE) {
+            t (myOutputDataframe_Stack_ChartEnergyData ()  )
+          } else {
+            myOutputDataframe_Stack_ChartEnergyData () 
+          }
+        },
+        extensions = 'Buttons',
+        options =
+          list (
+            dom = 'Blfrtip',
+            lengthMenu = list(c(10, 20, 50, 100, -1),
+                              c('10',  '20',  '50', '100', 'All')),
+            buttons = c('copy', 'csv', 'excel', 'pdf'),
+            paging = TRUE 
+            #columnDefs = list (list (digits = 2, targets = c(3:8))) doesn't work
+            #columnDefs = list(list(width = '200px', targets = c(1, 3)))
+          )
+        )
+      
+      
+      output$myOutputTable_Stack_InterimResults <-
+        DT::renderDataTable  ({
+          if (input$TransposeOutputTable_Stack_InterimResults == TRUE) {
+            t (myOutputDataframe_Stack_InterimResults ()  )
+          } else {
+            myOutputDataframe_Stack_InterimResults () 
+          }
+        },
+        extensions = 'Buttons',
+        options =
+          list (
+            dom = 'Blfrtip',
+            lengthMenu = list(c(10, 20, 50, 100, -1),
+                              c('10',  '20',  '50', '100', 'All')),
+            buttons = c('copy', 'csv', 'excel', 'pdf'),
+            paging = TRUE 
+          )
+        )
+      
+      
+      
+      
+      output$myOutputTable_Calc_Input <-
+        DT::renderDataTable  ({
+#          if (input$TransposeOutputTable_Calc_Input == TRUE) {
+            t (myOutputDataframe_Calc_Input ()  )
+#          } else {
+#            myOutputDataframe_Calc_Input () 
+#          }
+        },
+        extensions = 'Buttons',
+        options =
+          list (
+            dom = 'Blfrtip',
+            lengthMenu = list(c(-1, 100, 50, 20, 10),
+                              c('All', '100', '50', '20', '10')),
+            buttons = c('copy', 'csv', 'excel', 'pdf'),
+            paging = TRUE
+          )
+        )
+      
+      
+      output$myOutputTable_Calc_Output <-
+        DT::renderDataTable  ({
+#         if (input$TransposeOutputTable_Calc_Output == TRUE) {
+            t (myOutputDataframe_Calc_Output ()  )
+#          } else {
+#            myOutputDataframe_Calc_Output () 
+#          }
+        },
+        extensions = 'Buttons',
+        options =
+          list (
+            dom = 'Blfrtip',
+            lengthMenu = list(c(-1, 100, 50, 20, 10),
+                              c('All', '100', '50', '20', '10')),
+            buttons = c('copy', 'csv', 'excel', 'pdf'),
+            paging = TRUE 
+          )
+        )
+      
+      
+      
+      
+      output$myOutputTable_Calc_ChartEnergyData <-
+        DT::renderDataTable  ({
+#          if (input$TransposeOutputTable_Calc_ChartEnergyData == TRUE) {
+            t (myOutputDataframe_Calc_ChartEnergyData () [,] )
+#          } else {
+#            myOutputDataframe_Calc_ChartEnergyData () [,]
+#          }
+        },
+        extensions = 'Buttons',
+        options =
+          list (
+            dom = 'Blfrtip',
+            lengthMenu = list(c(-1, 100, 50, 20, 10),
+                              c('All', '100', '50', '20', '10')),
+            buttons = c('copy', 'csv', 'excel', 'pdf'),
+            paging = TRUE
+          )
+        )
+      
+      
+      output$myOutputTable_Calc_InterimResults <-
+        DT::renderDataTable  ({
+          #if (input$TransposeOutputTable_Calc_InterimResults == TRUE) {
+            t (myOutputDataframe_Calc_InterimResults ()  )
+          #} else {
+          #  myOutputDataframe_Calc_InterimResults () 
+          #}
+        },
+        extensions = 'Buttons',
+        options =
+          list (
+            dom = 'Blfrtip',
+            lengthMenu = list(c(-1, 100, 50, 20, 10),
+                              c('All', '100', '50', '20', '10')),
+            buttons = c('copy', 'csv', 'excel', 'pdf'),
+            paging = TRUE 
+          )
+        )
+      
+      
+
+                  
+      
+      output$myOutputTable_Selectable <-
+        DT::renderDataTable  ({
+          if (input$TransposeOutputTable_Selectable == TRUE) {
+            t (myOutputDataframe_Selectable ()  )
+          } else {
+            myOutputDataframe_Selectable () 
+          }
+        },
+        extensions = 'Buttons',
+        options =
+          list (
+            dom = 'Blfrtip',
+            lengthMenu = list(c(10, 20, 50, 100, -1),
+                              c('10',  '20',  '50', '100', 'All')),
+            # lengthMenu = list(c(-1, 100, 50, 20, 10),
+            #                   c('All', '100', '50', '20', '10')),
+            buttons = c('copy', 'csv', 'excel', 'pdf'),
+            paging = TRUE 
+          )
+        )
+      
+      
+      
+      
+      
+      
+      # openxlsx::read.xlsx (
+      #   paste0 ("Input/Excel/Parameters_", myChartType, ".xlsx"),
+      #   sheet = "ChartData",
+      #   colNames = TRUE
+      # )
+      
+      
+      # myImportDataframe <- 
+      #   renderTable ({
+      #     as.data.frame (
+      #       input$ImportFile
+      #       )
+      #   })
+      
+      
+
+      myImportDataframe <-
+        reactive ({
+          
+          as.data.frame (
+            openxlsx::read.xlsx (
+              input$ImportFile$datapath,
+              sheet = 1,
+              colNames = TRUE,
+              rowNames = TRUE
+            )
+            
+          )
+        })
+      
+      
+      
+      
+      # myImportDataframe <-
+      #   renderTable ({
+      # 
+      #     inFile <- input$ImportFile
+      # 
+      #     # if(is.null(inFile))
+      #     #   return(NULL)
+      # 
+      #     # file.rename (inFile$datapath,
+      #     #              paste0 (inFile$datapath, ".xlsx"))
+      # 
+      #     # openxlsx::read.xlsx (
+      #     #   paste0 (inFile$datapath, ".xlsx"),
+      #     #   sheet = 1,
+      #     #   colNames = TRUE
+      #     # )
+      # 
+      #     openxlsx::read.xlsx (
+      #       inFile$datapath,
+      #       sheet = 1,
+      #       colNames = TRUE
+      #     )
+      # 
+      # 
+      #     #read_excel (paste(inFile$datapath, ".xlsx", sep=""), 1)
+      #   })
+      
+
+      
+      
+
+      # # For testing
+      # myImportDataframe <- reactive ({
+      #     rv$DF_Stack_Input
+      # })
+      
+      
+      
+      output$myImportTable <-
+        DT::renderDataTable  ({
+          
+          myImportDataframe () 
+          
+          # rbind (
+          #   myImportDataframe () ,
+          #   myImportDataframe () 
+          # )
+          
+          # if (input$TransposeImportTable == TRUE) {
+          #   t (myImportDataframe ()  )
+          # } else {
+          #   myImportDataframe () 
+          # }
         },
         extensions = 'Buttons',
         options =
@@ -12472,15 +17669,291 @@ server <- function (input, output, session) {
         )
       
       
+      
+      
+      
+      
+      
+      #####################################################################################X
+      ## Button_TransferImportToStack -----
+      
+      observeEvent (
+        input$Button_TransferImportToStack, {
+          
+          # In case of an empty stack do nothing
+          if (
+            !is.na (rv$DF_Stack_Input [1,1]) & 
+            !is.null (input$ImportFile$datapath)  # This is working
+          #  !is.null (output$myImportTable)      # not working
+          #  !is.null (nrow (myImportDataframe () ))   # not working
+            ) {
+            
+            
+            n_Row_Stack  <- nrow (rv$DF_Stack_Input)
+            n_Row_Import <- nrow (myImportDataframe ())
+            
+            if (input$Checkbox_KeepExistingDatasets == TRUE) {
+              
+              i_StackRows_Import    <- (n_Row_Stack + 1) : (n_Row_Stack + n_Row_Import)
 
-      # output$myTable <- 
+              rv$DF_Stack_Input [i_StackRows_Import, ] <- 
+                myImportDataframe () [ , ]       
+              
+
+              rownames (rv$DF_Stack_Input) <-
+                rownames (
+                  data.frame (
+                    rbind (
+                      rv$DF_Stack_Input [1:n_Row_Stack, ],
+                      myImportDataframe ()  [, ]
+                    )
+                  )
+                )
+
+
+
+
+              
+
+
+              # rv$DF_Stack_Input [i_StackRows_Import, ] <- 
+              #   myImportDataframe () [ , ]       
+              
+              # rownames (rv$DF_Stack_Input [i_StackRows_Import, ]) <- 
+              #   rv$DF_Stack_Input [i_StackRows_Import , 1]
+              
+            } else {
+              
+              i_StackRows_Import <- 1 : n_Row_Import
+              
+              rv$DF_Stack_Input  <- rv$DF_Stack_Input [1, ] 
+              rv$DF_Stack_Output  <- rv$DF_Stack_Output [1, ] 
+              
+              rv$DF_Stack_Input [i_StackRows_Import, ] <- 
+                myImportDataframe () [ , ]       
+              
+              rownames (rv$DF_Stack_Input) <- rv$DF_Stack_Input [ , 1]
+              
+            } # End if else
+
+            
+            rv$DF_Stack_Output [i_StackRows_Import, ] <- NA
+            
+            rownames (rv$DF_Stack_Output) <- rownames (rv$DF_Stack_Input)
+            rv$DF_Stack_Output [ ,(1:2)] <- rv$DF_Stack_Input [ ,(1:2)]
+            
+            Index_Dataset <- 1
+            
+            updateSelectInput (
+              session,
+              "SelectInput_ID_Dataset_Stack",
+              choices = rownames (rv$DF_Stack_Input),
+              selected = rownames (rv$DF_Stack_Input [Index_Dataset, ])
+            )
+
+            updateSelectInput (
+              session,
+              "SelectInput_ID_Dataset_Stack_2",
+              choices = rownames (rv$DF_Stack_Input),
+              selected = rownames (rv$DF_Stack_Input [Index_Dataset, ])
+              # choices = rv$DF_Stack_Input [ , 1],
+              # selected = rv$DF_Calc_Input [1, 1]
+            )
+
+            updateTextInput (
+              inputId = "TextInput_Index_Stack",
+              value = Index_Dataset
+            )
+            
+            
+            
+            shinyjs::click ("Button_CalculateStack")    
+            
+            
+            
+            
+#             
+#             
+#             
+#             Index_Dataset <- 
+#               which (rownames (myImportDataframe () [1, ]) == rownames (rv$DF_Stack_Input))
+#               #which (rownames (rv$DF_Calc_Input [1, ]) == rownames (rv$DF_Stack_Input))
+# 
+#     if (1 == 2) {  
+# # provisorisch            if (length (Index_Dataset) > 0) {  
+#               ## Case: Calculation dataset rowname matches one of the rownames of the stack dataframe
+#               
+#               SelectedDataset <- input$SelectInput_ID_Dataset_Stack 
+#               
+#               rv$DF_Stack_Input [SelectedDataset, ] <- 
+#                 data.frame (
+#                   myImportDataframe () [1, ]
+#                   #rv$DF_Calc_Input [1, ]
+#                 )  
+#               
+#               #rownames (rv$DF_Stack_Input) <- rv$DF_Stack_Input [ ,1]
+#               
+# # +++  Provisorische Lösung!!!              
+#               
+#               rv$DF_Stack_Output [SelectedDataset, ] <- 
+#                 data.frame (
+#                   rv$DF_Calc_Output [1, ]
+#                 )  
+#               
+#               #rownames (rv$DF_Stack_Output) <- rv$DF_Stack_Output [ ,1]
+#               
+#               
+#               
+#               updateSelectInput (
+#                 session,
+#                 "SelectInput_ID_Dataset_Stack",
+#                 choices = rownames (rv$DF_Stack_Input),
+#                 selected = myImportDataframe () [1, 1]
+#                 #selected = rv$DF_Calc_Input [1, 1]
+#               )
+#               
+#               # updateSelectInput (
+#               #   session,
+#               #   "SelectInput_ID_Dataset_Stack",
+#               #   #choices = rv$DF_Stack_Input [ , 1]
+#               #   selected = rv$DF_Calc_Input [1, 1]
+#               # )
+#               
+#               
+#               updateSelectInput (
+#                 session,
+#                 "SelectInput_ID_Dataset_Stack_2",
+#                 choices = rownames (rv$DF_Stack_Input),
+#                 selected = myImportDataframe () [1, 1]
+#                 #selected = rv$DF_Calc_Input [1, 1]
+#               )
+#               
+#               #shinyjs::click ("Button_LoadFromStackToCalculation")
+#               
+#               
+#             } else {
+#               ## Case: Calculation dataset rowname cannot be found in the rownames of the stack dataframe
+#               
+#               
+#               
+#               
+#               
+#               # 
+#               # rv$DF_Stack_Input  <- 
+#               #   data.frame (
+#               #     rbind (
+#               #       rv$DF_Stack_Input [ , ],
+#               #       myImportDataframe ()  [, ]
+#               #       #rv$DF_Calc_Input  [1, ]
+#               #     )
+#               #   )
+#               # 
+#               # n_Row_Stack  <- nrow (rv$DF_Stack_Output)
+#               # n_Row_Import <- nrow (myImportDataframe ())
+#               # i_NewRows    <- (n_Row_Stack + 1) : (n_Row_Stack + n_Row_Import)
+#               # 
+#               # rv$DF_Stack_Output [i_NewRows, ] <- NA
+#               # rownames (rv$DF_Stack_Output) <- rownames (rv$DF_Stack_Input)
+#               # rv$DF_Stack_Output [ ,(1:2)] <- rv$DF_Stack_Input [ ,(1:2)]
+#               # 
+#               # # führt zu doppelten Rownames und damit zum Abbruch
+#               # # rownames (rv$DF_Stack_Input) <- rv$DF_Stack_Input [ ,1]
+#               # # rownames (rv$DF_Stack_Output) <- rv$DF_Stack_Output [ ,1]
+#               # 
+#               # 
+#               # # n_Row_Stack <- nrow (rv$DF_Stack_Input [ , ])
+#               # # 
+#               # # rv$DF_Stack_Input [n_Row_Stack+1, ] <- 
+#               # #   data.frame (
+#               # #     rv$DF_Calc_Input [1, ],
+#               # #     row.names = 1
+#               # #   )  
+#               # # 
+#               # # rv$DF_Stack_Output [n_Row_Stack+1, ]<- 
+#               # #   data.frame (
+#               # #     rv$DF_Calc_Output [1, ],
+#               # #     row.names = 1
+#               # #   )  
+#               # 
+#               # Index_Dataset <- 1
+#               # 
+#               # updateSelectInput (
+#               #   session,
+#               #   "SelectInput_ID_Dataset_Stack",
+#               #   choices = rownames (rv$DF_Stack_Input),
+#               #   selected = rownames (rv$DF_Stack_Input [Index_Dataset, ])
+#               # )
+#               # 
+#               # 
+#               # updateSelectInput (
+#               #   session,
+#               #   "SelectInput_ID_Dataset_Stack_2",
+#               #   choices = rownames (rv$DF_Stack_Input),
+#               #   selected = rownames (rv$DF_Stack_Input [Index_Dataset, ])
+#               #   # choices = rv$DF_Stack_Input [ , 1],
+#               #   # selected = rv$DF_Calc_Input [1, 1]
+#               # )
+#               # 
+#               # 
+#               # updateTextInput (
+#               #   inputId = "TextInput_Index_Stack",
+#               #   value = Index_Dataset
+#               # )
+#               
+#               
+#               # # 2025-06-20
+#               # rv$DF_Stack_Input [Index_Dataset,1] <-
+#               #   rownames (rv$DF_Stack_Input [Index_Dataset, ])
+#               # rv$DF_Calc_Input [1,1] <-
+#               #   rownames (rv$DF_Stack_Input [Index_Dataset, ])
+#               # rv$DF_Stack_Output [Index_Dataset,1] <-
+#               #   rownames (rv$DF_Stack_Output [Index_Dataset, ])
+#               # rv$DF_Calc_Output [1,1] <-
+#               #   rownames (rv$DF_Stack_Output [Index_Dataset, ])
+#               
+#               
+#               
+#             } # end if else
+            
+            
+          } # End if stack is not empty
+          
+          
+          
+          
+          
+        }, 
+        ignoreInit = TRUE
+      ) # End observe event Button_SaveCalculationToStack
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+
+      # output$myOutputTable_Selectable <- 
       #   #renderDataTable(
       #     # DT::datatable({
       #     DT::renderDataTable ({
-      #     if (input$TransposeOutputTable == TRUE) {
-      #         t (myOutputDataframe ())
+      #     if (input$TransposeOutputTable_Selectable == TRUE) {
+      #         t (myOutputDataframe_Selectable ())
       #       } else {
-      #         myOutputDataframe ()
+      #         myOutputDataframe_Selectable ()
       #       }
       #     },
       #     extensions = c('Buttons', 'Scroller'),
@@ -12507,13 +17980,13 @@ server <- function (input, output, session) {
       
       # 2025-05-16 funktioniert grundsätzlich, 
       # Quelle: https://github.com/rstudio/DT/issues/643
-      # output$myTable <- 
+      # output$myOutputTable_Selectable <- 
       #   renderDataTable(
       #     DT::datatable({
-      #       if (input$TransposeOutputTable == TRUE) {
-      #         t (myOutputDataframe ())
+      #       if (input$TransposeOutputTable_Selectable == TRUE) {
+      #         t (myOutputDataframe_Selectable ())
       #       } else {
-      #         myOutputDataframe ()
+      #         myOutputDataframe_Selectable ()
       #       }
       #     },
       #     extensions = c('Buttons', 'Scroller'),
@@ -12535,12 +18008,12 @@ server <- function (input, output, session) {
       # 
       
       # # 2025-05-16, funktionierte, aber Zeilenköpfe waren nicht fix, und Scrolleisten unpraktisch  
-      # output$myTable <- 
+      # output$myOutputTable_Selectable <- 
       #   DT::renderDataTable  ({
-          # if (input$TransposeOutputTable == TRUE) {
-          #   t (myOutputDataframe ())
+          # if (input$TransposeOutputTable_Selectable == TRUE) {
+          #   t (myOutputDataframe_Selectable ())
           # } else {
-          #   myOutputDataframe ()
+          #   myOutputDataframe_Selectable ()
           # }
       #   },
       #   extensions = 'Buttons', 
@@ -12569,7 +18042,7 @@ server <- function (input, output, session) {
           },
           content = function (file) {
             write.csv (
-              myOutputDataframe ()
+              myOutputDataframe_Selectable ()
               , 
               file, 
               row.names = FALSE,
@@ -12581,7 +18054,7 @@ server <- function (input, output, session) {
       
   
   
-} # End sever function
+} # End server function
 
 
 shinyApp(ui, server)
@@ -12718,7 +18191,7 @@ shinyApp(ui, server)
 #   # [input$ID_Dataset]
 # 
 #   
-#   # myOutputTables  <- reactive ({
+#   # List_OutputTables  <- reactive ({
 #   #   MobasyModel::EnergyProfileCalc (
 #   #     TabulaTables = TabulaTables (),
 #   #     MobasyBuildingDataTables = MobasyBuildingDataTables () )
@@ -12727,7 +18200,7 @@ shinyApp(ui, server)
 # 
 #   
 #   
-#   myOutputTables <- ExtendedTask$new (function () {
+#   List_OutputTables <- ExtendedTask$new (function () {
 #     future_promise ({
 #       MobasyModel::EnergyProfileCalc (
 #         TabulaTables = TabulaTables (),
@@ -12746,7 +18219,7 @@ shinyApp(ui, server)
 #   # }) |> bind_task_button("btn")
 #   
 #   observeEvent (input$Do_CalculateStack, {
-#     myOutputTables$invoke ()
+#     List_OutputTables$invoke ()
 #   })
 #   
 #   # observeEvent(input$btn, {
@@ -12754,7 +18227,7 @@ shinyApp(ui, server)
 #   # })
 # 
 #   output$A_C_Ref <- renderText ({
-#     is.null (myOutputTables$result () )
+#     is.null (List_OutputTables$result () )
 #     #Data_Output () [3, "A_Model1_C_Ref"]
 #   })
 #   
@@ -12762,7 +18235,7 @@ shinyApp(ui, server)
 #   
 #   
 #   # output$ResultTable_1 <- renderTable ({
-#   #   length (myOutputTables$result () )
+#   #   length (List_OutputTables$result () )
 #   # })
 #   
 #   
@@ -12771,7 +18244,7 @@ shinyApp(ui, server)
 #   # Warnung: Error in .getReactiveEnvironment()$currentContext: Operation not allowed without an active reactive context.
 #   # • You tried to do something that can only be done from inside a reactive consumer.
 #   # output$ResultTable_1 <- renderTable ({
-#   #   myOutputTables$result () ["Data_Output"]
+#   #   List_OutputTables$result () ["Data_Output"]
 #   # })
 #   
 #   
@@ -12781,7 +18254,7 @@ shinyApp(ui, server)
 #   # 
 #   # Data_Output <- reactive ({
 #   #   RemoveStringFromDFColNames (
-#   #     myDataFrame = data.frame (myOutputTables$result () ["Data_Output"]),
+#   #     myDataFrame = data.frame (List_OutputTables$result () ["Data_Output"]),
 #   #     myStringToRemove = "Data_Output."      
 #   #   )
 #   # })
@@ -12802,7 +18275,7 @@ shinyApp(ui, server)
 #   
 #     
 #   # Data_Output <- reactive ({
-#   #   myOutputTables () ["Data_Output"]
+#   #   List_OutputTables () ["Data_Output"]
 #   # })
 #   # 
 #   # Data_Output <- reactive ({
@@ -12814,7 +18287,7 @@ shinyApp(ui, server)
 #   
 #   
 #   # Data_Output <- reactive ({
-#   #   myOutputTables () ["Data_Output_PreCalculated"]
+#   #   List_OutputTables () ["Data_Output_PreCalculated"]
 #   # })
 #   
 #   
@@ -14584,11 +20057,11 @@ shinyApp(ui, server)
 #               
 #               fluidRow (
 #                 DT::DTOutput (
-#                   "myTable"
+#                   "myOutputTable_Selectable"
 #                 )
 #                 
 #                 # tableOutput (
-#                 #   "myTable"
+#                 #   "myOutputTable_Selectable"
 #                 # )
 #               )
 #           
@@ -15984,7 +21457,7 @@ shinyApp(ui, server)
 #     })
 #     
 #     
-#     output$myTable <- 
+#     output$myOutputTable_Selectable <- 
 #       DT::renderDataTable  ({
 #           if (input$TransposeOutputTable == TRUE) {
 #             t (myOutputDataframe ()) 
