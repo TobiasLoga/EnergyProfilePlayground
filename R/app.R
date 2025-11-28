@@ -21,8 +21,8 @@
 # renv::install (packages = "IWUGERMANY/clidamonger")
 # renv::install (packages = "TobiasLoga/CliDaMon")
 
-## renv::install (packages = "TobiasLoga/MobasyModel")
 # devtools::install_github ("TobiasLoga/MobasyModel")
+# # renv::install (packages = "TobiasLoga/MobasyModel")
 
 # # renv::install (packages = "TobiasLoga/TabulaCharts")
 # # devtools::install_github ("TobiasLoga/TabulaCharts")
@@ -162,6 +162,11 @@ SelectionList_ID_TypologyExampleBuildings <-
 
 # SelectionList_ID_Stack_Initialise <- c ("DE.MOBASY.Template.0001.01")
 # ID_Stack_Initialise <- "DE.MOBASY.Template.0001.01"
+
+
+DefaultValue_ApplyCalibrationFactor <- TRUE
+DefaultValue_ReferToLivingSpace     <- TRUE
+
 
 
 
@@ -2457,61 +2462,113 @@ ui <- shinydashboard::dashboardPage (
         # Thus, I pasted the original text from "info.Rmd" into the script below.
         
         markdown ("
+        
+        
+        
+        
+        
+        
+## IWU - Energieprofil - Shiny App - Development Version
+Version: 28.11.2025
+
+### Einführung 
+
+Das Online-Tool 'Energieprofil' ermöglicht eine Abschätzung des typischen Energieverbrauchs für Heizung und Warmwasser von Wohngebäuden. Da es sich um eine physikalische Modellierung des Energieverbrauchs handelt, wird das Berechnungsergebnis als 'Energiebedarf' bezeichnet. Der Energiebedarf eines Gebäudes hängt von der Größe, der Gebäudeform und vor allem vom Baujahr des Gebäudes ab - der Grund für letzteres sind die im Laufe der Jahrzehnte stetig erhöhten energetischen Anforderungen an Neubauten. Auch bei Altbauten kann der Energiebedarf durch Wärmeschutzmaßnahmen, also die Wärmedämmung von Dach, Außenwand und Fußböden sowie durch Einbau energetisch hochwertiger Fenster erheblich gesenkt werden - wobei durchaus das Qualitätsniveau von Neubauten erreicht werden kann. 
+
+Das Energieprofil-Online-Tool erlaubt es, die Einflüsse dieser Parameter auf den Energiebedarf abzuschätzen. Hierfür können verschiedene Beispielgebäude aus der deutschen Wohngebäudetypologie gewählt werden, die nach Größe, Gebäudeart und Baualter differenziert sind. Dabei sind die Beipielgebäde zunächst als nicht modernisiert angenommenen. Die Beispielgebäude können schrittweise modifiziert werden, z.B. können die Wohnfläche, die Anzahl der Geschosse, die Wärmedämmung, die energetische Qualität der Fenster auf den vorhandenen oder gewünschten Zustand eines realen Geäbudes angepasst werden und der Energiebedarf entsprechend ermittelt werden. Weiterhin kann die Wärmeversorgung modifiziert werden, in dem z.B. zusätzlich eine thermische Solaranlage oder statt des Kessels eine Wärmepumpe eingebaut wird. 
+
+Auf der Grundlage der energierelevanten Gebäudeeigenschaften (Energieprofil-Indikatoren) wird zunächst eine Energiieblanzierung des Baukörpers vorgenommen: Das Ergebnis ist der Heizwärmebedarf. Addiert man hierzu die Wärmemenge, die in Form von Warmwasser gezapft wird, erhält man den Gesamtwärmebedarf, den das Heizsystem decken muss. Nach Auswahl eines Heizsystems, das aus der Wärmeverteilung, den gegebenfalls erforderlichen Wärmespeichern und einem oder mehrerer Wärmeerzeuger besteht, wird der Bedarf an Endenergie berechnet, der differenziert nach Energieträger (Gas, Heizöl, Fernwärme, Strom, Biomasse) vom Tool ausgegeben wird. Die für die Wärmeversorgung eingesetzten Energieträger können aus ökonomischer und ökologischer Sicht unterschiedlich bewertet werden. Die Bewertung ist jedoch (noch) nicht Gegenstand des Online-Tools. 
+
+Die Berechnung erfolgt uner Annahme von 'standardisierten Bewohnern' :-) das heißt unabhängig vom Energiestandard wird eine Raumtemperatur von 20°C während des Tages in beheizten Räumen und ein gewisser Luftaustausch angenommen. Da diese Nutzungsbedingungen, aber auch andere Eingangsgrößen der Bilanzierung (z.B. Annahmen für die Baustoffe) in der Praxis sehr stark variieren und kaum empirische Daten vorliegen, ist davon auszugehen, dass der berechnete Energiebedarf den durchschnittlichen Energieverbrauch von Wohngebäuden nicht genau abbildet. Aus diesem Grund wird im Verfahren eine Kalibirierung auf das typische Verbrauchsniveau der Gebäude vorgenommen: Alle berechneten Energieströme werden mit einem empirisch ermittelten Faktor angepasst, der das Verhältnis von Verbrauch zu Bedarf für unterschiedliche Energiestandards wiedergibt. Auf Grund der genannten Ungewissheiten bei den Eingangsdaten ist es nicht möglich, den Energieverbrauch eines einzelnen Gebäudes exakt vorherzuberechnen. In den Diagrammen 'Erwartungsbereiche' wird versucht, mit Hilfe einfacher Abschätzungen die Unsicherheit der Berechnung darzustellen. Es kann davon ausgegangen werden, dass der gemessene Verbrauchswert eines realen Gebäudes typischerweise innherhalb dieser Spanne liegt.  
+
+
+### Vorgehen bei der Energiebilanzierung mit der Energieprofil-Shiny-App
+
+
+#### (1) Auswahl Beispielgebäude
+
+Dashboard, Menüpunkt 'Typologie': Durch Anklicken eines Bildes wird der Datensatz eines Beispielgebäudes in die Berechnung geladen und der berechnete Energiebedarf in den drei Diagrammen dargesellt (Heizwärmebedarf, Endenergiebedarf, Erwartungsbereiche).
+
+
+#### (2) Im Stack speichern
+
+Um den Datensatz eines Beispielgebäudes zu modifizieren, muss er im 'Stack'  (Berechnungsstapel) gespeichert werden. Bei Bedarf können auch alle Datensätze der Typologie-Beispielgebäude gespeichert werden (Schalter 'Alle im Stack speichern'). Sind mehrere Gebäudedatensätze im Stack vorhanden, so werden die Energiebedarfswerte im Hauptmenüpunkt 'Vergleich' gegenübergestellt. 
+
+
+#### (3) Modifikation der Eingabegrößen 
+
+In der horizontalen Kopfleiste des Dashboards kann ganz links aus den im Stack vorhandenen Datensätzen einer ausgewählt und in die Berechnung geladen werden. Dann können in den Tabs 'Gebäude' und 'Wärmeversorgung' die Merkmale des Gebäudes und der Anlagentechnik beliebig modifiziert werden. Die Ergebnisse der Berechnung werden dann jeweils in den Diagrammen rechts dargestellt. Sollen die Änderungen herhalten bleiben, muss man auf 'Speichern' klicken. Dann werden Eingangsdaten und Ergebnisse in den im Stack zugeordneten Datensatz gespeichert (vorhandene Daten werden überschrieben). Durch Editieren der ID des gerade in die Berechnung geladenen Datensatzes und anschließendes Klicken auf 'Speichern' kann ein neuer Datensatz angelegt werden. 
+
+
+#### (4) Export
+
+Im Hauptmenü 'Daten' können die Eingangs- und Ausgangsdaten des Stacks und der aktuellen Berechnung gesichtet werden. Weiterhin können alle Tabellen auch als CSV oder Excel exportiert werden.  
+
+
+#### (5) Re-Import
+
+Es ist möglich, eine Excel-Tabelle mit Eingabedaten in den Stack zu importieren (Menü 'Daten-Import' im Hauptmenü 'Daten', Hinweise zur erforderlichen Struktur der Tabelle stehen unten im Abschnitt zur Funktionalität.) Um (z.B. für Parameterstudien) Variablen systematisch zu variieren, bietet es sich an, einen Datensatz im Stack als Basisvariante anzulegen und mit den Eingabefeldern im Tab 'Gebäude' und 'Wärmeversorgung' auf die gewünschten Eigenschaften anzupassen. Nach dem Export kann dieser Datensatz in Excel vervielfältigt werden, um dann systematisch einzelne Eingabegrößen zu variieren. Nach dem Re-Import wird für alle Datensätze die Energiebilanz berechnet. 
+
+
+
+### Fachlicher Hintergrund 
+
+Diese Shiny-App dient der Berechnung des Energiebedarfs für Heizung und Warmwasser auf der Basis von Energieprofil-Indikatoren. 
+
+Details zum fachlichen Hintergrund finden sich auf der MOBASY-Projektseite: https://www.iwu.de/forschung/energie/mobasy/ (Beschreibung des Gesamtverfahrens: https://www.iwu.de/fileadmin/publikationen/energie/mobasy/2021_IWU_LogaEtAl_MOBASY-Realbilanzierung-Verbrauch-Bedarf-Vergleich.pdf). 
+
+Die Shiny-App erweitert die Funktionalität des MOBASY-Energieprofil-Webtools https://www.iwu.de/publikationen/tools/energieprofil/webtool/ um die Möglichkeit, berechnete Ein- und Ausgabedaten in einem Stack abzulegen und nach Durchführung der Berechnung als Excel-Tabelle herunterzuladen. Umgekehrt kann eine in Excel präparierte Eingabetabelle in den Stack geladen und berechnet werden.
+
+Die Shiny-App besteht aus folgenden Bausteinen:
+
+- 'Energieprofil-Indikatoren' für die Erfassung der wesentlichen energetischen Merkmale von Gebäudehülle und Wärmeversorgung (2 Eingabe-Formulare)
+- Schätzverfahren für die Gebäudehüllfläche auf der Basis der Wohnfläche und der geometrischen Energieprofil-Indikatoren
+- Schätzverfahren für Wärmedurchgangskoeffizienten (U-Werte) auf Basis von Informationen zu Baualter und nachträglicher Dämmung der Komponenten der thermischen Hülle
+- Konfigurationsalgorithmus für die Komponenten der Wärmeversorgung auf Basis der wesentlichen Merkmale (Vorhandensein und ggf. Art und Lokalisation von Anlagenkomponenten)
+- Pauschalwerte für die Effizienz der Komponenten der Wärmeversorgung (Wärmeverteilung, -speicherung und -erzeugung)
+- Energiebilanz-Berechnung (TABULA-Verfahren) zur Ermittlung des Heizwärmebedarfs sowie des nach Energieträger differenzierten Endenergiebedarfs für Heizung und Warmwasser (Beschreibung der Methodik: https://episcope.eu/fileadmin/tabula/public/docs/report/TABULA_CommonCalculationMethod.pdf)  
+
+Die in R programmierten Berechnungsformeln finden sich im R-Paket MobasyModel https://github.com/TobiasLoga/MobasyModel .
+Die Algorithmen sind weitgehend identisch mit denen des Excel-Tools 'EnergyProfile.xlsm' https://www.iwu.de/fileadmin/tools/energyprofile/EnergyProfile-XL-Package.zip .
+
+Wir stellen das Werkzeug gerne anderen Experten zur Nutzung Verfügung, können jedoch keinerlei Support übernehmen. Wir übernehmen keine Gewähr für die Vollständigkeit, Richtigkeit und Genauigkeit der Berechnungen und der Daten. Fehler können gemeldet werden an: Tobias Loga t.loga@iwu.de
+
+
+### Hinweise zur Funktionalität und zur Datenstruktur der vorliegenden Version  
+
+- Die Energieprofil-Indikatoren können je Einzelgebäude erfasst und eingegeben werden. Sind keine Informationen vorhanden, werden für die Berechnung Mittelwerte aus dem Wohngebäudebestand als Input angesetzt. Damit vergrößert sich jeweils die Unsicherheit des Berechnungsergebenisses. 
+
+- Die Ergebnisse können im Menüpunkt 'Daten' gesichtet und dort auch als Tabelle heruntergeladen werden. 
+
+- Weiterhin kann im Menüpunkt 'Daten' / 'Daten-Import' eine Tabelle mit Eingabedaten in den Stack geladen und berechnet werden. Wird eine heruntergeladene Eingabedatentabelle (Download unter 'Daten' / 'Stack_Input') als Ausgangbasis für den Upload verwendet (z.B. in dem ein Datensatz mehrfach kopiert und für eine Parameterstudie bei bestimmten Variablen systematisch variiert wird), so muss vor dem Upload die erste (über alle Spalten verbundene) Zeile gelöscht werden (Die Download-Funktion schreibt dort das Wort 'Energieprofil' hinein - es ist derzeit nicht klar, wie dies abgeschaltet werden kann.) 
+
+- Weitere im oben genannten Excel-Tool gegebene Möglichkeiten der Eingabe sind derzeit in der Shiny-App (noch) nicht implementiert. Für die gebäudeweise Eingabe und Analyse von Verbrauchsdaten und für den Verbrauch-Bedarf-Vergleich muss also weiterhin das Excel-Tool verwendet werden.  
+
+- Allerdings bietet die Energieprofil-Shiny-App die Möglichkeit, den Verbrauch-Bedarf-Vergleich für importierte Datensätze (vorbereitet in Excel) als Stack-Berechnung durchzuführen. Hierfür dient die Schaltfläche 'Gesamten Stack inkl. V/B-Vergleich berechnen'. Man beachte hier allerdings die lange Rechenzeit (ca. 20 Sekunden je im Stack enthaltenen Datensatz).  
+
+		
+
+-----
+
+Logbuch der Änderungen						
+						
+  		    
+						
+-----
+
+
+Institut Wohnen und Umwelt GmbH
+
+Tobias Loga 									
+
+www.iwu.de 
+        
+        
+        
+        
+        
+        
           
-        ## IWU - Energieprofil - Shiny App - Development Version
-        Version: 07.11.2025
-        
-        ## Erläuterungen 
-        
-        Diese Shiny-App dient der Berechnung des Energiebedarfs für Heizung und Warmwasser auf der Basis von Energieprofil-Indikatoren. 
-        
-        Details zum fachlichen Hintergrund finden sich auf der MOBASY-Projektseite: https://www.iwu.de/forschung/energie/mobasy/ (Beschreibung des Gesamtverfahrens: https://www.iwu.de/fileadmin/publikationen/energie/mobasy/2021_IWU_LogaEtAl_MOBASY-Realbilanzierung-Verbrauch-Bedarf-Vergleich.pdf). 
-        
-        Die Shiny-App erweitert die Funktionalität des MOBASY-Energieprofil-Webtools https://www.iwu.de/publikationen/tools/energieprofil/webtool/ um die Möglichkeit, berechnete Ein- und Ausgabedaten in einem Stack abzulegen und nach Durchführung der Berechnung als Excel-Tabelle herunterzuladen. Umgekehrt kann eine in Excel präparierte Eingabetabelle in den Stack geladen und berechnet werden.
-        
-        Die Shiny-App besteht aus folgenden Bausteinen:
-        
-        - 'Energieprofil-Indikatoren' für die Erfassung der wesentlichen energetischen Merkmale von Gebäudehülle und Wärmeversorgung (2 Eingabe-Formulare)
-        - Schätzverfahren für die Gebäudehüllfläche auf der Basis der Wohnfläche und der geometrischen Energieprofil-Indikatoren
-        - Schätzverfahren für Wärmedurchgangskoeffizienten (U-Werte) auf Basis von Informationen zu Baualter und nachträglicher Dämmung der Komponenten der thermischen Hülle
-        - Konfigurationsalgorithmus für die Komponenten der Wärmeversorgung auf Basis der wesentlichen Merkmale (Vorhandensein und ggf. Art und Lokalisation von Anlagenkomponenten)
-        - Pauschalwerte für die Effizienz der Komponenten der Wärmeversorgung (Wärmeverteilung, -speicherung und -erzeugung)
-        - Energiebilanz-Berechnung (TABULA-Verfahren) zur Ermittlung des Heizwärmebedarfs sowie des nach Energieträger differenzierten Endenergiebedarfs für Heizung und Warmwasser (Beschreibung der Methodik: https://episcope.eu/fileadmin/tabula/public/docs/report/TABULA_CommonCalculationMethod.pdf)  
-        
-        Die in R programmierten Berechnungsformeln finden sich im R-Paket MobasyModel https://github.com/TobiasLoga/MobasyModel .
-        Die Algorithmen sind weitgehend identisch mit denen des Excel-Tools 'EnergyProfile.xlsm' https://www.iwu.de/fileadmin/tools/energyprofile/EnergyProfile-XL-Package.zip .
-        
-        Wir stellen das Werkzeug gerne anderen Experten zur Nutzung Verfügung, können jedoch keinerlei Support übernehmen. Wir übernehmen keine Gewähr für die Vollständigkeit, Richtigkeit und Genauigkeit der Berechnungen und der Daten. Fehler können gemeldet werden an: Tobias Loga t.loga@iwu.de
-        
-        
-        ## Hinweise zur Funktionalität der vorliegenden Version  
-        
-        - Die Energieprofil-Indikatoren können je Einzelgebäude erfasst und eingegeben werden. Sind keine Informationen vorhanden, werden für die Berechnung Mittelwerte aus dem Wohngebäudebestand als Input angesetzt. Damit vergrößert sich jeweils die Unsicherheit des Berechnungsergebenisses. 
-        
-        - Die Ergebnisse können im Menüpunkt 'Daten' gesichtet und dort auch als Tabelle heruntergeladen werden. 
-        
-        - Weiterhin kann im Menüpunkt 'Daten' / 'Daten-Import' eine Tabelle mit Eingabedaten in den Stack geladen und berechnet werden. Wird eine heruntergeladene Eingabedatentabelle (Download unter 'Daten' / 'Stack_Input') als Ausgangbasis für den Upload verwendet (z.B. in dem ein Datensatz mehrfach kopiert und für eine Parameterstudie bei bestimmten Variablen systematisch variiert wird), so muss vor dem Upload die erste (über alle Spalten verbundene) Zeile gelöscht werden (Die Download-Funktion schreibt dort das Wort 'Energieprofil' hinein - es ist derzeit nicht klar, wie dies abgeschaltet werden kann.) 
-        
-        - Weitere im oben genannten Excel-Tool gegebene Möglichkeiten der Eingabe sind derzeit in der Shiny-App (noch) nicht implementiert. Für die gebäudeweise Eingabe und Analyse von Verbrauchsdaten und für den Verbrauch-Bedarf-Vergleich muss also weiterhin das Excel-Tool verwendet werden.  
-        
-        - Allerdings bietet die Shiny-App die Möglichkeit, den Verbrauch-Bedarf-Vergleich für importierte Datensätze (vorbereitet in Excel) als Stack-Berechnung durchzuführen. Hierfür dient die Schaltfläche 'Gesamten Stack inkl. V/B-Vergleich berechnen'. Man beachte hier allerdings die lange Rechenzeit (ca. 20 Sekunden je im Stack enthaltenen Datensatz).  
-        
-        		
-        
-        -----
-        
-        Logbuch der Änderungen						
-        						
-          		    
-        						
-        -----
-        
-        
-        Institut Wohnen und Umwelt GmbH
-        
-        Tobias Loga 									
-        
-        www.iwu.de 
 
           
 ")
@@ -2880,7 +2937,7 @@ ui <- shinydashboard::dashboardPage (
                           
                           actionButton (
                             "Button_AddAllTypologyExamplesToStack",
-                            label = strong (" Alle in den Stack laden ",),
+                            label = strong (" Alle im Stack speichern ",),
                             #width = '120%'
                             style = "padding: 0 !important"
                           ),
@@ -10312,7 +10369,7 @@ tabPanel (
                       checkboxInput (
                         inputId = "Checkbox_ApplyCalibrationFactor",
                         label = "auf typisches Verbrauchsniveau kalibrieren",
-                        value = FALSE,
+                        value = DefaultValue_ApplyCalibrationFactor,
                         width = NULL
                       )
                     ), # End column
@@ -10330,7 +10387,7 @@ tabPanel (
                       checkboxInput (
                         inputId = "Checkbox_ReferToLivingSpace",
                         label = "auf Wohnflächenbezug umrechnen",
-                        value = FALSE,
+                        value = DefaultValue_ReferToLivingSpace,
                         width = NULL
                       )
                     ), # End column
