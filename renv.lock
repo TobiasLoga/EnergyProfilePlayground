@@ -11,7 +11,7 @@
   "Packages": {
     "AuxFunctions": {
       "Package": "AuxFunctions",
-      "Version": "0.1.0",
+      "Version": "1.0.1",
       "Source": "GitHub",
       "Type": "Package",
       "Title": "Auxiliary functions with focus on emulating Excel functions",
@@ -21,14 +21,14 @@
       "License": "CC BY 4.0",
       "Encoding": "UTF-8",
       "LazyData": "true",
-      "RoxygenNote": "7.3.1",
+      "RoxygenNote": "7.3.3",
       "Author": "Jens Calisti [cre] (<https://orcid.org/0000-0003-2211-0553>)",
       "RemoteType": "github",
       "RemoteHost": "api.github.com",
       "RemoteUsername": "TobiasLoga",
       "RemoteRepo": "AuxFunctions",
       "RemoteRef": "main",
-      "RemoteSha": "10a97ce6c99aa02d8632bb8df2fb7058a3a16254"
+      "RemoteSha": "524e517362972498888347ebb3b9d18a53e3053c"
     },
     "CliDaMon": {
       "Package": "CliDaMon",
@@ -709,7 +709,7 @@
     "clidamonger": {
       "Package": "clidamonger",
       "Version": "1.4.0",
-      "Source": "Repository",
+      "Source": "GitHub",
       "Title": "Monthly Climate Data for Germany, Usable for Heating and Cooling Calculations",
       "Description": "This data package contains monthly climate data in Germany, it can be used for heating and  cooling calculations (external temperature, heating / cooling days, solar radiation).",
       "Authors@R": "c(person(given = \"Tobias\", family = \"Loga\", email = \"t.loga@iwu.de\", role = \"aut\", comment = c(ORCID = \"0000-0001-5097-5613\")), person(given = \"Guillaume\", family = \"Behem\", email = \"g.behem@iwu.de\", role = \"aut\"), person(given = \"Jens\", family = \"Calisti\", email = \"jens@tangled.de\", role = \"cre\", comment = c(ORCID = \"0000-0003-2211-0553\")))",
@@ -720,13 +720,18 @@
       ],
       "BugReports": "https://github.com/IWUGERMANY/clidamonger/issues",
       "URL": "https://github.com/IWUGERMANY/clidamonger",
+      "Roxygen": "list(markdown = TRUE)",
       "RoxygenNote": "7.3.2",
       "LazyData": "true",
       "LazyDataCompression": "xz",
-      "NeedsCompilation": "no",
-      "Author": "Tobias Loga [aut] (ORCID: <https://orcid.org/0000-0001-5097-5613>), Guillaume Behem [aut], Jens Calisti [cre] (ORCID: <https://orcid.org/0000-0003-2211-0553>)",
+      "Author": "Tobias Loga [aut] (<https://orcid.org/0000-0001-5097-5613>), Guillaume Behem [aut], Jens Calisti [cre] (<https://orcid.org/0000-0003-2211-0553>)",
       "Maintainer": "Jens Calisti <jens@tangled.de>",
-      "Repository": "CRAN"
+      "RemoteType": "github",
+      "RemoteHost": "api.github.com",
+      "RemoteUsername": "IWUGERMANY",
+      "RemoteRepo": "clidamonger",
+      "RemoteRef": "main",
+      "RemoteSha": "0bf772d4c305ef167030eda8e85167dfd020c932"
     },
     "clipr": {
       "Package": "clipr",
