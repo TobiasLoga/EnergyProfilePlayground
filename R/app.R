@@ -41,9 +41,22 @@
 
 
 
+
+
+
 # shinylive::export("R", "site")
 
+
 # httpuv::runStaticServer("site/")
+
+
+
+
+
+
+
+
+
 
 # usethis::use_github_action(url="https://github.com/posit-dev/r-shinylive/blob/actions-v1/examples/deploy-app.yaml")
 
@@ -65,8 +78,6 @@
 
 
 
-
-
 library (renv)
 
 library (shiny)
@@ -82,7 +93,6 @@ library (DT)
 
 library (echarts4r)
 
-library (tabuladata)
 library (MobasyModel)
 library (MobasyBuildingData)
 
@@ -806,6 +816,19 @@ List_UI_Checkbox_InputNotAvailable <-
 ## Auxiliary functions -----
 #####################################################################################X
 
+
+Parse_StringAsCommand <- function (
+    myString,
+    DF = NA
+) {
+  # when applying this on a dataframe, the dataframe must be named "DF" in myString (example: "DF$Var01")
+  # Internal test of function
+  #Sample <- InputData_Sample
+  #myString <- "Sample$Year_State_First <= Sample$Year_Start_CompareCalcMeter_01"
+  
+  return (eval (parse (text = myString)))
+  
+}
 
 
 RemoveStringFromDFColNames <- function (
@@ -1777,7 +1800,7 @@ ObserveNotAvailableCheckbox_UpdateDFCalcVariable <- function (
   # Use the parameter SuffixInputField in this case.    
   
   observeEvent (
-    AuxFunctions::Parse_StringAsCommand (paste0 ("DF$", Name_NACheckbox), DF = input), 
+    Parse_StringAsCommand (paste0 ("DF$", Name_NACheckbox), DF = input), 
     {
       
       Name_InputField <- 
@@ -1788,13 +1811,13 @@ ObserveNotAvailableCheckbox_UpdateDFCalcVariable <- function (
         )
       
       
-      if (AuxFunctions::Parse_StringAsCommand (paste0 ("DF$", Name_NACheckbox), DF = input) == 0) {
+      if (Parse_StringAsCommand (paste0 ("DF$", Name_NACheckbox), DF = input) == 0) {
         
         if (Name_InputField %in% List_UI_InputFields_Numeric_Percent) {
           
           rv$DF_Calc_Input [1, Name_InputField] <-
             0.01 * 
-            AuxFunctions::Parse_StringAsCommand (
+            Parse_StringAsCommand (
               paste0 ("DF$", Name_InputField), 
               DF = input
             )
@@ -1802,7 +1825,7 @@ ObserveNotAvailableCheckbox_UpdateDFCalcVariable <- function (
         } else {
           
           rv$DF_Calc_Input [1, Name_InputField] <-
-            AuxFunctions::Parse_StringAsCommand (
+            Parse_StringAsCommand (
               paste0 ("DF$", Name_InputField), 
               DF = input
             )
@@ -1844,7 +1867,7 @@ ObserveInputField_UpdateDFCalcVariable <- function (
 
   
   observeEvent (
-    AuxFunctions::Parse_StringAsCommand (
+    Parse_StringAsCommand (
       paste0 ("DF$", Name_InputField, SuffixInputField), 
       DF = input
     ), 
@@ -1854,7 +1877,7 @@ ObserveInputField_UpdateDFCalcVariable <- function (
         
         rv$DF_Calc_Input [1, Name_InputField] <-
           0.01 *
-          AuxFunctions::Parse_StringAsCommand (
+          Parse_StringAsCommand (
             paste0 ("DF$", Name_InputField, SuffixInputField), 
             DF = input
           )
@@ -1862,7 +1885,7 @@ ObserveInputField_UpdateDFCalcVariable <- function (
       } else {
         
         rv$DF_Calc_Input [1, Name_InputField] <-
-          AuxFunctions::Parse_StringAsCommand (
+          Parse_StringAsCommand (
             paste0 ("DF$", Name_InputField, SuffixInputField), 
             DF = input
           )
@@ -1877,13 +1900,13 @@ ObserveInputField_UpdateDFCalcVariable <- function (
   
     
   # observeEvent (
-  #   AuxFunctions::Parse_StringAsCommand (
+  #   Parse_StringAsCommand (
   #     paste0 ("DF$", Name_InputField, SuffixInputField), 
   #     DF = input
   #   ), 
   #   {
   #     rv$DF_Calc_Input [1, Name_InputField] <-
-  #       AuxFunctions::Parse_StringAsCommand (
+  #       Parse_StringAsCommand (
   #         paste0 ("DF$", Name_InputField, SuffixInputField), 
   #         DF = input
   #       )
@@ -1914,13 +1937,13 @@ ObserveInputField_UpdateDFCalcVariable <- function (
 #   # Use the parameter SuffixInputField in this case.    
 #     
 #   observeEvent (
-#     AuxFunctions::Parse_StringAsCommand (
+#     Parse_StringAsCommand (
 #       paste0 ("DF$", Name_InputField, SuffixInputField), 
 #       DF = input
 #     ), 
 #     {
 #       rv$DF_Stack_Input [input$SelectInput_ID_Dataset_Stack, Name_InputField] <-
-#         AuxFunctions::Parse_StringAsCommand (
+#         Parse_StringAsCommand (
 #           paste0 ("DF$", Name_InputField, SuffixInputField), 
 #           DF = input
 #         )
@@ -1964,14 +1987,14 @@ ObserveInputField_UpdateNumericInputField <- function (
   
   
   observeEvent (
-    AuxFunctions::Parse_StringAsCommand (
+    Parse_StringAsCommand (
       paste0 ("DF$", Name_InputField1), 
       DF = input
     ), 
     {
 
       # if (!is.na (            # the first if is used to enable comparison 
-      #       AuxFunctions::Parse_StringAsCommand (
+      #       Parse_StringAsCommand (
       #         paste0 ("DF$", Name_InputField2),
       #         DF = input
       #       )
@@ -1979,7 +2002,7 @@ ObserveInputField_UpdateNumericInputField <- function (
       # ) {
         
       
-      Value_InputField1 <- AuxFunctions::Parse_StringAsCommand (
+      Value_InputField1 <- Parse_StringAsCommand (
         paste0 ("DF$", Name_InputField1),
         DF = input
       )
@@ -1989,7 +2012,7 @@ ObserveInputField_UpdateNumericInputField <- function (
       }
       
       
-      Value_InputField2 <- AuxFunctions::Parse_StringAsCommand (
+      Value_InputField2 <- Parse_StringAsCommand (
         paste0 ("DF$", Name_InputField2),
         DF = input
         )
@@ -2004,7 +2027,7 @@ ObserveInputField_UpdateNumericInputField <- function (
         updateNumericInput (
           session = session,
           inputId = Name_InputField2,
-          value = AuxFunctions::Parse_StringAsCommand (
+          value = Parse_StringAsCommand (
             paste0 ("DF$", Name_InputField1),
             DF = input
           )
@@ -2018,7 +2041,7 @@ ObserveInputField_UpdateNumericInputField <- function (
       #   updateNumericInput (
       #     session = session,
       #     inputId = Name_InputField2,
-      #     value = AuxFunctions::Parse_StringAsCommand (
+      #     value = Parse_StringAsCommand (
       #       paste0 ("DF$", Name_InputField1), 
       #       DF = input
       #     )
@@ -2034,7 +2057,7 @@ ObserveInputField_UpdateNumericInputField <- function (
       ## This is not needed.
       ## Stack variable is updated as a consequence of the change of the input field 
       # rv$DF_Stack_Input [input$SelectInput_ID_Dataset_Stack, Name_InputField2] <-
-      #   AuxFunctions::Parse_StringAsCommand (
+      #   Parse_StringAsCommand (
       #     paste0 ("DF$", Name_InputField1), 
       #     DF = input
       #   )
@@ -2081,7 +2104,7 @@ ObserveNumericInputField_UpdateSliderInputField <- function (
   
   
   observeEvent (
-    AuxFunctions::Parse_StringAsCommand (
+    Parse_StringAsCommand (
       paste0 ("DF$", Name_SourceInputField), 
       DF = input
     ), 
@@ -2090,7 +2113,7 @@ ObserveNumericInputField_UpdateSliderInputField <- function (
       updateSliderInput (
         session = session,
         inputId = Name_TargetInputField,
-        value = AuxFunctions::Parse_StringAsCommand (
+        value = Parse_StringAsCommand (
           paste0 ("DF$", Name_SourceInputField), 
           DF = input
         )
@@ -2140,7 +2163,7 @@ ObserveMatrixButton_LoadDatasetFromPoolToCalculation <- function (
   
   
   observeEvent (
-    AuxFunctions::Parse_StringAsCommand (
+    Parse_StringAsCommand (
       ButtonEventName,
       DF = input
     ), {
@@ -14767,13 +14790,13 @@ server <- function (input, output, session) {
   # for (Name_InputField in List_UI_InputFields_Numeric) {
   # 
   #   observeEvent (
-  #     AuxFunctions::Parse_StringAsCommand (
+  #     Parse_StringAsCommand (
   #       paste0 ("DF$", Name_InputField), 
   #       DF = input
   #       ), 
   #     {
   #       rv$DF_Stack_Input [input$SelectInput_ID_Dataset_Stack, Name_InputField] <-
-  #         AuxFunctions::Parse_StringAsCommand (
+  #         Parse_StringAsCommand (
   #           paste0 ("DF$", Name_InputField), 
   #           DF = input
   #         )
@@ -14784,14 +14807,14 @@ server <- function (input, output, session) {
   
   # Das funktioniert:
   # observeEvent (
-  #   AuxFunctions::Parse_StringAsCommand ("DF$d_Insulation_Roof", DF = input), {
+  #   Parse_StringAsCommand ("DF$d_Insulation_Roof", DF = input), {
   #   rv$DF_Stack_Input [input$SelectInput_ID_Dataset_Stack, 'd_Insulation_Roof'] <-
-  #     AuxFunctions::Parse_StringAsCommand ("DF$d_Insulation_Roof", DF = input)
+  #     Parse_StringAsCommand ("DF$d_Insulation_Roof", DF = input)
   # })
   
   # observeEvent (input$d_Insulation_Roof, {
   #   rv$DF_Stack_Input [input$SelectInput_ID_Dataset_Stack, 'd_Insulation_Roof'] <-
-  #     AuxFunctions::Parse_StringAsCommand ("DF$d_Insulation_Roof", DF = input)
+  #     Parse_StringAsCommand ("DF$d_Insulation_Roof", DF = input)
   # })
   
   # observeEvent (input$d_Insulation_Roof, {
