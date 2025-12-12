@@ -17674,16 +17674,31 @@ server <- function (input, output, session) {
 
       myImportDataframe <-
         reactive ({
+
           
           as.data.frame (
-            openxlsx::read.xlsx (
-              input$ImportFile$datapath,
+            readxl::read_excel (
+              path = input$ImportFile$datapath,
               sheet = 1,
-              colNames = TRUE,
-              rowNames = TRUE
+              col_names = TRUE,
+              #na = NA 
             )
             
           )
+
+
+          # as.data.frame (
+          #   openxlsx::read.xlsx (
+          #     input$ImportFile$datapath,
+          #     sheet = 1,
+          #     colNames = TRUE,
+          #     rowNames = TRUE
+          #   )
+          # 
+          # )
+
+          
+                    
         })
       
       
