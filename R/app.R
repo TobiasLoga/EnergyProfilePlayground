@@ -14,7 +14,7 @@
 
 # devtools::install_github ("IWUGERMANY/tabuladata")
 # #renv::install (packages = "IWUGERMANY/tabuladata")
-# renv::install (packages = "TobiasLoga/AuxFunctions")
+# # renv::install (packages = "TobiasLoga/AuxFunctions")
 
 # 
 # devtools::install_github ("TobiasLoga/MobasyBuildingData")
@@ -27,9 +27,9 @@
 # # renv::install (packages = "TobiasLoga/MobasyModel")
 
 # # renv::install (packages = "TobiasLoga/TabulaCharts")
-# # devtools::install_github ("TobiasLoga/TabulaCharts")
+# #  
 # remotes::install_github ("TobiasLoga/TabulaCharts")
-# install.packages("D:/TL/Entwicklung/R/GitHub/myRepos/TabulaCharts_0.1.1.tar.gz", repos = NULL, type = "source")
+# install.packages("D:/TL/Entwicklung/R/GitHub/myRepos/TabulaCharts_0.1.4.tar.gz", repos = NULL, type = "source")
 
 # install.packages("D:/TL/Entwicklung/R/GitHub/myRepos/MobasyBuildingData_0.1.2.tar.gz", repos = NULL, type = "source")
 # install.packages("D:/TL/Entwicklung/R/GitHub/myRepos/MobasyBuildingData_0.1.0.tar.gz", repos = NULL, type = "source", 
@@ -93,6 +93,7 @@ library (DT)
 
 library (echarts4r)
 
+library (tabuladata)
 library (MobasyModel)
 library (MobasyBuildingData)
 
@@ -1350,20 +1351,60 @@ Calculate_EnergyDemand <- function (
 
   
   
-  
-  
-  
-  
   myDF_BuildingData_Output [ID_Calculate , -1] <- 
     List_OutputTables$Data_Output [ , ]
+  
+  
+  # n_Col_Output <- ncol (myDF_BuildingData_Output)
+  # i_Col_A_C_Ref <- which (columns (myDF_BuildingData_Output) == "A_Model1_C_Ref")
+  # 
+  # 
+  # myDF_BuildingData_Output [ID_Calculate , "A_Model1_C_Ref"] <- 
+  #   
+  #   ifelse ( !is.na ("A_Model1_C_Ref"),
+  #            
+  #            myDF_BuildingData_Output [ID_Calculate , "A_Model1_C_Ref" ],
+  #            
+  #            0    # Resulting values are not given, values do not make any sense. 
+  #            
+  #   )
+  # 
+  #   myDF_BuildingData_Output [ID_Calculate , (i_Col_A_C_Ref + 1) : n_Col_Output ] <- 
+  #   
+  #   ifelse (myDF_BuildingData_Output [ID_Calculate , "A_Model1_C_Ref" ] > 0,
+  #           
+  #     myDF_BuildingData_Output [ID_Calculate , (i_Col_A_C_Ref + 1) : n_Col_Output],
+  #     
+  #     NA    # Resulting values are not given, values do not make any sense. 
+  #     
+  #   )
+  # 
   
 #  myDF_BuildingData_CalcData [ID_Calculate , -1] <- 
   myDF_Calc_InterimResults  <- 
     List_OutputTables$Data_Calc [ , ]
   
+  
+  
+  
   myDF_Calc_ChartEnergyData <-
     List_OutputTables$DF_Display_Energy
   #List_OutputTables$List_Chart_HeatNeed$DF_HeatNeed_Data [ , ]
+  
+  
+  #n_Col_ChartEnergy <- ncol (myDF_Calc_ChartEnergyData)
+  #
+  # myDF_Calc_ChartEnergyData [ID_Calculate , 4:n_Col_ChartEnergy ] <- 
+  #   
+  #   ifelse (myDF_Calc_ChartEnergyData [ID_Calculate , "q_h_nd_net"] > 0,
+  #           
+  #           myDF_Calc_ChartEnergyData [ID_Calculate , 4:n_Col_ChartEnergy ],
+  #           
+  #           NA    # Resulting values are not given, values do not make any sense. 
+  #           
+  #   )
+  
+  
   
   
   # 2025-10-24 / ging nicht --> löschen
@@ -12447,7 +12488,8 @@ shinydashboard::tabItem (
                   fileInput (
                     'ImportFile', 
                     'Excel-Import: Bitte xlsx-Datei-Auswählen',
-                    accept = c(".xlsx")
+                    accept = c(".xlsx"),
+                    width = '100%'
                   ),
                   
                 ), # End column
@@ -17824,16 +17866,42 @@ server <- function (input, output, session) {
                 myImportDataframe () [ , ]       
               
 
+              
               rownames (rv$DF_Stack_Input) <-
-                rownames (
-                  data.frame (
-                    rbind (
-                      rv$DF_Stack_Input [1:n_Row_Stack, ],
-                      myImportDataframe ()  [, ]
-                    )
+                make.names (
+                    names = 
+                      c (
+                      rv$DF_Stack_Input [1:n_Row_Stack, 1],
+                      myImportDataframe ()  [ , 1]
+                      ), 
+                    unique = TRUE
                   )
-                )
+                
+              
+              
+              # rownames (rv$DF_Stack_Input) <-
+              #   rownames (
+              #     data.frame (
+              #       rbind (
+              #         rv$DF_Stack_Input [1:n_Row_Stack, ],
+              #         myImportDataframe ()  [, ]
+              #       )
+              #     )
+              #   )
+              
+              
+              
+              # rownames (rv$DF_Stack_Input) <-
+              # 
+              #     data.frame (
+              #       rbind (
+              #         rv$DF_Stack_Input [1:n_Row_Stack, ],
+              #         myImportDataframe ()  [, ]
+              #       )
+              #     ) [ ,"ID_Stack"]
 
+              
+              
 
 
 
@@ -17846,7 +17914,10 @@ server <- function (input, output, session) {
               # rownames (rv$DF_Stack_Input [i_StackRows_Import, ]) <- 
               #   rv$DF_Stack_Input [i_StackRows_Import , 1]
               
+              
+              
             } else {
+              
               
               i_StackRows_Import <- 1 : n_Row_Import
               
@@ -17858,8 +17929,12 @@ server <- function (input, output, session) {
               
               rownames (rv$DF_Stack_Input) <- rv$DF_Stack_Input [ , 1]
               
+              
             } # End if else
 
+            
+            # rownames (rv$DF_Stack_Input) <- rv$DF_Stack_Input [ , 1]
+            
             
             rv$DF_Stack_Output [i_StackRows_Import, ] <- NA
             
