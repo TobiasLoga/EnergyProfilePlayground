@@ -123,7 +123,7 @@
     },
     "MobasyModel": {
       "Package": "MobasyModel",
-      "Version": "0.1.5",
+      "Version": "0.1.6",
       "Source": "GitHub",
       "Type": "Package",
       "Title": "MOBASY model - realistic calculation of the energy demand for heating and its uncertainty",
@@ -144,7 +144,7 @@
       "RemoteRepo": "MobasyModel",
       "RemoteUsername": "TobiasLoga",
       "RemoteRef": "HEAD",
-      "RemoteSha": "47b96cffc3d0f0ebbbbd3ef91c281c4b078eb0c6",
+      "RemoteSha": "209401ca530bb8f5cdcd657c75accd3f78bb511a",
       "NeedsCompilation": "no",
       "Author": "Jens Calisti [cre] (<https://orcid.org/0000-0003-2211-0553>)",
       "Depends": [

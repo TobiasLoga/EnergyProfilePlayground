@@ -8620,7 +8620,7 @@ www.iwu.de
                                   div (
                                     
                                     checkboxInput (
-                                      inputId = "Indicator_SysH_W_Decentral",
+                                      inputId = "Indicator_SysW_G_Decentral",
                                       label = strong ("Dezentrale Warmwasserbereitung"), 
                                       value = FALSE, 
                                       width = NULL
@@ -9143,9 +9143,10 @@ tabPanel (
             "TABULA-Standard EFH (EU.SUH)"  = "EU.SUH",
             "TABULA-Standard MFH (EU.MUH)"  = "EU.MUH",
             "MOBASY-Standard EFH"  = "DE.MOBASY.Development.SUH",
-            "MOBASY-Standard MFH"  = "DE.MOBASY.Development.MUH"
-            # "MOBASY-Standard EFH 'DE.MOBASY.Development.SUH'"  = "DE.MOBASY.Development.SUH",
-            # "MOBASY-Standard MFH 'DE.MOBASY.Development.MUH'"  = "DE.MOBASY.Development.MUH"
+            "MOBASY-Standard MFH"  = "DE.MOBASY.Development.MUH",
+            #"MOBASY-Standard EFH 'DE.MOBASY.Development.SUH'"  = "DE.MOBASY.Development.SUH",
+            #"MOBASY-Standard MFH 'DE.MOBASY.Development.MUH'"  = "DE.MOBASY.Development.MUH"
+            "DE.MOBASY.Development.*" = "DE.MOBASY.Development.*"
           ),
           
           selected = "EU.SUH",
