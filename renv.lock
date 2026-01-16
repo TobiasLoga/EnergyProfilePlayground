@@ -4141,7 +4141,7 @@
     },
     "tabuladata": {
       "Package": "tabuladata",
-      "Version": "0.0.0.9001",
+      "Version": "0.1.1",
       "Source": "GitHub",
       "Title": "TABULA tables - parameters for energy performance calculation",
       "Authors@R": "person (given = \"Tobias\", family = \"Loga\", , \"t.loga@iwu.de\", role = c(\"aut\", \"cre\"), comment = c(ORCID = \"YOUR-ORCID-ID\")) person (given = \"Jens\", family = \"Calisti\", email = \"jens@tangled.de\", role = \"cre\", comment = c(ORCID = \"0000-0003-2211-0553\"))",
@@ -4156,7 +4156,7 @@
       "RemoteRepo": "tabuladata",
       "RemoteUsername": "IWUGERMANY",
       "RemoteRef": "HEAD",
-      "RemoteSha": "90d62bb74a3602925a52ecade9973ce191a792b4",
+      "RemoteSha": "5860d085ba21ea3793fa38a896c044554b169814",
       "NeedsCompilation": "no",
       "Author": "Jens Calisti [cre] (<https://orcid.org/0000-0003-2211-0553>)",
       "Maintainer": "Jens Calisti <jens@tangled.de>",

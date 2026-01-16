@@ -10,7 +10,8 @@
 # install.packages ("devtools")
 # install.packages("gitcreds")
 # install.packages ("clidamonger")
-# install.packages("shinylive")
+# install.packages ("shinylive")
+# install.packages ("tabuladata")
 
 # devtools::install_github ("IWUGERMANY/tabuladata")
 # #renv::install (packages = "IWUGERMANY/tabuladata")
@@ -147,20 +148,48 @@ SelectionList_ID_Pool_Initialise <-
   MobasyBuildingData::DF_FilterBuildingData [ ,"EnergyProfileShinyApp"]
   #  MobasyBuildingData::DF_FilterBuildingData [ ,"Typology-DE_Example-Buildings"]
 
-ID_Pool_Initialise <-
-  "Example.01"
+
+
+
+ID_Pool_Initialise <-    
+  "Example.01" 
+
   #"DE.N.SFH.01.Gen.ReEx.001.001"
   #"DE.Template.01" # 2025-07-17 Das funktioniert nicht -> Meldung "Zeilennamen enthalten fehlende Werte"
   # -> Die Zeilennamen sind aber da, daher debuggen
   # Kann auch sein, dass MobasyModel den Datensatz nicht rechnen kann und der Fehler dadurch entsteht. 
+  # 
+  # 2026-01-16 Habe gerade festgestellt, dass es in der Excel-Tabelle Data.Building gar kein "DE.Template.01" gab. 
+  # Der Name tauchte aber in der Datensatz-Liste für das Shiny-Tool auf.
+  # Es gab bisher nur "DE.MOBASY.Template.0001.01".
+  # 
+  # Jetzt habe ich folgende zwei Templates angelegt: 
+  # "DE.TABULA.2025.Template.01"
+  # "DE.Gen.Template.01" 
+  # Das zweite ist derzeit identisch zu dem ersten, sollte im Shiny-Tool als Template verwendet werden:
+  # (1) für das Anlegen eines komplett leeren Datensatzes (hierzu Auswahl aus Templates ermöglichen).
+  # (2) für ein zukünftig sinnvolles Importieren von Tabellen, in denen nur Energieprofil-Daten stehen. 
+  # (Zusammenführen mit dem Template, als Vorlage kann Funktion im Paket TabulaDataSourceXLSX verwendet werden.)
 
+
+
+
+## ID of a dataset in the pool that is used as a template for new datasets 
+# --> Initialises the selection list (ID of the dataset in the pool), dataset can be changed during the session
+ID_Pool_Template_Initialise <- 
+  ID_Pool_Initialise
+
+
+
+
+## Dataset used to initialise the calculation stack (ID of the dataset in the pool)
 ID_Stack_Initialise <- 
   ID_Pool_Initialise
+
 
 SelectionList_ID_Stack_Initialise <- c (
   ID_Stack_Initialise
 )
-
 
 
 SelectionList_ID_TypologyExampleBuildings <- 
@@ -490,6 +519,7 @@ InputVariableNames <- c (
   "Indicator_Heatpump_SysH",								
   "Indicator_Heatpump_SysW",
   "Code_HeatpumpType",
+  "Indicator_Heatpump_PlusDirectElectricHeater",
   
   "Indicator_ElectricCentral",	
   "Indicator_ElectricCentral_SysH",								
@@ -683,6 +713,7 @@ List_UI_InputFields_CheckBox <- c (
   "Indicator_Heatpump",	
   "Indicator_Heatpump_SysH",								
   "Indicator_Heatpump_SysW",
+  "Indicator_Heatpump_PlusDirectElectricHeater", # 2026-01-16 added
 
   "Indicator_ElectricCentral",	
   "Indicator_ElectricCentral_SysH",								
@@ -736,10 +767,7 @@ List_UI_InputFields_CheckBox <- c (
   
   "Indicator_SysHW_D_S_ExtraThickInsulation"
   
-  
-  
-  
-) # Current number: 13 + 1 + 9 + 12 + 14 = 34 + 14 + 14 = 63
+) # Current number: 13 + 1 + 9 + 12 + 14 = 34 + 14 + 14 + 1 = 64
 
   
 List_UI_InputFields_RadioButton <- c (
@@ -3031,7 +3059,7 @@ www.iwu.de
                           actionButton (
                             "Button_AddAllTypologyExamplesToStack",
                             label = strong (" Alle im Stack speichern ",),
-                            #width = '120%'
+                            width = '100%',
                             style = "padding: 0 !important"
                           ),
                           align = 'right'
@@ -3039,8 +3067,9 @@ www.iwu.de
                           #style = "background-color:white"
 
                           
-                        )
+                        ),
                         
+                        #style = "background-color: lightblue"
                         
                       ), # End fluidRow
                       
@@ -7382,12 +7411,26 @@ www.iwu.de
                               #   #style = ColumnStyle_Checkbox
                               # ),
                               
+                              column (
+                                1
+                              ),
+                              column (
+                                11,
+                                checkboxInput (
+                                  inputId = "Indicator_Heatpump_PlusDirectElectricHeater",
+                                  label = "zusätzlich direkt-elektrisch (z.B. Heizstab)", 
+                                  value = FALSE, 
+                                  width = NULL
+                                )
+                                
+                              ),
+                              
                               status = "primary",
                               footer = NULL, 
                               solidHeader = FALSE, 
                               background = NULL, 
                               width = 4, 
-                              height = 100,
+                              height = 120,
                               collapsible = FALSE, 
                               collapsed = FALSE
                               
@@ -7420,7 +7463,7 @@ www.iwu.de
                               solidHeader = FALSE, 
                               background = NULL, 
                               width = 6, 
-                              height = 100,
+                              height = 120,
                               collapsible = FALSE, 
                               collapsed = FALSE
                               
@@ -9142,11 +9185,13 @@ tabPanel (
           choices = c (
             "TABULA-Standard EFH (EU.SUH)"  = "EU.SUH",
             "TABULA-Standard MFH (EU.MUH)"  = "EU.MUH",
+            "TABULA-Standard abh. von Wohnungszahl (EU.*)"  = "EU.*",
             "MOBASY-Standard EFH"  = "DE.MOBASY.Development.SUH",
             "MOBASY-Standard MFH"  = "DE.MOBASY.Development.MUH",
+            "MOBASY abh. von Wohnungszahl"  = "DE.MOBASY.Development.*"
             #"MOBASY-Standard EFH 'DE.MOBASY.Development.SUH'"  = "DE.MOBASY.Development.SUH",
             #"MOBASY-Standard MFH 'DE.MOBASY.Development.MUH'"  = "DE.MOBASY.Development.MUH"
-            "DE.MOBASY.Development.*" = "DE.MOBASY.Development.*"
+            #"DE.MOBASY.Development.*" = "DE.MOBASY.Development.*"
           ),
           
           selected = "EU.SUH",
@@ -9496,12 +9541,13 @@ tabPanel (
           label = "Tabellenwerte für Bauteile",
           
           choices = c (
-            "Generische Werte ('Gen', verwendet im TABULA WebTool)" = "Gen",
-            "MOBASY-Werte (derzeit Default-Einstellung)"            = "MOBASY",
-            "REWOTY-Werte (derzeit noch Baustelle)"                 = "REWOTY"
+            "Generische Werte ('Gen') / aktuelle Version" = "Gen",
+            "MOBASY-Werte"                                = "MOBASY",
+            "REWOTY-Werte"                                = "REWOTY"
+            #"TabulaWebTool', KVEP 2005, verwendet im TABULA WebTool)" = "TabulaWebTool",
           ),
           
-          selected = "MOBASY",
+          selected = "Gen",
           width = '95%'
         ),
 
@@ -12487,9 +12533,10 @@ shinydashboard::tabItem (
                   4,
                   
                   fileInput (
-                    'ImportFile', 
-                    'Excel-Import: Bitte xlsx-Datei-Auswählen',
-                    accept = c(".xlsx"),
+                    inputId = "ImportFile", 
+                    label = "Excel-Import: Bitte xlsx-Datei-Auswählen",
+                    accept = c(".xlsx", ".rda"),
+                    #accept = c(".xlsx"),
                     width = '100%'
                   ),
                   
@@ -12500,7 +12547,7 @@ shinydashboard::tabItem (
                   strong ("Importierte Input-Daten in den Stack übertragen"),
                   actionButton (
                     inputId = "Button_TransferImportToStack",
-                    label = "In die Tabelle 'Stack_Input' Übertragen"
+                    label = "In die Tabelle 'Stack_Input' übertragen"
                   ),
                   
                   checkboxInput(
@@ -12591,8 +12638,59 @@ shinydashboard::tabItem (
           # p("The time is ", textOutput("current_time", inline=TRUE)),
           # hr(),
 
+          
+          
 
-
+          ## Selection of template dataset to be used for neu datasets in calculation stack  -----
+          
+          fluidRow (
+            
+            
+            column (
+              5,
+              strong ("Vorlage für neue Datensätze"),
+              br (),
+              "Auswahl eines geeigneten Template-Datensatzes aus dem Pool"
+            ),
+            
+            column (
+              5,
+              selectizeInput (
+                inputId = "SelectInput_ID_Dataset_Pool_Template",
+                label = NULL,
+                # label   = "Jahr",
+                choices = SelectionList_ID_Pool_Initialise, # MobasyBuildingData::Data_Output$ID_Dataset ,
+                selected = ID_Pool_Template_Initialise, # "Example.01",
+                multiple = FALSE,
+                width = '100%'
+              ),
+              #style = "height:35px"
+            ),
+            
+            # column (
+            #   1,
+            #   
+            #   
+            #   
+            #   " x"
+            #   
+            # ),
+            
+            column (
+              2,
+              actionButton (
+                "Button_Pool_Template_AddToStack", 
+                strong ("zum Stack hinzufügen"),
+                width = '100%'                
+              )
+            ),
+            
+            style = "border: 1px dotted lightgrey"
+            
+          ),
+          
+          
+          
 
 
           ## Selection of building datasets from pool for calculation stack  -----
@@ -12601,12 +12699,14 @@ shinydashboard::tabItem (
 
 
             column (
-              4,
-              "Datensatz aus der MOBASY-Gebäudedatenbank"
+              5,
+              strong ("Datensatz aus dem Pool"),
+              br (),
+              "Laden einer Auswahl von Datensätzen aus dem Pool (MOBASY-Gebäudedatenbank)"
             ),
 
             column (
-              4,
+              5,
               selectizeInput (
                 inputId = "ID_Dataset_Pool",
                 label = NULL,
@@ -12614,14 +12714,18 @@ shinydashboard::tabItem (
                 choices = SelectionList_ID_Pool_Initialise, # MobasyBuildingData::Data_Output$ID_Dataset ,
                 selected = ID_Pool_Initialise, # "Example.01",
                 multiple = TRUE,
-                width = 500
+                width = '100%'
               ),
               #style = "height:35px"
             ),
 
             column (
-              4,
-              actionButton ("Button_Pool_AddToStack", "Add selected dataset to calculation stack")
+              2,
+              actionButton (
+                "Button_Pool_AddToStack", 
+                strong ("zum Stack hinzufügen"),
+                width = '100%'                
+                )
             ),
 
 
@@ -12637,12 +12741,14 @@ shinydashboard::tabItem (
           fluidRow (
 
             column (
-              4,
-              "Datensatz vom Calculation stack"
+              5,
+              strong ("Datensatz vom Calculation Stack"),
+              br (),
+              "Laden aus dem Stack in die aktuelle Berechnung"
             ),
 
             column (
-              4,
+              5,
               selectInput (
                 inputId = "SelectInput_ID_Dataset_Stack_2",
                 label = NULL,
@@ -12651,14 +12757,18 @@ shinydashboard::tabItem (
                                    # MobasyBuildingData::Data_Output$ID_Dataset ,
                 #choices = c (1995:2023),
                 selected = ID_Stack_Initialise, # ID_Dataset_Initialise_Stack,  # "Example.01",
-                width = 500
+                width = '100%'
               ),
-              style = "height:35px"
+              style = "height:50px"
             ),
 
             column (
-              4,
-              actionButton ("Button_Calculate", "Calculate selected dataset")
+              2,
+              actionButton (
+                "Button_Calculate", 
+                "Neu berechnen",
+                width = '100%'
+                )
             ),
 
             #input_task_button("Do_PushToStack", "Push to calculation stack"),
@@ -12676,7 +12786,7 @@ shinydashboard::tabItem (
             #   style = "height:35px"
             # ),
 
-            style = "border: 1px dotted lightgrey"
+            style = "border: 1px dotted ligthgrey;"
 
           ), # End fluidRow
 
@@ -12703,34 +12813,45 @@ shinydashboard::tabItem (
           fluidRow(
 
             column (
-              8,
-              "Test"
+              5,
+              strong ("Daten-Editor (experimentell)")
             ),
 
             column (
-              4,
-              actionButton ("Button_Edit_CalcStack", "Edit values of calculation stack")
+              5,
+              actionButton (
+                "Button_Edit_CalcStack", 
+                strong ("Datensätze manuell editieren"),
+                width = '100%')
             ),
-
+            
+            style =   "height: 52px; border: 7px solid lightblue; background-color: lightblue",
+            #style = "border: 1px dotted grey; background-color: white; height: 50px"
+            
           ),
 
 
           fluidRow (
-            "Data Editor",
+            # "Data Editor",
             column (
               12,
               DT::dataTableOutput ('MyDataTable'),
               style = "overflow-x: scroll;"
               #style = "overflow-y: scroll;overflow-x: scroll;"
 
-            )
+            ),
+            
+            style =   "height: 52px; border: 7px solid lightblue; background-color: lightblue",
+            #style = "border: 1px dotted grey; background-color: white;"
+            
           ),
 
           fluidRow (
+            
             column (
               12,
-              "Data Viewer",
-
+              "",
+              strong ("Viewer: Data_Input"),
 
 
               # ## 2025-05-09 ausprobiert und wieder abgeschaltet
@@ -12749,12 +12870,12 @@ shinydashboard::tabItem (
               # br(),
 
 
-
-
               tableOutput ("Stack_Input"),
 
+              strong ("Viewer: Stack_Output"),
               tableOutput ("Stack_Output"),
 
+              strong ("Viewer: Calc_ChartEnergyData"),
               tableOutput ("Stack_ChartEnergy"),
 
               style = "overflow-x: scroll;"
@@ -12762,6 +12883,7 @@ shinydashboard::tabItem (
             ),
 
             style = "overflow-y: scroll;"
+            #style = "overflow-y: scroll; background-color:white;"
           ),
 
 
@@ -13259,7 +13381,7 @@ server <- function (input, output, session) {
   
   
   #####################################################################################X
-  ## Observe "Button_Pool_AddToStack"  -----
+  ## Button_Pool_AddToStack  -----
   
 
   observeEvent (
@@ -13342,10 +13464,94 @@ server <- function (input, output, session) {
     }, ignoreInit = TRUE
   ) # End observeEvent input$Button_Pool_AddToStack
   
+
+  
   
   
   #####################################################################################X
-  ## Observe "Button_AddAllTypologyExamplesToStack"  -----
+  ## Button_Pool_Template_AddToStack  -----
+  
+  
+  observeEvent (
+    input$Button_Pool_Template_AddToStack,{
+      
+      if (is.na (rv$DF_Stack_Input [1,1])) {
+        
+        # Case: Initialisation
+        
+        rv$DF_Stack_Input <- 
+          data.frame (
+            DF_Pool_Input ()  [input$SelectInput_ID_Dataset_Pool_Template, ],
+            row.names = DF_Pool_Input ()  [input$SelectInput_ID_Dataset_Pool_Template, 1]
+          )
+        
+        rv$DF_Stack_Output <- 
+          data.frame(
+            DF_Pool_Output ()  [input$SelectInput_ID_Dataset_Pool_Template, ],
+            row.names = DF_Pool_Input ()  [input$SelectInput_ID_Dataset_Pool_Template, 1]
+          )
+        
+      } else {
+        
+        # Case: Standard procedure 
+        
+        rv$DF_Stack_Input <-
+          data.frame (
+            rbind (
+              rv$DF_Stack_Input,
+              DF_Pool_Input ()  [input$SelectInput_ID_Dataset_Pool_Template, ]
+            )
+          )
+        
+        rv$DF_Stack_Input [ , 1] <-
+          rownames (rv$DF_Stack_Input)
+        
+        rv$DF_Stack_Output <-
+          data.frame (
+            rbind (
+              rv$DF_Stack_Output,
+              DF_Pool_Output ()  [input$SelectInput_ID_Dataset_Pool_Template, ]
+            )
+          ) 
+      } # End if else
+      
+      rv$DF_Stack_Output [ , 1] <-
+        rownames (rv$DF_Stack_Output)
+      
+      
+      updateSelectInput (
+        session, 
+        "SelectInput_ID_Dataset_Stack",
+        choices = rownames (rv$DF_Stack_Input)
+        #choices = rv$DF_Stack_Input [ , 1]
+        #selected =  rv$DF_Stack_Input [1 , 1]
+      )
+      
+      updateSelectInput (
+        session,
+        "SelectInput_ID_Dataset_Stack_2",
+        choices = rownames (rv$DF_Stack_Input)
+        #choices = rv$DF_Stack_Input [ , 1],
+        #selected = input$SelectInput_ID_Dataset_Stack
+      )
+      
+      # 2024-09-27 abgeschaltet 
+      #UpdateInputFieldsFromStack (session, input, rv)    
+      
+
+      
+            
+      shinyjs::click ("Button_CalculateStack")
+      
+      
+      
+    }, ignoreInit = TRUE
+  ) # End observeEvent input$Button_Pool_Template_AddToStack
+  
+  
+  
+  #####################################################################################X
+  ## Button_AddAllTypologyExamplesToStack  -----
   
   
   observeEvent (
@@ -14363,7 +14569,13 @@ server <- function (input, output, session) {
     input = input, rv = rv)
   
   
+  ObserveInputField_UpdateDFCalcVariable (
+    Name_InputField = List_UI_InputFields_CheckBox [64],
+    SuffixInputField = "",
+    input = input, rv = rv)
   
+  
+    
   
   
   ## RadioButton
@@ -17741,18 +17953,54 @@ server <- function (input, output, session) {
       myImportDataframe <-
         reactive ({
 
-          
           as.data.frame (
             readxl::read_excel (
               path = input$ImportFile$datapath,
               sheet = 1,
               col_names = TRUE,
-              #na = NA 
+              #na = NA
             )
-            
           )
+          
 
+        })         
 
+      
+      # #as.data.frame (
+      # load (
+      #   file = input$ImportFile
+      #   #              file = input$ImportFile$datapath
+      # )
+      # #) 
+      
+                          
+          # as.data.frame (
+          #   readxl::read_excel (
+          #     path = input$ImportFile$datapath,
+          #     sheet = 1,
+          #     col_names = TRUE,
+          #     #na = NA
+          #   )
+          # )
+          
+          
+          
+          # req (input$ImportFile$datapath)
+          # 
+          # # Create a new environment to avoid overwriting existing objects
+          # env <- new.env()
+          # load (input$ImportFile$datapath, envir = env)
+
+          # as.data.frame (
+          #   load (
+          #     file = input$ImportFile$datapath
+          #   )
+          # )
+          
+          
+
+          
+          
           # as.data.frame (
           #   openxlsx::read.xlsx (
           #     input$ImportFile$datapath,
@@ -17762,10 +18010,9 @@ server <- function (input, output, session) {
           #   )
           # 
           # )
-
-          
+      
                     
-        })
+  
       
       
       
@@ -17859,12 +18106,49 @@ server <- function (input, output, session) {
             n_Row_Stack  <- nrow (rv$DF_Stack_Input)
             n_Row_Import <- nrow (myImportDataframe ())
             
+            i_Col_Stack_Common <- which (colnames (rv$DF_Stack_Input) %in% colnames (myImportDataframe ()))
+            
+            ColNames_Common <- 
+              colnames (
+                rv$DF_Stack_Input [ ,i_Col_Stack_Common]
+              )
+            
+            
+## 2026-01-16 The if else could be simplified since most of the script is identical.               
+            
+            
             if (input$Checkbox_KeepExistingDatasets == TRUE) {
               
               i_StackRows_Import    <- (n_Row_Stack + 1) : (n_Row_Stack + n_Row_Import)
 
+              
+              ## 2026-01-16 refined procedure
+              # (1) The template is used to prepare the new datasets.
+              # (2) The columns included in the import file, must not be complete anymore. 
+              #     Other column names do not disturb anymore. 
+
               rv$DF_Stack_Input [i_StackRows_Import, ] <- 
-                myImportDataframe () [ , ]       
+                do.call (
+                  "rbind", 
+                  replicate (
+                    n_Row_Import, 
+                    DF_Pool_Input ()  [input$SelectInput_ID_Dataset_Pool_Template, ], 
+                    simplify = FALSE
+                    )
+                  )
+
+              rv$DF_Stack_Input [
+                i_StackRows_Import, 
+                ColNames_Common
+                #which (colnames (rv$DF_Stack_Input) %in% colnames (myImportDataframe ()))
+              ] <-
+                myImportDataframe () [ , ColNames_Common]
+              
+
+              ## 2026-01-16 old
+              # 
+              # rv$DF_Stack_Input [i_StackRows_Import, ] <- 
+              #   myImportDataframe () [ , ]       
               
 
               
@@ -17922,11 +18206,38 @@ server <- function (input, output, session) {
               
               i_StackRows_Import <- 1 : n_Row_Import
               
-              rv$DF_Stack_Input  <- rv$DF_Stack_Input [1, ] 
+              rv$DF_Stack_Input   <- rv$DF_Stack_Input [1, ] 
               rv$DF_Stack_Output  <- rv$DF_Stack_Output [1, ] 
               
+              
+              
+              ## 2026-01-16 refined procedure
+              # (1) The template is used to prepare the new datasets.
+              # (2) The columns included in the import file, must not be complete anymore. 
+              #     Other column names do not disturb anymore. 
+              
               rv$DF_Stack_Input [i_StackRows_Import, ] <- 
-                myImportDataframe () [ , ]       
+                do.call (
+                  "rbind", 
+                  replicate (
+                    n_Row_Import, 
+                    DF_Pool_Input ()  [input$SelectInput_ID_Dataset_Pool_Template, ], 
+                    simplify = FALSE
+                  )
+                )
+              
+              rv$DF_Stack_Input [
+                i_StackRows_Import, 
+                ColNames_Common
+                #which (colnames (rv$DF_Stack_Input) %in% colnames (myImportDataframe ()))
+              ] <-
+                myImportDataframe () [ , ColNames_Common]
+              
+
+              ## 2026-01-16 old
+              # 
+              # rv$DF_Stack_Input [i_StackRows_Import, ] <- 
+              #   myImportDataframe () [ , ]       
               
               rownames (rv$DF_Stack_Input) <- rv$DF_Stack_Input [ , 1]
               
@@ -17964,6 +18275,18 @@ server <- function (input, output, session) {
               inputId = "TextInput_Index_Stack",
               value = Index_Dataset
             )
+            
+            
+            #myImportDataframe () [ , ] <- NA # 2026-01-16 added to clear memory usage. But commented, since it provokes an error
+            # Maybe later the template dataset could be assigned?
+            # 
+            # The following doesn't work either. 
+            # myImportDataframe () [,] <-
+            #   myImportDataframe () [1,]
+            # myImportDataframe () <-
+            #   DF_Pool_Input ()  [ID_Stack_Initialise, ]
+            # myImportDataframe () [ , ] <-
+            #       DF_Pool_Input ()  [ID_Stack_Initialise, ]
             
             
             
@@ -18124,7 +18447,7 @@ server <- function (input, output, session) {
           
         }, 
         ignoreInit = TRUE
-      ) # End observe event Button_SaveCalculationToStack
+      ) # End observe event Button_TransferImportToStack
       
       
       

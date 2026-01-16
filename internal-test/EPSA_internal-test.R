@@ -18,9 +18,12 @@ base::load ("www/DF_BuildingTypeMatrix.rda")
 # Das heißt es wird beim Laden mit relativer Adresse vom Skript-Ordner "R" ausgegangen!
 
 
+colnames (tabuladata::insulation.default)
 
 
+View (tabuladata::insulation.default)
 
+View (tabuladata::measure.f.default)
 
 
 
@@ -109,7 +112,7 @@ BuildingTypeInfo (
 
 
 
-
+tabuladata::climate ["DE.KR12-Mannheim", ]
 
 
 
