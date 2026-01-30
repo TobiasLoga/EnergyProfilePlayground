@@ -176,8 +176,11 @@ ID_Pool_Initialise <-
 
 ## ID of a dataset in the pool that is used as a template for new datasets 
 # --> Initialises the selection list (ID of the dataset in the pool), dataset can be changed during the session
+
 ID_Pool_Template_Initialise <- 
-  ID_Pool_Initialise
+  "DE.Gen.Template.01"
+
+#  ID_Pool_Initialise
 
 
 
@@ -2590,7 +2593,7 @@ ui <- shinydashboard::dashboardPage (
         
         
 ## IWU - Energieprofil - Shiny App - Development Version
-Version: 28.11.2025
+Version: 30.01.2026
 
 ### Einführung 
 
@@ -16777,7 +16780,7 @@ server <- function (input, output, session) {
           col.names =  c (
             "ID_Stack", 
             colnames (ResultList$DF_Calc_InterimResults [ , -9]))
-          # "Date_Change" removed, caused contious update of screen in output table ("Daten")
+          # "Date_Change" removed, caused continuous update of screen in output table ("Daten")
           
         )
         

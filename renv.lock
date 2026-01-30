@@ -95,7 +95,7 @@
     },
     "MobasyBuildingData": {
       "Package": "MobasyBuildingData",
-      "Version": "0.1.4",
+      "Version": "0.1.6",
       "Source": "GitHub",
       "Type": "Package",
       "Title": "MOBASY Building data tables",
@@ -105,7 +105,7 @@
       "License": "CC BY 4.0",
       "Encoding": "UTF-8",
       "LazyData": "true",
-      "RoxygenNote": "7.3.2",
+      "RoxygenNote": "7.3.3",
       "Suggests": [
         "testthat (>= 3.0.0)"
       ],
@@ -115,7 +115,7 @@
       "RemoteRepo": "MobasyBuildingData",
       "RemoteUsername": "TobiasLoga",
       "RemoteRef": "HEAD",
-      "RemoteSha": "54da61a39d3167624302b987499afe83423b8cea",
+      "RemoteSha": "402c26eebfa28af06b7ab7ea9632fe9d7aaec28c",
       "NeedsCompilation": "no",
       "Depends": [
         "R (>= 3.5.0)"
@@ -278,7 +278,7 @@
     },
     "TabulaCharts": {
       "Package": "TabulaCharts",
-      "Version": "0.1.4",
+      "Version": "0.1.5",
       "Source": "GitHub",
       "Title": "Create charts for displaying the results of the TABULA energy performance calculation",
       "Description": "Column charts for visualising energy flow through building fabric in the heating season, final energy demand for heating and DHW, uncertainties of energy demand.",
@@ -286,7 +286,7 @@
       "License": "CC BY 4.0",
       "Encoding": "UTF-8",
       "Roxygen": "list(markdown = TRUE)",
-      "RoxygenNote": "7.3.2",
+      "RoxygenNote": "7.3.3",
       "LazyData": "true",
       "Imports": [
         "echarts4r",
@@ -294,14 +294,10 @@
       ],
       "RemoteType": "github",
       "RemoteHost": "api.github.com",
-      "RemoteRepo": "TabulaCharts",
       "RemoteUsername": "TobiasLoga",
-      "RemoteRef": "HEAD",
-      "RemoteSha": "a9a7a9ac0d05d30a274cd40700bbbc034bfc405a",
-      "NeedsCompilation": "no",
-      "Depends": [
-        "R (>= 3.5.0)"
-      ]
+      "RemoteRepo": "TabulaCharts",
+      "RemoteRef": "main",
+      "RemoteSha": "fffc1a638d3f4588b89910bcad64adea6eb20334"
     },
     "askpass": {
       "Package": "askpass",

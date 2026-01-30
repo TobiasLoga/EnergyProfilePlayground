@@ -1,5 +1,5 @@
 ## IWU - Energieprofil - Shiny App - Development Version
-Version: 28.11.2025
+Version: 30.01.2026
 
 ### Einführung 
 
