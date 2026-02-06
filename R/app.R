@@ -79,7 +79,7 @@
 
 
 
-library (renv)
+#library (renv)
 
 library (shiny)
 library (shinyalert)
@@ -5111,8 +5111,8 @@ www.iwu.de
                             conditionalPanel (
                               condition = "
                                 ((input.Code_InsulationType_Wall == 'Refurbish') | 
-                                 (input.Code_InsulationType_Wall == 'Original')) &
-                                 (input.Checkbox_d_Insulation_Wall_InputNotAvailable == 0)
+                                 (input.Code_InsulationType_Wall == 'Original')) # &
+                                 #(input.Checkbox_d_Insulation_Wall_InputNotAvailable == 0)
                                 ",
 
                               column (
@@ -5129,9 +5129,9 @@ www.iwu.de
                                 )
                                 
                               
-                            ), # End conditionalPanel
+                            ), 
                               
-                            ),
+                            ), # End conditionalPanel
                             
                             
                           ), # End fluidRow
@@ -12528,12 +12528,13 @@ shinydashboard::tabItem (
                 
               ), # End fluidRow
               
+              
               fluidRow (
                 
                 br (),
                 
                 column (
-                  4,
+                  6,
                   
                   fileInput (
                     inputId = "ImportFile", 
@@ -12543,10 +12544,148 @@ shinydashboard::tabItem (
                     width = '100%'
                   ),
                   
+                  fluidRow (
+                    style = "margin-top: -10px;",
+                    
+
+                    column (
+                      12,
+                      style = "margin-top: -20px; height:30px;",
+                      
+                      #div (
+
+                        checkboxInput(
+                          inputId =  "Checkbox_SelectImportRange",
+                          label = "Zellbereich mit Daten auswählen",
+                          value = FALSE,
+                          width = NULL
+                        ),
+                      
+                      #), # End div
+                      
+                    ), # End Column
+                    
+                    conditionalPanel (
+                      condition = "input.Checkbox_SelectImportRange",
+                    
+                      # column (
+                      #   1,
+                      #   "",    br(),
+                      #   "von", br (), br (),
+                      #   "bis", br ()
+                      # ),
+                      
+                      column (
+                        2, 
+                        br (), 
+                        "Datensätze"
+                      ), # End column
+                      
+                      column (
+                        2,
+                        "Start",
+                        
+                        div (
+                          style = "margin-top: 0px; height:40px;",
+                          
+                          numericInput (
+                            inputId = "NumericInput_Row_Start",
+                            label = NULL,
+                            value = 1,
+                            min = 1,
+                            max = 5000,
+                            step = 50,
+                            width = "100px",
+                          )
+                          
+                        ), # End div
+                        
+                      ), # End column
+                      
+                      column (
+                        3,
+                        "Anzahl",
+                        div (
+                          style = "margin-top: 0px; height:40px;",
+                          
+                          numericInput (
+                            inputId = "NumericInput_Rows_Count",
+                            label = NULL,
+                            value = 500,
+                            min = 1,
+                            max = 5000,
+                            step = 50,
+                            width = "100px"
+                          )
+                          
+                        ), # End div
+                        
+                      ), # End column
+                      
+                      column (
+                        1,
+                        br (),
+                        "Spalte",
+                        
+                        
+                        
+                      ), # End column
+                      
+                      column (
+                        2,
+                        "von",
+                        
+                        div (
+                          style = "margin-top: 0px; height:40px;",
+                          
+                          numericInput (
+                            inputId = "NumericInput_Column_Start",
+                            label = NULL,
+                            value = 1,
+                            min = 1,
+                            max = 5000,
+                            step = 50,
+                            width = "100px"
+                          ),
+                          
+                        ), # End div
+                        
+                      ), # End column
+                      
+                      column (
+                        2,
+                        "bis",
+                        div (
+                          style = "margin-top: 0px; height:40px;",
+                          
+                          numericInput (
+                            inputId = "NumericInput_Column_End",
+                            label = NULL,
+                            value = 200,
+                            min = 1,
+                            max = 5000,
+                            step = 50,
+                            width = "100px"
+                          )
+                        ) # End div
+                        
+                        
+                        
+                      ) # End column
+                      
+                    ), # End conditionalPanel
+                    
+                    
+                    
+                  ), # End fluidRow
+                  
+                  
+                  
                 ), # End column
                 
+                
                 column (
-                  4,
+                  3,
                   strong ("Importierte Input-Daten in den Stack übertragen"),
                   actionButton (
                     inputId = "Button_TransferImportToStack",
@@ -17956,14 +18095,130 @@ server <- function (input, output, session) {
       myImportDataframe <-
         reactive ({
 
-          as.data.frame (
-            readxl::read_excel (
-              path = input$ImportFile$datapath,
-              sheet = 1,
-              col_names = TRUE,
-              #na = NA
+          if (input$Checkbox_SelectImportRange == TRUE) {
+            
+            as.data.frame (
+              as.list (
+                readxl::read_excel (
+                  path = input$ImportFile$datapath,
+                  sheet = 1,
+                  col_names = FALSE,
+                  range = 
+                    cellranger::cell_limits (
+                      c (
+                        input$NumericInput_Row_Start + 1,
+                        input$NumericInput_Column_Start
+                      ), 
+                      c (
+                        input$NumericInput_Row_Start + 1 + input$NumericInput_Rows_Count - 1,
+                        input$NumericInput_Column_End
+                      )
+                    ),
+                  #range = cellranger::cell_limits (c(3,1), c(5,1000)),
+                  #range = cellranger::cell_rows (13:15),
+                  trim_ws = FALSE
+                )              
+              ),
+              col.names = 
+                readxl::read_excel (
+                  path = input$ImportFile$datapath,
+                  sheet = 1,
+                  col_names = FALSE,
+                  range = 
+                    cellranger::cell_limits (
+                      c (1,input$NumericInput_Column_Start), 
+                      c (1,input$NumericInput_Column_End)
+                    ),
+                  #range = cellranger::cell_rows (1),
+                  trim_ws = FALSE
+                  #range = c ("A1:FP3", "A10:FP12") # Test, skipping data rows at the beginningdoesn't work
+                  #range = c ("1:3", "10:12")
+                  #range = cellranger::cell_rows (c(1:4, 11:15))
+                  #na = NA
+                )
+            ) # End as.dataframe
+            
+          } else{
+            
+            as.data.frame (
+              readxl::read_excel (
+                path = input$ImportFile$datapath,
+                sheet = 1,
+                col_names = TRUE,
+              )
             )
-          )
+            
+            
+          }
+
+          
+          
+          #           
+          # as.data.frame (
+          #   as.list (
+          #     readxl::read_excel (
+          #       path = input$ImportFile$datapath,
+          #       sheet = 1,
+          #       col_names = FALSE,
+          #       range = cellranger::cell_limits (c(3,1), c(5,3))
+          #       #range = cellranger::cell_rows (3:5)
+          #       #trim_ws = FALSE
+          #     )              
+          #   ),
+          #   col.names = c("A", "B", "C")
+          #     # colnames (
+          #     #   readxl::read_excel (
+          #     #     path = input$ImportFile$datapath,
+          #     #     sheet = 1,
+          #     #     col_names = FALSE,
+          #     #     range = cellranger::cell_limits (c(1,1), c(1,8))
+          #     #     #range = cellranger::cell_rows (1),
+          #     #     #trim_ws = FALSE
+          #     #     #range = c ("A1:FP3", "A10:FP12") # Test, skipping data rows at the beginningdoesn't work
+          #     #     #range = c ("1:3", "10:12")
+          #     #     #range = cellranger::cell_rows (c(1:4, 11:15))
+          #     #     #na = NA
+          #     #   )
+          #     # )
+          #   
+          # )
+          # 
+          
+          # #as.data.frame (
+          #   rbind (
+          #     readxl::read_excel (
+          #       path = input$ImportFile$datapath,
+          #       sheet = 1,
+          #       col_names = FALSE,
+          #       range = cellranger::cell_rows (1) 
+          #       #range = c ("A1:FP3", "A10:FP12") # Test, skipping data rows at the beginningdoesn't work 
+          #       #range = c ("1:3", "10:12")
+          #       #range = cellranger::cell_rows (c(1:4, 11:15)) 
+          #       #na = NA
+          #     ),
+          #     readxl::read_excel (
+          #       path = input$ImportFile$datapath,
+          #       sheet = 1,
+          #       col_names = FALSE,
+          #       range = cellranger::cell_rows (5:8) 
+          #     )
+          #     
+          #   #)
+          # )
+          
+          
+          
+          # as.data.frame (
+          #   readxl::read_excel (
+          #     path = input$ImportFile$datapath,
+          #     sheet = 1,
+          #     col_names = TRUE,
+          #     #range = c ("A1:FP3", "A10:FP12") # Test, unfortunately skipping data rows at the beginningdoesn't work
+          #     #range = c ("1:3", "10:12")
+          #     #range = cellranger::cell_rows (c(1:4, 11:15))
+          #     #na = NA
+          #   )
+          # )
           
 
         })         
@@ -18104,6 +18359,20 @@ server <- function (input, output, session) {
           #  !is.null (output$myImportTable)      # not working
           #  !is.null (nrow (myImportDataframe () ))   # not working
             ) {
+            
+            ## 2026-02-06 Select a range of the import dataframe.
+            # nicht weiter gemacht. Man kann den myImportDataframe () offensichtlich nicht ändern
+            
+            # Index_FirstImportDataset <- 10
+            # Index_LastImportDataset <- 20
+            # n_Row_Import <- nrow (myImportDataframe ())
+            # 
+            # myImportDataframe () [ 11:n_Row_Import , 2:10 ]  <- NA 
+            
+            # DF_Temp <- 
+            #   myImportDataframe () [  11:13 , ]
+            # 
+            # myImportDataframe () [ , ] <- as.data.frame (DF_Temp)
             
             
             n_Row_Stack  <- nrow (rv$DF_Stack_Input)

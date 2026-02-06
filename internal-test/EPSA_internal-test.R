@@ -10,6 +10,15 @@ DF_BuildingTypeMatrix <- NA
 DF_BuildingTypeMatrix <- read.delim ("clipboard")
 save (DF_BuildingTypeMatrix, file = "DF_BuildingTypeMatrix.rda")
 
+na.omit
+# 2026-02-06
+# Hier steckt irgendwie ein Fehler:
+# Wenn das Package renv geladen ist, kann man kein rda durch Doppelklick laden!
+# da RStudio dann offensichtlich nur load () aufruft ohne Package-Name 
+base::load ("R/www/DF_BuildingTypeMatrix.rda")
+
+DF_BuildingTypeMatrix [ 3:5 , ]
+
 # Das funktioniert in Shiny nicht:
 base::load ("data/DF_BuildingTypeMatrix.rda")
 
