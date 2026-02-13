@@ -143,6 +143,9 @@ base::load ("www/DF_BuildingTypeMatrix.rda")
 #####################################################################################X
 
 
+DefaultValue_Checkbox_AutomaticCalculation <- TRUE
+
+
 
 SelectionList_ID_Pool_Initialise <- 
   MobasyBuildingData::DF_FilterBuildingData [ ,"EnergyProfileShinyApp"]
@@ -682,6 +685,7 @@ List_UI_InputFields_Slider_Percent <- c (
   "f_Insulation_Wall_Slider",
   "f_Insulation_Floor_Slider",
   "f_Area_WindowType2_Slider"
+  
 )
 
   
@@ -1964,6 +1968,12 @@ ObserveInputField_UpdateDFCalcVariable <- function (
         
       } # End if else
       
+      
+      # 2026-02-13 TEST
+      #shinyjs::click("Button_Calculate") 
+      
+      
+      
     })
   
   
@@ -2593,11 +2603,11 @@ ui <- shinydashboard::dashboardPage (
         
         
 ## IWU - Energieprofil - Shiny App - Development Version
-Version: 30.01.2026
+Version: 07.02.2026
 
 ### Einführung 
 
-Das Online-Tool 'Energieprofil' ermöglicht eine Abschätzung des typischen Energieverbrauchs für Heizung und Warmwasser von Wohngebäuden. Da es sich um eine physikalische Modellierung des Energieverbrauchs handelt, wird das Berechnungsergebnis als 'Energiebedarf' bezeichnet. Der Energiebedarf eines Gebäudes hängt von der Größe, der Gebäudeform und vor allem vom Baujahr des Gebäudes ab - der Grund für letzteres sind die im Laufe der Jahrzehnte stetig erhöhten energetischen Anforderungen an Neubauten. Auch bei Altbauten kann der Energiebedarf durch Wärmeschutzmaßnahmen, also die Wärmedämmung von Dach, Außenwand und Fußböden sowie durch Einbau energetisch hochwertiger Fenster erheblich gesenkt werden - wobei durchaus das Qualitätsniveau von Neubauten erreicht werden kann. 
+Das im Rahmen von Forschungsprojekten am Institut Wohnen und Umwelt (IWU) entwickelte Online-Tool 'Energieprofil' ermöglicht eine Abschätzung des typischen Energieverbrauchs für Heizung und Warmwasser von Wohngebäuden. Da es sich um eine physikalische Modellierung des Energieverbrauchs handelt, wird das Berechnungsergebnis als 'Energiebedarf' bezeichnet. Der Energiebedarf eines Gebäudes hängt von der Größe, der Gebäudeform und vor allem vom Baujahr des Gebäudes ab - der Grund für letzteres sind die im Laufe der Jahrzehnte stetig erhöhten energetischen Anforderungen an Neubauten. Auch bei Altbauten kann der Energiebedarf durch Wärmeschutzmaßnahmen, also die Wärmedämmung von Dach, Außenwand und Fußböden sowie durch Einbau energetisch hochwertiger Fenster erheblich gesenkt werden - wobei durchaus das Qualitätsniveau von Neubauten erreicht werden kann. 
 
 Das Energieprofil-Online-Tool erlaubt es, die Einflüsse dieser Parameter auf den Energiebedarf abzuschätzen. Hierfür können verschiedene Beispielgebäude aus der deutschen Wohngebäudetypologie gewählt werden, die nach Größe, Gebäudeart und Baualter differenziert sind. Dabei sind die Beipielgebäde zunächst als nicht modernisiert angenommenen. Die Beispielgebäude können schrittweise modifiziert werden, z.B. können die Wohnfläche, die Anzahl der Geschosse, die Wärmedämmung, die energetische Qualität der Fenster auf den vorhandenen oder gewünschten Zustand eines realen Geäbudes angepasst werden und der Energiebedarf entsprechend ermittelt werden. Weiterhin kann die Wärmeversorgung modifiziert werden, in dem z.B. zusätzlich eine thermische Solaranlage oder statt des Kessels eine Wärmepumpe eingebaut wird. 
 
@@ -2939,7 +2949,7 @@ www.iwu.de
                 checkboxInput (
                   "Checkbox_AutomaticCalculation",
                   label = "Automatisch",
-                  value = TRUE
+                  value = DefaultValue_Checkbox_AutomaticCalculation
                 ),
                 align = 'left'
               ),
@@ -4190,7 +4200,7 @@ www.iwu.de
                               inputId = "d_Insulation_Roof_Slider",
                               label = NULL,
                               #label = "Dämmstärke [cm]",
-                              value = 0,
+                              value = 1, # 2026-02-13 geändert von 0 auf 1
                               min = 1,
                               max = 40,
                               step = 1
@@ -4285,7 +4295,7 @@ www.iwu.de
                             sliderInput (
                               inputId = "f_Insulation_Roof_Slider",
                               label = NULL,
-                              value = 0,
+                              value = 10, # 2026-02-13 geändert von 0 auf 10
                               min = 10,
                               max = 100,
                               step = 10
@@ -4556,7 +4566,7 @@ www.iwu.de
                                 inputId = "d_Insulation_Ceiling_Slider",
                                 label = NULL,
                                 #label = "Dämmstärke [cm]",
-                                value = 0,
+                                value = 1, # 2026-02-13 geändert von 0 auf 1
                                 min = 1,
                                 max = 40,
                                 step = 1
@@ -4651,7 +4661,7 @@ www.iwu.de
                               sliderInput (
                                 inputId = "f_Insulation_Ceiling_Slider",
                                 label = NULL,
-                                value = 0,
+                                value = 10, # 2026-02-13 geändert von 0 auf 10
                                 min = 10,
                                 max = 100,
                                 step = 10
@@ -4953,7 +4963,7 @@ www.iwu.de
                                   inputId = "d_Insulation_Wall_Slider",
                                   label = NULL,
                                   #label = "Dämmstärke [cm]",
-                                  value = 0,
+                                  value = 1, # 2026-02-13 geändert von 0 auf 1
                                   min = 1,
                                   max = 40,
                                   step = 1
@@ -5049,7 +5059,7 @@ www.iwu.de
                                 sliderInput (
                                   inputId = "f_Insulation_Wall_Slider",
                                   label = NULL,
-                                  value = 0,
+                                  value = 10, # 2026-02-13 geändert von 0 auf 10
                                   min = 10,
                                   max = 100,
                                   step = 10
@@ -5111,10 +5121,10 @@ www.iwu.de
                             conditionalPanel (
                               condition = "
                                 ((input.Code_InsulationType_Wall == 'Refurbish') | 
-                                 (input.Code_InsulationType_Wall == 'Original')) # &
-                                 #(input.Checkbox_d_Insulation_Wall_InputNotAvailable == 0)
+                                 (input.Code_InsulationType_Wall == 'Original')) 
                                 ",
-
+                              #(input.Checkbox_d_Insulation_Wall_InputNotAvailable == 0)
+                              
                               column (
                                 4
                               ),
@@ -5620,7 +5630,7 @@ www.iwu.de
                               inputId = "d_Insulation_Floor_Slider",
                               label = NULL,
                               #label = "Dämmstärke [cm]",
-                              value = 0,
+                              value = 1, # 2026-02-13 geändert von 0 auf 1
                               min = 1,
                               max = 40,
                               step = 1
@@ -5716,7 +5726,7 @@ www.iwu.de
                             sliderInput (
                               inputId = "f_Insulation_Floor_Slider",
                               label = NULL,
-                              value = 0,
+                              value = 10, # 2026-02-13 geändert von 0 auf 10
                               min = 10,
                               max = 100,
                               step = 10
@@ -5935,7 +5945,7 @@ www.iwu.de
                       ### Further window type 
 
                       conditionalPanel (
-                        condition = "input.Show_WindowType2",
+                        condition = "(input.Show_WindowType2 == 1)",
                         
                         div (".", style = "line-height:0.2;"),
                         
@@ -6231,7 +6241,7 @@ www.iwu.de
                           
                           
                           conditionalPanel (
-                            condition = "input.Show_Categories_ThermalBridging",
+                            condition = "input.Show_Categories_ThermalBridging == 1",
                           
                             br (),
                             br (),
@@ -6288,7 +6298,7 @@ www.iwu.de
                               
                               
                               conditionalPanel (
-                                condition = "input.Show_Explanation_ThermalBridging",
+                                condition = "input.Show_Explanation_ThermalBridging == 1",
                                 
                                 fluidRow (
                                   
@@ -6528,7 +6538,7 @@ www.iwu.de
                         
                         
                         conditionalPanel (
-                          condition = "input.Show_Categories_AirTightness",
+                          condition = "input.Show_Categories_AirTightness == 1",
                           
                           br (),
                           br (),
@@ -6571,7 +6581,7 @@ www.iwu.de
                             8,
 
                             conditionalPanel (
-                              condition = "input.Show_Explanation_AirTightness",
+                              condition = "input.Show_Explanation_AirTightness == 1",
                               
                               
                               fluidRow (
@@ -9285,7 +9295,7 @@ tabPanel (
   
   
   
-  ##### > Darstellung der Eingabefelder  -----
+  ##### > Benutzeroberfläche  -----
   
   
   box (
@@ -9308,7 +9318,7 @@ tabPanel (
         
         div (
           
-          strong ("Darstellung Eingabefelder"), 
+          strong ("Benutzeroberfläche"), 
           
           style = "margin-top: -8px; margin-left: 10px;"
           
@@ -9358,15 +9368,22 @@ tabPanel (
       ), # End column
       
       
-      # column (
-      #   12,
-      #   "Leere Spalte",
-      #   
-      #   
-      #   br (),
-      #   br (),
-      #   
-      # ), # End column
+      column (
+        12,
+        
+        strong ("Taktung der automatischen Berechnung in Sekunden"),
+        
+        numericInput (
+          inputId = "NumericInput_InvalidateLater",
+          label = NULL,
+          value = 3,
+          min = 1,
+          max = 60,
+          width = 80
+        ), # End numeric input
+        
+        
+      ), # End column
       
     ) # End fluidRow
     
@@ -10597,7 +10614,7 @@ tabPanel (
                           # style = "text-align:middle; margin-top:-5px;",
                           
                           conditionalPanel (
-                            condition = "!input.Checkbox_AutoScaling_ChartHeatNeed",
+                            condition = "!input.Checkbox_AutoScaling_ChartHeatNeed == 1",
                             
                             column (
                               3,
@@ -10727,7 +10744,7 @@ tabPanel (
                           #style = "text-align:middle; margin-top:-10px;",
                           
                           conditionalPanel (
-                            condition = "!input.Checkbox_AutoScaling_ChartFinalEnergy",
+                            condition = "!input.Checkbox_AutoScaling_ChartFinalEnergy == 1",
                             
                             column (
                               3,
@@ -10823,7 +10840,7 @@ tabPanel (
                           #style = "text-align:middle; margin-top:-10px;",
                           
                           conditionalPanel (
-                            condition = "!input.Checkbox_AutoScaling_ChartExpectationRanges",
+                            condition = "!input.Checkbox_AutoScaling_ChartExpectationRanges == 1",
                             
                             
                             column (
@@ -11422,7 +11439,7 @@ shinydashboard::tabItem (
                     # style = "text-align:middle; margin-top:-5px;",
                     
                     conditionalPanel (
-                      condition = "!input.Checkbox_AutoScaling_ChartCompareLeft",
+                      condition = "!input.Checkbox_AutoScaling_ChartCompareLeft == 1",
                       
                       column (
                         3,
@@ -11644,7 +11661,7 @@ shinydashboard::tabItem (
                     # style = "text-align:middle; margin-top:-5px;",
                     
                     conditionalPanel (
-                      condition = "!input.Checkbox_AutoScaling_ChartCompareRight",
+                      condition = "!input.Checkbox_AutoScaling_ChartCompareRight == 1",
                       
                       column (
                         3,
@@ -12566,7 +12583,7 @@ shinydashboard::tabItem (
                     ), # End Column
                     
                     conditionalPanel (
-                      condition = "input.Checkbox_SelectImportRange",
+                      condition = "input.Checkbox_SelectImportRange == 1",
                     
                       # column (
                       #   1,
@@ -14120,7 +14137,8 @@ server <- function (input, output, session) {
   
   ## List_UI_InputFields_Slider_Percent
   
-  
+
+
   ObserveInputField_UpdateNumericInputField (
     session = session,
     Name_InputField1 = List_UI_InputFields_Slider_Percent [1],
@@ -14137,7 +14155,7 @@ server <- function (input, output, session) {
     Name_InputField2 = "", # is determined automatically by removing the suffix
     input = input, rv = rv
   )
-  
+
   ObserveInputField_UpdateNumericInputField (
     session = session,
     Name_InputField1 = List_UI_InputFields_Slider_Percent [3],
@@ -14145,7 +14163,7 @@ server <- function (input, output, session) {
     Name_InputField2 = "", # is determined automatically by removing the suffix
     input = input, rv = rv
   )
-  
+
   ObserveInputField_UpdateNumericInputField (
     session = session,
     Name_InputField1 = List_UI_InputFields_Slider_Percent [4],
@@ -14153,7 +14171,7 @@ server <- function (input, output, session) {
     Name_InputField2 = "", # is determined automatically by removing the suffix
     input = input, rv = rv
   )
-  
+
   ObserveInputField_UpdateNumericInputField (
     session = session,
     Name_InputField1 = List_UI_InputFields_Slider_Percent [5],
@@ -14161,7 +14179,7 @@ server <- function (input, output, session) {
     Name_InputField2 = "", # is determined automatically by removing the suffix
     input = input, rv = rv
   )
-  
+
   
   
   
@@ -14954,6 +14972,10 @@ server <- function (input, output, session) {
     input = input, 
     rv = rv
   )
+  
+  
+  
+  
   
   
   
@@ -16753,9 +16775,51 @@ server <- function (input, output, session) {
         shinyjs::click("Button_Calculate")
         
     }
-    invalidateLater (3000)
+    
+    invalidateLater (input$NumericInput_InvalidateLater * 1000)
+    
+    #invalidateLater (as.numeric (AuxFunctions::Replace_NA (input$NumericInput_InvalidateLater, 3))  * 1000)
+    #invalidateLater (3000)
+    
   }) # "The button will be pressed automatically every 3 seconds"
 
+  
+  
+  
+  
+  
+
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
   
   
   
@@ -16786,7 +16850,8 @@ server <- function (input, output, session) {
         ResultList <- 
           Calculate_EnergyDemand  (
             myDF_BuildingData_Input  = rv$DF_Calc_Input   [1, ] ,
-            myDF_BuildingData_Output = rv$DF_Calc_Output  [1, ] ,
+            # myDF_BuildingData_Output = rv$DF_Calc_Output  [1, ] , 2026-02-13 changed
+            myDF_BuildingData_Output = DF_Pool_Output () [ID_Pool_Template_Initialise, ] ,
             TabulaTables = TabulaTables (),
             ID_Calculate = 1
           )
@@ -16798,11 +16863,13 @@ server <- function (input, output, session) {
         
         
         
-        rv$DF_Calc_Output [ ,"Date_Change"] <- 
+        rv$DF_Calc_Output [ ,"Date_Change"] <-
           format (
             x = Sys.time (),
             format = "%Y-%m-%d %H:%M"
-          )    
+          )
+        
+        
         
         #  as.character (Sys.time ())    
         # !!! Aufgabe: Format verbessern, außerdem beim Einlesen von Excel schon in Tag/Zeit-Format verwandeln, 
