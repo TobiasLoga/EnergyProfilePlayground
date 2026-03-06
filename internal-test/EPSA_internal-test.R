@@ -2,7 +2,28 @@
 length (which (5 == c (0,1,2,3,4,5))) > 0
 
 
-## Erzeugen der RDA -----
+## Erzeugen und ändern der RDA -----
+
+
+### Building Type Matrix RDA ändern  -----
+
+# Laden durch Doppelklick im Folder-Panel
+
+DF_BuildingTypeMatrix$Name_National_TypologyRegion
+DF_BuildingTypeMatrix$Name_AdditionalParameter_National 
+DF_BuildingTypeMatrix$Date_Change
+
+
+DF_BuildingTypeMatrix$Name_AdditionalParameter_National [14]    <- "Sonder-Typ Fertighaus ABL"
+DF_BuildingTypeMatrix$Name_AdditionalParameter_National [15:16] <- "Sonder-Typ Hochhaus ABL"
+DF_BuildingTypeMatrix$Name_AdditionalParameter_National [17:21] <- "Sonder-Typ industr. Wohnungsbau NBL"
+DF_BuildingTypeMatrix$Name_AdditionalParameter_National [22:23] <- "Sonder-Typ Hochhaus NBL"
+
+DF_BuildingTypeMatrix$Date_Change [14:23] <- "06.03.2026"
+
+save (DF_BuildingTypeMatrix, file = "DF_BuildingTypeMatrix.rda") 
+
+
 
 ### Holen und Speichern der Building Type Matrix  -----
 
@@ -387,6 +408,23 @@ DF_Calc_ChartEnergyData <-
 
 
 
+
+
+
+## Load the chart data and settings
+
+
+# Load the chart settings  
+ChartSettings_HeatNeed          <- TabulaCharts::ChartSettings_HeatNeed
+ChartSettings_FinalEnergy       <- TabulaCharts::ChartSettings_FinalEnergy
+ChartSettings_ExpectationRanges <- TabulaCharts::ChartSettings_ExpectationRanges
+
+# Load the templates for the chart data   
+ChartData_HeatNeed              <- TabulaCharts::ChartData_HeatNeed
+ChartData_FinalEnergy           <- TabulaCharts::ChartData_FinalEnergy
+ChartData_ExpectationRanges     <- TabulaCharts::ChartData_ExpectationRanges
+
+ChartSettings_HeatNeed$FontSize [5] <- 15
 
 
 

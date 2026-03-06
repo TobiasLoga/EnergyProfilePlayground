@@ -107,14 +107,25 @@ library (TabulaCharts)
 #####################################################################################X
 
 
-# Load the chart settings  
-ChartSettings_HeatNeed <- TabulaCharts::ChartSettings_HeatNeed
-ChartSettings_FinalEnergy <- TabulaCharts::ChartSettings_FinalEnergy
+## Load the chart settings  
+ChartSettings_HeatNeed          <- TabulaCharts::ChartSettings_HeatNeed
+ChartSettings_FinalEnergy       <- TabulaCharts::ChartSettings_FinalEnergy
 ChartSettings_ExpectationRanges <- TabulaCharts::ChartSettings_ExpectationRanges
 
-# Load the templates for the chart data   
-ChartData_HeatNeed     <- TabulaCharts::ChartData_HeatNeed
-ChartData_FinalEnergy     <- TabulaCharts::ChartData_FinalEnergy
+
+## Correction of parameters used for comparison charts 
+# Later to be implemented in TabulaCharts
+
+ChartSettings_HeatNeed$Grid_Left [5] <- 0.30
+ChartSettings_HeatNeed$Grid_Bottom [5] <- 0.15
+
+ChartSettings_FinalEnergy$Grid_Left [5] <- 0.30
+ChartSettings_FinalEnergy$Grid_Bottom [5] <- 0.15
+
+
+## Load the templates for the chart data   
+ChartData_HeatNeed              <- TabulaCharts::ChartData_HeatNeed
+ChartData_FinalEnergy           <- TabulaCharts::ChartData_FinalEnergy
 ChartData_ExpectationRanges     <- TabulaCharts::ChartData_ExpectationRanges
 
 
@@ -130,8 +141,6 @@ base::load ("www/DF_BuildingTypeMatrix.rda")
 
 
 
-# ? nötig ?
-#options (viewer = NULL)
 
 
 
@@ -1094,6 +1103,66 @@ Construct_UI_MatrixActionButton <- function (
     onclick = "document.getElementById('Button_Load_Example_Type_113').style.backgroundColor = 'transparent';",
     onclick = "document.getElementById('Button_Load_Example_Type_114').style.backgroundColor = 'transparent';",
     
+    onclick = "document.getElementById('Button_Load_Example_Type_121').style.backgroundColor = 'transparent';",
+    onclick = "document.getElementById('Button_Load_Example_Type_122').style.backgroundColor = 'transparent';",
+    onclick = "document.getElementById('Button_Load_Example_Type_123').style.backgroundColor = 'transparent';",
+    onclick = "document.getElementById('Button_Load_Example_Type_124').style.backgroundColor = 'transparent';",
+    
+    onclick = "document.getElementById('Button_Load_Example_Type_131').style.backgroundColor = 'transparent';",
+    onclick = "document.getElementById('Button_Load_Example_Type_132').style.backgroundColor = 'transparent';",
+    onclick = "document.getElementById('Button_Load_Example_Type_133').style.backgroundColor = 'transparent';",
+    onclick = "document.getElementById('Button_Load_Example_Type_134').style.backgroundColor = 'transparent';",
+    
+    onclick = "document.getElementById('Button_Load_Example_Type_141').style.backgroundColor = 'transparent';",
+    onclick = "document.getElementById('Button_Load_Example_Type_142').style.backgroundColor = 'transparent';",
+    onclick = "document.getElementById('Button_Load_Example_Type_143').style.backgroundColor = 'transparent';",
+    onclick = "document.getElementById('Button_Load_Example_Type_144').style.backgroundColor = 'transparent';",
+    
+    onclick = "document.getElementById('Button_Load_Example_Type_151').style.backgroundColor = 'transparent';",
+    onclick = "document.getElementById('Button_Load_Example_Type_152').style.backgroundColor = 'transparent';",
+    onclick = "document.getElementById('Button_Load_Example_Type_153').style.backgroundColor = 'transparent';",
+    onclick = "document.getElementById('Button_Load_Example_Type_154').style.backgroundColor = 'transparent';",
+    
+    onclick = "document.getElementById('Button_Load_Example_Type_161').style.backgroundColor = 'transparent';",
+    onclick = "document.getElementById('Button_Load_Example_Type_162').style.backgroundColor = 'transparent';",
+    onclick = "document.getElementById('Button_Load_Example_Type_163').style.backgroundColor = 'transparent';",
+    onclick = "document.getElementById('Button_Load_Example_Type_164').style.backgroundColor = 'transparent';",
+    
+    onclick = "document.getElementById('Button_Load_Example_Type_171').style.backgroundColor = 'transparent';",
+    onclick = "document.getElementById('Button_Load_Example_Type_172').style.backgroundColor = 'transparent';",
+    onclick = "document.getElementById('Button_Load_Example_Type_173').style.backgroundColor = 'transparent';",
+    onclick = "document.getElementById('Button_Load_Example_Type_174').style.backgroundColor = 'transparent';",
+    
+    onclick = "document.getElementById('Button_Load_Example_Type_181').style.backgroundColor = 'transparent';",
+    onclick = "document.getElementById('Button_Load_Example_Type_182').style.backgroundColor = 'transparent';",
+    onclick = "document.getElementById('Button_Load_Example_Type_183').style.backgroundColor = 'transparent';",
+    onclick = "document.getElementById('Button_Load_Example_Type_184').style.backgroundColor = 'transparent';",
+  
+    onclick = "document.getElementById('Button_Load_Example_Type_191').style.backgroundColor = 'transparent';",
+    onclick = "document.getElementById('Button_Load_Example_Type_192').style.backgroundColor = 'transparent';",
+    onclick = "document.getElementById('Button_Load_Example_Type_193').style.backgroundColor = 'transparent';",
+    onclick = "document.getElementById('Button_Load_Example_Type_194').style.backgroundColor = 'transparent';",
+    
+    onclick = "document.getElementById('Button_Load_Example_Type_201').style.backgroundColor = 'transparent';",
+    onclick = "document.getElementById('Button_Load_Example_Type_202').style.backgroundColor = 'transparent';",
+    onclick = "document.getElementById('Button_Load_Example_Type_203').style.backgroundColor = 'transparent';",
+    onclick = "document.getElementById('Button_Load_Example_Type_204').style.backgroundColor = 'transparent';",
+    
+    onclick = "document.getElementById('Button_Load_Example_Type_211').style.backgroundColor = 'transparent';",
+    onclick = "document.getElementById('Button_Load_Example_Type_212').style.backgroundColor = 'transparent';",
+    onclick = "document.getElementById('Button_Load_Example_Type_213').style.backgroundColor = 'transparent';",
+    onclick = "document.getElementById('Button_Load_Example_Type_214').style.backgroundColor = 'transparent';",
+    
+    onclick = "document.getElementById('Button_Load_Example_Type_221').style.backgroundColor = 'transparent';",
+    onclick = "document.getElementById('Button_Load_Example_Type_222').style.backgroundColor = 'transparent';",
+    onclick = "document.getElementById('Button_Load_Example_Type_223').style.backgroundColor = 'transparent';",
+    onclick = "document.getElementById('Button_Load_Example_Type_224').style.backgroundColor = 'transparent';",
+    
+    onclick = "document.getElementById('Button_Load_Example_Type_231').style.backgroundColor = 'transparent';",
+    onclick = "document.getElementById('Button_Load_Example_Type_232').style.backgroundColor = 'transparent';",
+    onclick = "document.getElementById('Button_Load_Example_Type_233').style.backgroundColor = 'transparent';",
+    onclick = "document.getElementById('Button_Load_Example_Type_234').style.backgroundColor = 'transparent';",
+    
     
     
     onclick =
@@ -1171,7 +1240,16 @@ Construct_UI_BuildingTypeMatrix <- function (
       column (
         1,
         style = Style_TypologyMatrix_BodyElement_Left,
-        ""
+        div (i_Row_Matrix, style = "color:lightblue;"),
+        div (
+          BuildingTypeInfo (
+            ColumnName_FixedPart = "Name_AdditionalParameter_National",
+            i_Row_BuildingType = i_Row_Matrix,
+            i_Col_BuildingType = 0
+          ),
+          style = "color:grey; font-size:10px"
+          #style = "color:cadetblue; font-size:10px"
+        )
       ), # End column
       
       column (
@@ -2602,45 +2680,39 @@ ui <- shinydashboard::dashboardPage (
         
         
         
-## IWU - Energieprofil - Shiny App - Development Version
-Version: 07.02.2026
+## IWU - Energieprofil-WebTool (Shiny App)
+#### Berechnung des Energiebedarfs für Heizung und Warmwasser auf der Basis von energierelevanten Gebäudemerkmalen (Energieprofil-Indikatoren)
+
+Version: 06.03.2026
 
 ### Einführung 
 
-Das im Rahmen von Forschungsprojekten am Institut Wohnen und Umwelt (IWU) entwickelte Online-Tool 'Energieprofil' ermöglicht eine Abschätzung des typischen Energieverbrauchs für Heizung und Warmwasser von Wohngebäuden. Da es sich um eine physikalische Modellierung des Energieverbrauchs handelt, wird das Berechnungsergebnis als 'Energiebedarf' bezeichnet. Der Energiebedarf eines Gebäudes hängt von der Größe, der Gebäudeform und vor allem vom Baujahr des Gebäudes ab - der Grund für letzteres sind die im Laufe der Jahrzehnte stetig erhöhten energetischen Anforderungen an Neubauten. Auch bei Altbauten kann der Energiebedarf durch Wärmeschutzmaßnahmen, also die Wärmedämmung von Dach, Außenwand und Fußböden sowie durch Einbau energetisch hochwertiger Fenster erheblich gesenkt werden - wobei durchaus das Qualitätsniveau von Neubauten erreicht werden kann. 
+Das im Rahmen von Forschungsprojekten am Institut Wohnen und Umwelt (IWU) entwickelte Energieprofil-WebTool ermöglicht für Bestandswohngebäude eine Abschätzung des typischen Energieverbrauchs für Heizung und Warmwasser. Da es sich um eine physikalische Modellierung des Energieverbrauchs handelt, wird das Berechnungsergebnis als 'Energiebedarf' bezeichnet. Der Energiebedarf eines Gebäudes hängt von der Größe, der Gebäudeform und vor allem vom Baujahr des Gebäudes ab - der Grund für letzteres sind die im Laufe der Jahrzehnte stetig erhöhten energetischen Anforderungen an Neubauten. Auch bei Altbauten kann der Energiebedarf durch Wärmeschutzmaßnahmen, also die Wärmedämmung von Dach, Außenwand und Fußböden sowie durch Einbau energetisch hochwertiger Fenster erheblich gesenkt werden - wobei durchaus das Qualitätsniveau von Neubauten erreicht werden kann. 
 
-Das Energieprofil-Online-Tool erlaubt es, die Einflüsse dieser Parameter auf den Energiebedarf abzuschätzen. Hierfür können verschiedene Beispielgebäude aus der deutschen Wohngebäudetypologie gewählt werden, die nach Größe, Gebäudeart und Baualter differenziert sind. Dabei sind die Beipielgebäde zunächst als nicht modernisiert angenommenen. Die Beispielgebäude können schrittweise modifiziert werden, z.B. können die Wohnfläche, die Anzahl der Geschosse, die Wärmedämmung, die energetische Qualität der Fenster auf den vorhandenen oder gewünschten Zustand eines realen Geäbudes angepasst werden und der Energiebedarf entsprechend ermittelt werden. Weiterhin kann die Wärmeversorgung modifiziert werden, in dem z.B. zusätzlich eine thermische Solaranlage oder statt des Kessels eine Wärmepumpe eingebaut wird. 
+Das Energieprofil-WebTool erlaubt es, die Einflüsse dieser Parameter auf den Energiebedarf abzuschätzen. Hierfür können verschiedene Beispielgebäude aus der deutschen Wohngebäudetypologie gewählt werden, die nach Größe, Gebäudeart und Baualter differenziert sind. Dabei sind die Beipielgebäde zunächst als nicht modernisiert angenommenen. Die Beispielgebäude können schrittweise modifiziert werden, z.B. können die Wohnfläche, die Anzahl der Geschosse, die Wärmedämmung, die energetische Qualität der Fenster auf den vorhandenen oder gewünschten Zustand eines realen Geäbudes angepasst werden und der Energiebedarf entsprechend ermittelt werden. Weiterhin kann die Wärmeversorgung modifiziert werden, in dem z.B. zusätzlich eine thermische Solaranlage oder statt des Kessels eine Wärmepumpe eingebaut wird. 
 
-Auf der Grundlage der energierelevanten Gebäudeeigenschaften (Energieprofil-Indikatoren) wird zunächst eine Energiieblanzierung des Baukörpers vorgenommen: Das Ergebnis ist der Heizwärmebedarf. Addiert man hierzu die Wärmemenge, die in Form von Warmwasser gezapft wird, erhält man den Gesamtwärmebedarf, den das Heizsystem decken muss. Nach Auswahl eines Heizsystems, das aus der Wärmeverteilung, den gegebenfalls erforderlichen Wärmespeichern und einem oder mehrerer Wärmeerzeuger besteht, wird der Bedarf an Endenergie berechnet, der differenziert nach Energieträger (Gas, Heizöl, Fernwärme, Strom, Biomasse) vom Tool ausgegeben wird. Die für die Wärmeversorgung eingesetzten Energieträger können aus ökonomischer und ökologischer Sicht unterschiedlich bewertet werden. Die Bewertung ist jedoch (noch) nicht Gegenstand des Online-Tools. 
+Auf der Grundlage der energierelevanten Gebäudeeigenschaften (Energieprofil-Indikatoren) wird zunächst eine Bilanzierung der im Winter durch die Temperaturunterschiede zwischen innen und außen entstehenden Wärmeverluste durch die Gebäudehülle vorgenommen: Zieht man davon die im Gebäude durch Sonneneinstrahlung und durch Nutzung (z.B. Haushaltstrom) anfallende Wärme ab, erhält man den 'Heizwärmebedarf', also die Wärmemenge, die man dem Gebäude im Winter zuführen muss, um die gewünschte Innentemperatur zu halten. Addiert man hierzu die Wärmemenge, die in Form von Warmwasser gezapft wird, erhält man den Gesamtwärmebedarf, den das Heizsystem decken muss. Nach Auswahl eines Heizsystems, das aus der Wärmeverteilung, den gegebenfalls erforderlichen Wärmespeichern und einem oder mehrerer Wärmeerzeuger besteht, wird der Bedarf an Endenergie berechnet, der differenziert nach Energieträger (Gas, Heizöl, Fernwärme, Strom, Biomasse) vom Tool ausgegeben wird. Die für die Wärmeversorgung eingesetzten Energieträger können aus ökonomischer und ökologischer Sicht unterschiedlich bewertet werden. Die Bewertung ist jedoch (noch) nicht Gegenstand des Online-Tools. 
 
 Die Berechnung erfolgt uner Annahme von 'standardisierten Bewohnern' :-) das heißt unabhängig vom Energiestandard wird eine Raumtemperatur von 20°C während des Tages in beheizten Räumen und ein gewisser Luftaustausch angenommen. Da diese Nutzungsbedingungen, aber auch andere Eingangsgrößen der Bilanzierung (z.B. Annahmen für die Baustoffe) in der Praxis sehr stark variieren und kaum empirische Daten vorliegen, ist davon auszugehen, dass der berechnete Energiebedarf den durchschnittlichen Energieverbrauch von Wohngebäuden nicht genau abbildet. Aus diesem Grund wird im Verfahren eine Kalibirierung auf das typische Verbrauchsniveau der Gebäude vorgenommen: Alle berechneten Energieströme werden mit einem empirisch ermittelten Faktor angepasst, der das Verhältnis von Verbrauch zu Bedarf für unterschiedliche Energiestandards wiedergibt. Auf Grund der genannten Ungewissheiten bei den Eingangsdaten ist es nicht möglich, den Energieverbrauch eines einzelnen Gebäudes exakt vorherzuberechnen. In den Diagrammen 'Erwartungsbereiche' wird versucht, mit Hilfe einfacher Abschätzungen die Unsicherheit der Berechnung darzustellen. Es kann davon ausgegangen werden, dass der gemessene Verbrauchswert eines realen Gebäudes typischerweise innherhalb dieser Spanne liegt.  
 
 
-### Vorgehen bei der Energiebilanzierung mit der Energieprofil-Shiny-App
+### Vorgehen bei der Energiebilanzierung mit dem Energieprofil-WebTool
 
-
-#### (1) Auswahl Beispielgebäude
-
+#### (1) Auswahl Beispielgebäude 
 Dashboard, Menüpunkt 'Typologie': Durch Anklicken eines Bildes wird der Datensatz eines Beispielgebäudes in die Berechnung geladen und der berechnete Energiebedarf in den drei Diagrammen dargesellt (Heizwärmebedarf, Endenergiebedarf, Erwartungsbereiche).
 
-
 #### (2) Im Stack speichern
-
-Um den Datensatz eines Beispielgebäudes zu modifizieren, muss er im 'Stack'  (Berechnungsstapel) gespeichert werden. Bei Bedarf können auch alle Datensätze der Typologie-Beispielgebäude gespeichert werden (Schalter 'Alle im Stack speichern'). Sind mehrere Gebäudedatensätze im Stack vorhanden, so werden die Energiebedarfswerte im Hauptmenüpunkt 'Vergleich' gegenübergestellt. 
-
+Um den Datensatz eines Beispielgebäudes zu modifizieren, muss er im 'Stack'  (Berechnungsstapel) gespeichert werden: Hierfür dient die Schaltfläche 'Speichern'. 
+Bei Bedarf können alle vordefinierten Datensätze der Typologie-Beispielgebäude in den Stack geladen und gespeichert werden (Schalter 'Alle im Stack speichern' über der Haustypenmatrix). 
+Sind mehrere Gebäudedatensätze im Stack vorhanden, so werden die Energiebedarfswerte im Hauptmenüpunkt 'Vergleich' gegenübergestellt. 
 
 #### (3) Modifikation der Eingabegrößen 
-
-In der horizontalen Kopfleiste des Dashboards kann ganz links aus den im Stack vorhandenen Datensätzen einer ausgewählt und in die Berechnung geladen werden. Dann können in den Tabs 'Gebäude' und 'Wärmeversorgung' die Merkmale des Gebäudes und der Anlagentechnik beliebig modifiziert werden. Die Ergebnisse der Berechnung werden dann jeweils in den Diagrammen rechts dargestellt. Sollen die Änderungen herhalten bleiben, muss man auf 'Speichern' klicken. Dann werden Eingangsdaten und Ergebnisse in den im Stack zugeordneten Datensatz gespeichert (vorhandene Daten werden überschrieben). Durch Editieren der ID des gerade in die Berechnung geladenen Datensatzes und anschließendes Klicken auf 'Speichern' kann ein neuer Datensatz angelegt werden. 
-
+In der horizontalen Kopfleiste des Dashboards kann ganz links aus den im Stack vorhandenen Datensätzen einer ausgewählt und in die Berechnung geladen werden. Dann können in den Tabs 'Gebäude' und 'Wärmeversorgung' die Merkmale des Gebäudes und der Anlagentechnik beliebig modifiziert werden. Die Ergebnisse der Berechnung werden dann jeweils in den Diagrammen rechts dargestellt. Sollen die Änderungen herhalten bleiben, muss man auf 'Speichern' klicken. Dann werden Eingangsdaten und Ergebnisse in den im Stack zugeordneten Datensatz gespeichert (vorhandene Daten werden überschrieben). Durch Editieren der ID des gerade in die Berechnung geladenen Datensatzes (Feld 'ID des geladenen Datensatzes / editierbar') und anschließendes Klicken auf 'Speichern' können die aktuellen Daten als neuer Datensatz im Stack gespeichert werden. 
 
 #### (4) Export
-
 Im Hauptmenü 'Daten' können die Eingangs- und Ausgangsdaten des Stacks und der aktuellen Berechnung gesichtet werden. Weiterhin können alle Tabellen auch als CSV oder Excel exportiert werden.  
 
-
 #### (5) Re-Import
-
 Es ist möglich, eine Excel-Tabelle mit Eingabedaten in den Stack zu importieren (Menü 'Daten-Import' im Hauptmenü 'Daten', Hinweise zur erforderlichen Struktur der Tabelle stehen unten im Abschnitt zur Funktionalität.) Um (z.B. für Parameterstudien) Variablen systematisch zu variieren, bietet es sich an, einen Datensatz im Stack als Basisvariante anzulegen und mit den Eingabefeldern im Tab 'Gebäude' und 'Wärmeversorgung' auf die gewünschten Eigenschaften anzupassen. Nach dem Export kann dieser Datensatz in Excel vervielfältigt werden, um dann systematisch einzelne Eingabegrößen zu variieren. Nach dem Re-Import wird für alle Datensätze die Energiebilanz berechnet. 
 
 
@@ -2658,42 +2730,58 @@ Die Shiny-App besteht aus folgenden Bausteinen:
 - 'Energieprofil-Indikatoren' für die Erfassung der wesentlichen energetischen Merkmale von Gebäudehülle und Wärmeversorgung (2 Eingabe-Formulare)
 - Schätzverfahren für die Gebäudehüllfläche auf der Basis der Wohnfläche und der geometrischen Energieprofil-Indikatoren
 - Schätzverfahren für Wärmedurchgangskoeffizienten (U-Werte) auf Basis von Informationen zu Baualter und nachträglicher Dämmung der Komponenten der thermischen Hülle
-- Konfigurationsalgorithmus für die Komponenten der Wärmeversorgung auf Basis der wesentlichen Merkmale (Vorhandensein und ggf. Art und Lokalisation von Anlagenkomponenten)
+- Konfigurationsalgorithmus für die Komponenten der Wärmeversorgung auf Basis der wesentlichen Merkmale (Vorhandensein und ggf. Art und Lokalisierung von Anlagenkomponenten)
 - Pauschalwerte für die Effizienz der Komponenten der Wärmeversorgung (Wärmeverteilung, -speicherung und -erzeugung)
 - Energiebilanz-Berechnung (TABULA-Verfahren) zur Ermittlung des Heizwärmebedarfs sowie des nach Energieträger differenzierten Endenergiebedarfs für Heizung und Warmwasser (Beschreibung der Methodik: https://episcope.eu/fileadmin/tabula/public/docs/report/TABULA_CommonCalculationMethod.pdf)  
 
 Die in R programmierten Berechnungsformeln finden sich im R-Paket MobasyModel https://github.com/TobiasLoga/MobasyModel .
 Die Algorithmen sind weitgehend identisch mit denen des Excel-Tools 'EnergyProfile.xlsm' https://www.iwu.de/fileadmin/tools/energyprofile/EnergyProfile-XL-Package.zip .
 
-Wir stellen das Werkzeug gerne anderen Experten zur Nutzung Verfügung, können jedoch keinerlei Support übernehmen. Wir übernehmen keine Gewähr für die Vollständigkeit, Richtigkeit und Genauigkeit der Berechnungen und der Daten. Fehler können gemeldet werden an: Tobias Loga t.loga@iwu.de
+Wir stellen das Werkzeug gerne anderen Experten zur Nutzung Verfügung, können jedoch keinerlei Support übernehmen. Wir übernehmen keine Gewähr für die Lauffähigkeit und Funktionalität des Tools oder für die Vollständigkeit, Richtigkeit und Genauigkeit der Berechnungen und der Daten. Fehler können gemeldet werden an: Tobias Loga t.loga@iwu.de
 
 
 ### Hinweise zur Funktionalität und zur Datenstruktur der vorliegenden Version  
 
 - Die Energieprofil-Indikatoren können je Einzelgebäude erfasst und eingegeben werden. Sind keine Informationen vorhanden, werden für die Berechnung Mittelwerte aus dem Wohngebäudebestand als Input angesetzt. Damit vergrößert sich jeweils die Unsicherheit des Berechnungsergebenisses. 
 
-- Die Ergebnisse können im Menüpunkt 'Daten' gesichtet und dort auch als Tabelle heruntergeladen werden. 
+- Die Ergebnisse können im Menüpunkt 'Daten' gesichtet und dort auch als Tabelle heruntergeladen werden.
 
-- Weiterhin kann im Menüpunkt 'Daten' / 'Daten-Import' eine Tabelle mit Eingabedaten in den Stack geladen und berechnet werden. Wird eine heruntergeladene Eingabedatentabelle (Download unter 'Daten' / 'Stack_Input') als Ausgangbasis für den Upload verwendet (z.B. in dem ein Datensatz mehrfach kopiert und für eine Parameterstudie bei bestimmten Variablen systematisch variiert wird), so muss vor dem Upload die erste (über alle Spalten verbundene) Zeile gelöscht werden (Die Download-Funktion schreibt dort das Wort 'Energieprofil' hinein - es ist derzeit nicht klar, wie dies abgeschaltet werden kann.) 
+- Weiterhin kann im Menüpunkt 'Daten' / 'Daten-Import' eine Tabelle mit Eingabedaten in den Stack geladen und berechnet werden. Wird eine heruntergeladene Eingabedatentabelle (Download unter 'Daten' / 'Stack_Input') als Ausgangbasis für den Upload verwendet (z.B. in dem ein Datensatz mehrfach kopiert und für eine Parameterstudie bei bestimmten Variablen systematisch variiert wird), so muss vor dem Upload die erste (über alle Spalten verbundene) Zeile gelöscht werden (Die Shiny-App-Download-Funktion schreibt dort das Wort 'Energieprofil' hinein - es ist derzeit nicht klar, wie dies abgeschaltet werden kann.) Weiterhin muss beachtet werden, dass auf Grund von begrenzten Systemressourcen der Berechnungsstack nicht beliebig groß sein kann. Nach derzeitigem Erfahrungsstand kann empfohlen werden, nicht mehr als 1000 Gebäude gleichzeitig zu berechnen. 
 
-- Weitere im oben genannten Excel-Tool gegebene Möglichkeiten der Eingabe sind derzeit in der Shiny-App (noch) nicht implementiert. Für die gebäudeweise Eingabe und Analyse von Verbrauchsdaten und für den Verbrauch-Bedarf-Vergleich muss also weiterhin das Excel-Tool verwendet werden.  
-
-- Allerdings bietet die Energieprofil-Shiny-App die Möglichkeit, den Verbrauch-Bedarf-Vergleich für importierte Datensätze (vorbereitet in Excel) als Stack-Berechnung durchzuführen. Hierfür dient die Schaltfläche 'Gesamten Stack inkl. V/B-Vergleich berechnen'. Man beachte hier allerdings die lange Rechenzeit (ca. 20 Sekunden je im Stack enthaltenen Datensatz).  
+- Weitere im oben genannten Excel-Tool gegebene Möglichkeiten der Eingabe sind derzeit in der Shiny-App (noch) nicht implementiert. Für die gebäudeweise Eingabe und Analyse von Verbrauchsdaten und für den Verbrauch-Bedarf-Vergleich muss also weiterhin das Excel-Tool verwendet werden. Allerdings bietet das Energieprofil-WebTool die Möglichkeit, den Verbrauch-Bedarf-Vergleich für importierte Datensätze (vorbereitet in Excel) als Stack-Berechnung durchzuführen. Hierfür dient die Schaltfläche 'Gesamten Stack inkl. V/B-Vergleich berechnen'. Man beachte hier allerdings die lange Rechenzeit (ca. 20 Sekunden je im Stack enthaltenen Datensatz).  
 
 		
 
 -----
 
-Logbuch der Änderungen						
-						
+
+#### Entwicklungs-Logbuch
+
+
+##### Offene Punkte / bekannte Probleme
+- 2026-03-06 Beispielgeäude-Datensätze für die neueste Baualtersklasse der Typologie fehlen noch. 
+
+
+
+##### Änderungen						
+- 2026-03-06 Erste öffentlich Version (Version 0.1.0) 						
+				
   		    
 						
 -----
 
 
-Institut Wohnen und Umwelt GmbH
-
 Tobias Loga 									
+
+-----
+
+IWU - Institut Wohnen und Umwelt GmbH
+
+Rheinstraße 65
+
+64295 Darmstadt
+
+GERMANY
 
 www.iwu.de 
         
@@ -3021,7 +3109,7 @@ www.iwu.de
                         # Header 
                         column ( 
                           12,
-                          strong ("Ausgangsdatensätze - deutsche Wohngebäudetypologie - Beispielgebäude"),
+                          strong ("Ausgangsdatensätze - deutsche Wohngebäudetypologie - Haustypen-Matrix - Beispielgebäude"),
                           style = "background-color: white; color: black; text-align: center;"
                           #style = "background-color: grey; color: white;",
                           
@@ -3134,7 +3222,7 @@ www.iwu.de
                             column (
                               1,
                               style = Style_TypologyMatrix_HeaderElement_Left,
-                              ""
+                              div ("Zeile", style = "color:lightblue")
                             ), # End column
                             column (
                               1,
@@ -3232,7 +3320,17 @@ www.iwu.de
                             column (
                               1,
                               style = Style_TypologyMatrix_BodyElement_Left,
-                              ""
+                              div ("1", style = "color:lightblue"),
+                              br(),
+                              div (
+                                BuildingTypeInfo (
+                                  ColumnName_FixedPart = "Name_AdditionalParameter_National",
+                                  i_Row_BuildingType = 1,
+                                  i_Col_BuildingType = 0
+                                ),
+                                style = "color:grey; font-size:10px"
+                                #style = "color:cadetblue; font-size:10px"
+                              )
                             ), # End column
                             
                             column (
@@ -3600,26 +3698,54 @@ www.iwu.de
                             i_Row_Matrix = 11
                           ),
                           
-                          # Construct_UI_BuildingTypeMatrix (
-                          #   i_Row_Matrix = 12
-                          # ),
-                           
-                          # Construct_UI_BuildingTypeMatrix (
-                          #   i_Row_Matrix = 13
-                          # ),
-                          #
-                          # Construct_UI_BuildingTypeMatrix (
-                          #   i_Row_Matrix = 14
-                          # ),
-                          # 
-                          # Construct_UI_BuildingTypeMatrix (
-                          #   i_Row_Matrix = 15
-                          # ),
-                          # 
-                          # Construct_UI_BuildingTypeMatrix (
-                          #   i_Row_Matrix = 16
-                          # ),
-                          # 
+                          Construct_UI_BuildingTypeMatrix (
+                            i_Row_Matrix = 12
+                          ),
+
+                          Construct_UI_BuildingTypeMatrix (
+                            i_Row_Matrix = 13
+                          ),
+
+                          Construct_UI_BuildingTypeMatrix (
+                            i_Row_Matrix = 14
+                          ),
+
+                          Construct_UI_BuildingTypeMatrix (
+                            i_Row_Matrix = 15
+                          ),
+
+                          Construct_UI_BuildingTypeMatrix (
+                            i_Row_Matrix = 16
+                          ),
+
+                          
+                          Construct_UI_BuildingTypeMatrix (
+                            i_Row_Matrix = 17
+                          ),
+                          
+                          Construct_UI_BuildingTypeMatrix (
+                            i_Row_Matrix = 18
+                          ),
+                          
+                          Construct_UI_BuildingTypeMatrix (
+                            i_Row_Matrix = 19
+                          ),
+                          
+                          Construct_UI_BuildingTypeMatrix (
+                            i_Row_Matrix = 20
+                          ),
+                          
+                          Construct_UI_BuildingTypeMatrix (
+                            i_Row_Matrix = 21
+                          ),
+                          
+                          Construct_UI_BuildingTypeMatrix (
+                            i_Row_Matrix = 22
+                          ),
+                          
+                          Construct_UI_BuildingTypeMatrix (
+                            i_Row_Matrix = 23
+                          ),
                           
                           
                           
@@ -16524,228 +16650,536 @@ server <- function (input, output, session) {
   )
   
   
-  # #####################################################################################X
-  # ## Button_Load_Example_Type Row 12 / Col 1:4 -----
-  # 
-  # ObserveMatrixButton_LoadDatasetFromPoolToCalculation (
-  #   i_Row = 12,
-  #   i_Col = 1,
-  #   input = input,
-  #   rv = rv,
-  #   session = session,
-  #   DF_PoolData_Input = DF_Pool_Input (),
-  #   DF_PoolData_Output = DF_Pool_Output ()
-  # )
-  # 
-  # ObserveMatrixButton_LoadDatasetFromPoolToCalculation (
-  #   i_Row = 12,
-  #   i_Col = 2,
-  #   input = input,
-  #   rv = rv,
-  #   session = session,
-  #   DF_PoolData_Input = DF_Pool_Input (),
-  #   DF_PoolData_Output = DF_Pool_Output ()
-  # )
-  # 
-  # ObserveMatrixButton_LoadDatasetFromPoolToCalculation (
-  #   i_Row = 12,
-  #   i_Col = 3,
-  #   input = input,
-  #   rv = rv,
-  #   session = session,
-  #   DF_PoolData_Input = DF_Pool_Input (),
-  #   DF_PoolData_Output = DF_Pool_Output ()
-  # )
-  # 
-  # ObserveMatrixButton_LoadDatasetFromPoolToCalculation (
-  #   i_Row = 12,
-  #   i_Col = 4,
-  #   input = input,
-  #   rv = rv,
-  #   session = session,
-  #   DF_PoolData_Input = DF_Pool_Input (),
-  #   DF_PoolData_Output = DF_Pool_Output ()
-  # )
+  #####################################################################################X
+  ## Button_Load_Example_Type Row 12 / Col 1:4 -----
+
+  ObserveMatrixButton_LoadDatasetFromPoolToCalculation (
+    i_Row = 12,
+    i_Col = 1,
+    input = input,
+    rv = rv,
+    session = session,
+    DF_PoolData_Input = DF_Pool_Input (),
+    DF_PoolData_Output = DF_Pool_Output ()
+  )
+
+  ObserveMatrixButton_LoadDatasetFromPoolToCalculation (
+    i_Row = 12,
+    i_Col = 2,
+    input = input,
+    rv = rv,
+    session = session,
+    DF_PoolData_Input = DF_Pool_Input (),
+    DF_PoolData_Output = DF_Pool_Output ()
+  )
+
+  ObserveMatrixButton_LoadDatasetFromPoolToCalculation (
+    i_Row = 12,
+    i_Col = 3,
+    input = input,
+    rv = rv,
+    session = session,
+    DF_PoolData_Input = DF_Pool_Input (),
+    DF_PoolData_Output = DF_Pool_Output ()
+  )
+
+  ObserveMatrixButton_LoadDatasetFromPoolToCalculation (
+    i_Row = 12,
+    i_Col = 4,
+    input = input,
+    rv = rv,
+    session = session,
+    DF_PoolData_Input = DF_Pool_Input (),
+    DF_PoolData_Output = DF_Pool_Output ()
+  )
+
+
+
+
+  #####################################################################################X
+  ## Button_Load_Example_Type Row 13 / Col 1:4 -----
+
+  ObserveMatrixButton_LoadDatasetFromPoolToCalculation (
+    i_Row = 13,
+    i_Col = 1,
+    input = input,
+    rv = rv,
+    session = session,
+    DF_PoolData_Input = DF_Pool_Input (),
+    DF_PoolData_Output = DF_Pool_Output ()
+  )
+
+  ObserveMatrixButton_LoadDatasetFromPoolToCalculation (
+    i_Row = 13,
+    i_Col = 2,
+    input = input,
+    rv = rv,
+    session = session,
+    DF_PoolData_Input = DF_Pool_Input (),
+    DF_PoolData_Output = DF_Pool_Output ()
+  )
+
+  ObserveMatrixButton_LoadDatasetFromPoolToCalculation (
+    i_Row = 13,
+    i_Col = 3,
+    input = input,
+    rv = rv,
+    session = session,
+    DF_PoolData_Input = DF_Pool_Input (),
+    DF_PoolData_Output = DF_Pool_Output ()
+  )
+
+  ObserveMatrixButton_LoadDatasetFromPoolToCalculation (
+    i_Row = 13,
+    i_Col = 4,
+    input = input,
+    rv = rv,
+    session = session,
+    DF_PoolData_Input = DF_Pool_Input (),
+    DF_PoolData_Output = DF_Pool_Output ()
+  )
+
+
+  #####################################################################################X
+  ## Button_Load_Example_Type Row 14 / Col 1:4 -----
+
+  ObserveMatrixButton_LoadDatasetFromPoolToCalculation (
+    i_Row = 14,
+    i_Col = 1,
+    input = input,
+    rv = rv,
+    session = session,
+    DF_PoolData_Input = DF_Pool_Input (),
+    DF_PoolData_Output = DF_Pool_Output ()
+  )
+
+  ObserveMatrixButton_LoadDatasetFromPoolToCalculation (
+    i_Row = 14,
+    i_Col = 2,
+    input = input,
+    rv = rv,
+    session = session,
+    DF_PoolData_Input = DF_Pool_Input (),
+    DF_PoolData_Output = DF_Pool_Output ()
+  )
+
+  ObserveMatrixButton_LoadDatasetFromPoolToCalculation (
+    i_Row = 14,
+    i_Col = 3,
+    input = input,
+    rv = rv,
+    session = session,
+    DF_PoolData_Input = DF_Pool_Input (),
+    DF_PoolData_Output = DF_Pool_Output ()
+  )
+
+  ObserveMatrixButton_LoadDatasetFromPoolToCalculation (
+    i_Row = 14,
+    i_Col = 4,
+    input = input,
+    rv = rv,
+    session = session,
+    DF_PoolData_Input = DF_Pool_Input (),
+    DF_PoolData_Output = DF_Pool_Output ()
+  )
+
+
+  #####################################################################################X
+  ## Button_Load_Example_Type Row 15 / Col 1:4 -----
+
+  ObserveMatrixButton_LoadDatasetFromPoolToCalculation (
+    i_Row = 15,
+    i_Col = 1,
+    input = input,
+    rv = rv,
+    session = session,
+    DF_PoolData_Input = DF_Pool_Input (),
+    DF_PoolData_Output = DF_Pool_Output ()
+  )
+
+  ObserveMatrixButton_LoadDatasetFromPoolToCalculation (
+    i_Row = 15,
+    i_Col = 2,
+    input = input,
+    rv = rv,
+    session = session,
+    DF_PoolData_Input = DF_Pool_Input (),
+    DF_PoolData_Output = DF_Pool_Output ()
+  )
+
+  ObserveMatrixButton_LoadDatasetFromPoolToCalculation (
+    i_Row = 15,
+    i_Col = 3,
+    input = input,
+    rv = rv,
+    session = session,
+    DF_PoolData_Input = DF_Pool_Input (),
+    DF_PoolData_Output = DF_Pool_Output ()
+  )
+
+  ObserveMatrixButton_LoadDatasetFromPoolToCalculation (
+    i_Row = 15,
+    i_Col = 4,
+    input = input,
+    rv = rv,
+    session = session,
+    DF_PoolData_Input = DF_Pool_Input (),
+    DF_PoolData_Output = DF_Pool_Output ()
+  )
+
+
+  #####################################################################################X
+  ## Button_Load_Example_Type Row 16 / Col 1:4 -----
+
+  ObserveMatrixButton_LoadDatasetFromPoolToCalculation (
+    i_Row = 16,
+    i_Col = 1,
+    input = input,
+    rv = rv,
+    session = session,
+    DF_PoolData_Input = DF_Pool_Input (),
+    DF_PoolData_Output = DF_Pool_Output ()
+  )
+
+  ObserveMatrixButton_LoadDatasetFromPoolToCalculation (
+    i_Row = 16,
+    i_Col = 2,
+    input = input,
+    rv = rv,
+    session = session,
+    DF_PoolData_Input = DF_Pool_Input (),
+    DF_PoolData_Output = DF_Pool_Output ()
+  )
+
+  ObserveMatrixButton_LoadDatasetFromPoolToCalculation (
+    i_Row = 16,
+    i_Col = 3,
+    input = input,
+    rv = rv,
+    session = session,
+    DF_PoolData_Input = DF_Pool_Input (),
+    DF_PoolData_Output = DF_Pool_Output ()
+  )
+
+  ObserveMatrixButton_LoadDatasetFromPoolToCalculation (
+    i_Row = 16,
+    i_Col = 4,
+    input = input,
+    rv = rv,
+    session = session,
+    DF_PoolData_Input = DF_Pool_Input (),
+    DF_PoolData_Output = DF_Pool_Output ()
+  )
+
+
+  #####################################################################################X
+  ## Button_Load_Example_Type Row 17 / Col 1:4 -----
+  
+  ObserveMatrixButton_LoadDatasetFromPoolToCalculation (
+    i_Row = 17,
+    i_Col = 1,
+    input = input,
+    rv = rv,
+    session = session,
+    DF_PoolData_Input = DF_Pool_Input (),
+    DF_PoolData_Output = DF_Pool_Output ()
+  )
+  
+  ObserveMatrixButton_LoadDatasetFromPoolToCalculation (
+    i_Row = 17,
+    i_Col = 2,
+    input = input,
+    rv = rv,
+    session = session,
+    DF_PoolData_Input = DF_Pool_Input (),
+    DF_PoolData_Output = DF_Pool_Output ()
+  )
+  
+  ObserveMatrixButton_LoadDatasetFromPoolToCalculation (
+    i_Row = 17,
+    i_Col = 3,
+    input = input,
+    rv = rv,
+    session = session,
+    DF_PoolData_Input = DF_Pool_Input (),
+    DF_PoolData_Output = DF_Pool_Output ()
+  )
+  
+  ObserveMatrixButton_LoadDatasetFromPoolToCalculation (
+    i_Row = 17,
+    i_Col = 4,
+    input = input,
+    rv = rv,
+    session = session,
+    DF_PoolData_Input = DF_Pool_Input (),
+    DF_PoolData_Output = DF_Pool_Output ()
+  )
   
   
+  #####################################################################################X
+  ## Button_Load_Example_Type Row 18 / Col 1:4 -----
   
-  # 
-  # #####################################################################################X
-  # ## Button_Load_Example_Type Row 13 / Col 1:4 -----
-  # 
-  # ObserveMatrixButton_LoadDatasetFromPoolToCalculation (
-  #   i_Row = 13,
-  #   i_Col = 1,
-  #   input = input,
-  #   rv = rv,
-  #   session = session,
-  #   DF_PoolData_Input = DF_Pool_Input (),
-  #   DF_PoolData_Output = DF_Pool_Output ()
-  # )
-  # 
-  # ObserveMatrixButton_LoadDatasetFromPoolToCalculation (
-  #   i_Row = 13,
-  #   i_Col = 2,
-  #   input = input,
-  #   rv = rv,
-  #   session = session,
-  #   DF_PoolData_Input = DF_Pool_Input (),
-  #   DF_PoolData_Output = DF_Pool_Output ()
-  # )
-  # 
-  # ObserveMatrixButton_LoadDatasetFromPoolToCalculation (
-  #   i_Row = 13,
-  #   i_Col = 3,
-  #   input = input,
-  #   rv = rv,
-  #   session = session,
-  #   DF_PoolData_Input = DF_Pool_Input (),
-  #   DF_PoolData_Output = DF_Pool_Output ()
-  # )
-  # 
-  # ObserveMatrixButton_LoadDatasetFromPoolToCalculation (
-  #   i_Row = 13,
-  #   i_Col = 4,
-  #   input = input,
-  #   rv = rv,
-  #   session = session,
-  #   DF_PoolData_Input = DF_Pool_Input (),
-  #   DF_PoolData_Output = DF_Pool_Output ()
-  # )
-  # 
-  # 
-  # #####################################################################################X
-  # ## Button_Load_Example_Type Row 14 / Col 1:4 -----
-  # 
-  # ObserveMatrixButton_LoadDatasetFromPoolToCalculation (
-  #   i_Row = 14,
-  #   i_Col = 1,
-  #   input = input,
-  #   rv = rv,
-  #   session = session,
-  #   DF_PoolData_Input = DF_Pool_Input (),
-  #   DF_PoolData_Output = DF_Pool_Output ()
-  # )
-  # 
-  # ObserveMatrixButton_LoadDatasetFromPoolToCalculation (
-  #   i_Row = 14,
-  #   i_Col = 2,
-  #   input = input,
-  #   rv = rv,
-  #   session = session,
-  #   DF_PoolData_Input = DF_Pool_Input (),
-  #   DF_PoolData_Output = DF_Pool_Output ()
-  # )
-  # 
-  # ObserveMatrixButton_LoadDatasetFromPoolToCalculation (
-  #   i_Row = 14,
-  #   i_Col = 3,
-  #   input = input,
-  #   rv = rv,
-  #   session = session,
-  #   DF_PoolData_Input = DF_Pool_Input (),
-  #   DF_PoolData_Output = DF_Pool_Output ()
-  # )
-  # 
-  # ObserveMatrixButton_LoadDatasetFromPoolToCalculation (
-  #   i_Row = 14,
-  #   i_Col = 4,
-  #   input = input,
-  #   rv = rv,
-  #   session = session,
-  #   DF_PoolData_Input = DF_Pool_Input (),
-  #   DF_PoolData_Output = DF_Pool_Output ()
-  # )
-  # 
-  # 
-  # #####################################################################################X
-  # ## Button_Load_Example_Type Row 15 / Col 1:4 -----
-  # 
-  # ObserveMatrixButton_LoadDatasetFromPoolToCalculation (
-  #   i_Row = 15,
-  #   i_Col = 1,
-  #   input = input,
-  #   rv = rv,
-  #   session = session,
-  #   DF_PoolData_Input = DF_Pool_Input (),
-  #   DF_PoolData_Output = DF_Pool_Output ()
-  # )
-  # 
-  # ObserveMatrixButton_LoadDatasetFromPoolToCalculation (
-  #   i_Row = 15,
-  #   i_Col = 2,
-  #   input = input,
-  #   rv = rv,
-  #   session = session,
-  #   DF_PoolData_Input = DF_Pool_Input (),
-  #   DF_PoolData_Output = DF_Pool_Output ()
-  # )
-  # 
-  # ObserveMatrixButton_LoadDatasetFromPoolToCalculation (
-  #   i_Row = 15,
-  #   i_Col = 3,
-  #   input = input,
-  #   rv = rv,
-  #   session = session,
-  #   DF_PoolData_Input = DF_Pool_Input (),
-  #   DF_PoolData_Output = DF_Pool_Output ()
-  # )
-  # 
-  # ObserveMatrixButton_LoadDatasetFromPoolToCalculation (
-  #   i_Row = 15,
-  #   i_Col = 4,
-  #   input = input,
-  #   rv = rv,
-  #   session = session,
-  #   DF_PoolData_Input = DF_Pool_Input (),
-  #   DF_PoolData_Output = DF_Pool_Output ()
-  # )
-  # 
-  # 
-  # #####################################################################################X
-  # ## Button_Load_Example_Type Row 16 / Col 1:4 -----
-  # 
-  # ObserveMatrixButton_LoadDatasetFromPoolToCalculation (
-  #   i_Row = 16,
-  #   i_Col = 1,
-  #   input = input,
-  #   rv = rv,
-  #   session = session,
-  #   DF_PoolData_Input = DF_Pool_Input (),
-  #   DF_PoolData_Output = DF_Pool_Output ()
-  # )
-  # 
-  # ObserveMatrixButton_LoadDatasetFromPoolToCalculation (
-  #   i_Row = 16,
-  #   i_Col = 2,
-  #   input = input,
-  #   rv = rv,
-  #   session = session,
-  #   DF_PoolData_Input = DF_Pool_Input (),
-  #   DF_PoolData_Output = DF_Pool_Output ()
-  # )
-  # 
-  # ObserveMatrixButton_LoadDatasetFromPoolToCalculation (
-  #   i_Row = 16,
-  #   i_Col = 3,
-  #   input = input,
-  #   rv = rv,
-  #   session = session,
-  #   DF_PoolData_Input = DF_Pool_Input (),
-  #   DF_PoolData_Output = DF_Pool_Output ()
-  # )
-  # 
-  # ObserveMatrixButton_LoadDatasetFromPoolToCalculation (
-  #   i_Row = 16,
-  #   i_Col = 4,
-  #   input = input,
-  #   rv = rv,
-  #   session = session,
-  #   DF_PoolData_Input = DF_Pool_Input (),
-  #   DF_PoolData_Output = DF_Pool_Output ()
-  # )
-  # 
-  # 
+  ObserveMatrixButton_LoadDatasetFromPoolToCalculation (
+    i_Row = 18,
+    i_Col = 1,
+    input = input,
+    rv = rv,
+    session = session,
+    DF_PoolData_Input = DF_Pool_Input (),
+    DF_PoolData_Output = DF_Pool_Output ()
+  )
+  
+  ObserveMatrixButton_LoadDatasetFromPoolToCalculation (
+    i_Row = 18,
+    i_Col = 2,
+    input = input,
+    rv = rv,
+    session = session,
+    DF_PoolData_Input = DF_Pool_Input (),
+    DF_PoolData_Output = DF_Pool_Output ()
+  )
+  
+  ObserveMatrixButton_LoadDatasetFromPoolToCalculation (
+    i_Row = 18,
+    i_Col = 3,
+    input = input,
+    rv = rv,
+    session = session,
+    DF_PoolData_Input = DF_Pool_Input (),
+    DF_PoolData_Output = DF_Pool_Output ()
+  )
+  
+  ObserveMatrixButton_LoadDatasetFromPoolToCalculation (
+    i_Row = 18,
+    i_Col = 4,
+    input = input,
+    rv = rv,
+    session = session,
+    DF_PoolData_Input = DF_Pool_Input (),
+    DF_PoolData_Output = DF_Pool_Output ()
+  )
+  
+  
+  #####################################################################################X
+  ## Button_Load_Example_Type Row 19 / Col 1:4 -----
+  
+  ObserveMatrixButton_LoadDatasetFromPoolToCalculation (
+    i_Row = 19,
+    i_Col = 1,
+    input = input,
+    rv = rv,
+    session = session,
+    DF_PoolData_Input = DF_Pool_Input (),
+    DF_PoolData_Output = DF_Pool_Output ()
+  )
+  
+  ObserveMatrixButton_LoadDatasetFromPoolToCalculation (
+    i_Row = 19,
+    i_Col = 2,
+    input = input,
+    rv = rv,
+    session = session,
+    DF_PoolData_Input = DF_Pool_Input (),
+    DF_PoolData_Output = DF_Pool_Output ()
+  )
+  
+  ObserveMatrixButton_LoadDatasetFromPoolToCalculation (
+    i_Row = 19,
+    i_Col = 3,
+    input = input,
+    rv = rv,
+    session = session,
+    DF_PoolData_Input = DF_Pool_Input (),
+    DF_PoolData_Output = DF_Pool_Output ()
+  )
+  
+  ObserveMatrixButton_LoadDatasetFromPoolToCalculation (
+    i_Row = 19,
+    i_Col = 4,
+    input = input,
+    rv = rv,
+    session = session,
+    DF_PoolData_Input = DF_Pool_Input (),
+    DF_PoolData_Output = DF_Pool_Output ()
+  )
+  
+  
+  #####################################################################################X
+  ## Button_Load_Example_Type Row 20 / Col 1:4 -----
+  
+  ObserveMatrixButton_LoadDatasetFromPoolToCalculation (
+    i_Row = 20,
+    i_Col = 1,
+    input = input,
+    rv = rv,
+    session = session,
+    DF_PoolData_Input = DF_Pool_Input (),
+    DF_PoolData_Output = DF_Pool_Output ()
+  )
+  
+  ObserveMatrixButton_LoadDatasetFromPoolToCalculation (
+    i_Row = 20,
+    i_Col = 2,
+    input = input,
+    rv = rv,
+    session = session,
+    DF_PoolData_Input = DF_Pool_Input (),
+    DF_PoolData_Output = DF_Pool_Output ()
+  )
+  
+  ObserveMatrixButton_LoadDatasetFromPoolToCalculation (
+    i_Row = 20,
+    i_Col = 3,
+    input = input,
+    rv = rv,
+    session = session,
+    DF_PoolData_Input = DF_Pool_Input (),
+    DF_PoolData_Output = DF_Pool_Output ()
+  )
+  
+  ObserveMatrixButton_LoadDatasetFromPoolToCalculation (
+    i_Row = 20,
+    i_Col = 4,
+    input = input,
+    rv = rv,
+    session = session,
+    DF_PoolData_Input = DF_Pool_Input (),
+    DF_PoolData_Output = DF_Pool_Output ()
+  )
+  
+  
+  #####################################################################################X
+  ## Button_Load_Example_Type Row 21 / Col 1:4 -----
+  
+  ObserveMatrixButton_LoadDatasetFromPoolToCalculation (
+    i_Row = 21,
+    i_Col = 1,
+    input = input,
+    rv = rv,
+    session = session,
+    DF_PoolData_Input = DF_Pool_Input (),
+    DF_PoolData_Output = DF_Pool_Output ()
+  )
+  
+  ObserveMatrixButton_LoadDatasetFromPoolToCalculation (
+    i_Row = 21,
+    i_Col = 2,
+    input = input,
+    rv = rv,
+    session = session,
+    DF_PoolData_Input = DF_Pool_Input (),
+    DF_PoolData_Output = DF_Pool_Output ()
+  )
+  
+  ObserveMatrixButton_LoadDatasetFromPoolToCalculation (
+    i_Row = 21,
+    i_Col = 3,
+    input = input,
+    rv = rv,
+    session = session,
+    DF_PoolData_Input = DF_Pool_Input (),
+    DF_PoolData_Output = DF_Pool_Output ()
+  )
+  
+  ObserveMatrixButton_LoadDatasetFromPoolToCalculation (
+    i_Row = 21,
+    i_Col = 4,
+    input = input,
+    rv = rv,
+    session = session,
+    DF_PoolData_Input = DF_Pool_Input (),
+    DF_PoolData_Output = DF_Pool_Output ()
+  )
+  
+  
+  #####################################################################################X
+  ## Button_Load_Example_Type Row 22 / Col 1:4 -----
+  
+  ObserveMatrixButton_LoadDatasetFromPoolToCalculation (
+    i_Row = 22,
+    i_Col = 1,
+    input = input,
+    rv = rv,
+    session = session,
+    DF_PoolData_Input = DF_Pool_Input (),
+    DF_PoolData_Output = DF_Pool_Output ()
+  )
+  
+  ObserveMatrixButton_LoadDatasetFromPoolToCalculation (
+    i_Row = 22,
+    i_Col = 2,
+    input = input,
+    rv = rv,
+    session = session,
+    DF_PoolData_Input = DF_Pool_Input (),
+    DF_PoolData_Output = DF_Pool_Output ()
+  )
+  
+  ObserveMatrixButton_LoadDatasetFromPoolToCalculation (
+    i_Row = 22,
+    i_Col = 3,
+    input = input,
+    rv = rv,
+    session = session,
+    DF_PoolData_Input = DF_Pool_Input (),
+    DF_PoolData_Output = DF_Pool_Output ()
+  )
+  
+  ObserveMatrixButton_LoadDatasetFromPoolToCalculation (
+    i_Row = 22,
+    i_Col = 4,
+    input = input,
+    rv = rv,
+    session = session,
+    DF_PoolData_Input = DF_Pool_Input (),
+    DF_PoolData_Output = DF_Pool_Output ()
+  )
+  
+  
+  #####################################################################################X
+  ## Button_Load_Example_Type Row 23 / Col 1:4 -----
+  
+  ObserveMatrixButton_LoadDatasetFromPoolToCalculation (
+    i_Row = 23,
+    i_Col = 1,
+    input = input,
+    rv = rv,
+    session = session,
+    DF_PoolData_Input = DF_Pool_Input (),
+    DF_PoolData_Output = DF_Pool_Output ()
+  )
+  
+  ObserveMatrixButton_LoadDatasetFromPoolToCalculation (
+    i_Row = 23,
+    i_Col = 2,
+    input = input,
+    rv = rv,
+    session = session,
+    DF_PoolData_Input = DF_Pool_Input (),
+    DF_PoolData_Output = DF_Pool_Output ()
+  )
+  
+  ObserveMatrixButton_LoadDatasetFromPoolToCalculation (
+    i_Row = 23,
+    i_Col = 3,
+    input = input,
+    rv = rv,
+    session = session,
+    DF_PoolData_Input = DF_Pool_Input (),
+    DF_PoolData_Output = DF_Pool_Output ()
+  )
+  
+  ObserveMatrixButton_LoadDatasetFromPoolToCalculation (
+    i_Row = 23,
+    i_Col = 4,
+    input = input,
+    rv = rv,
+    session = session,
+    DF_PoolData_Input = DF_Pool_Input (),
+    DF_PoolData_Output = DF_Pool_Output ()
+  )
+  
+  
   
   
   
@@ -17568,7 +18002,7 @@ server <- function (input, output, session) {
       
       
       output$Chart_HeatNeed <- renderEcharts4r ({
-        ShowBarChart  (
+        TabulaCharts::ShowBarChart  (
           myChartSettings = ChartSettings_HeatNeed  [4, ],
           myChartData     = ChartData_HeatNeed ,
           DF_EnergyData   = if (is.na (rv$DF_Calc_ChartEnergyData [1,1])) {
@@ -17607,7 +18041,7 @@ server <- function (input, output, session) {
       
       
       output$Chart_FinalEnergy <- renderEcharts4r ({
-        ShowBarChart  (
+        TabulaCharts::ShowBarChart  (
           myChartSettings = ChartSettings_FinalEnergy  [3, ],
           myChartData     = ChartData_FinalEnergy ,
           DF_EnergyData   = if (is.na (rv$DF_Calc_ChartEnergyData [1,1])) {
@@ -17646,7 +18080,7 @@ server <- function (input, output, session) {
       
       
       output$Chart_ExpectationRanges <- renderEcharts4r ({
-        ShowBarChart  (
+        TabulaCharts::ShowBarChart  (
           myChartSettings = ChartSettings_ExpectationRanges  [4, ],
           myChartData     = ChartData_ExpectationRanges ,
           DF_EnergyData   = if (is.na (rv$DF_Calc_ChartEnergyData [1,1])) {
@@ -17685,7 +18119,7 @@ server <- function (input, output, session) {
       
       
       output$Chart_CompareHeatNeed <- renderEcharts4r ({
-        ShowBarChart_DataComparison  (
+        TabulaCharts::ShowBarChart_DataComparison  (
           myChartSettings        = ChartSettings_HeatNeed  [5, ],
           myChartData            = ChartData_HeatNeed ,
           DF_EnergyData   = if (is.na (rv$DF_Stack_ChartEnergyData [1,1])) {
@@ -17709,7 +18143,7 @@ server <- function (input, output, session) {
           Type_LegendLabel       = "Short", 
           Do_FlipChart           = TRUE,
           stackStrategy          = 'samesign',
-          ScalingFactor_FontSize = 0.7,
+          ScalingFactor_FontSize = 0.6,
           Set_MaxY_Auto          = input$Checkbox_AutoScaling_ChartCompareLeft, # Set_MaxY_Auto_ChartCompareLeft,
           y_Max_ManualInput      = input$NumericInput_MaxValue_Scale_ChartCompareLeft, #y_Max_ManualInput_ChartCompareLeft #        
           Filter_VarName         = "q_h_nd_net" # c("q_int", "q_sol")   # 
@@ -17717,7 +18151,7 @@ server <- function (input, output, session) {
       }) 
       
       output$Chart_CompareFinalEnergy <- renderEcharts4r ({
-        ShowBarChart_DataComparison  (
+        TabulaCharts::ShowBarChart_DataComparison  (
           myChartSettings        = ChartSettings_FinalEnergy  [5, ],
           myChartData            = ChartData_FinalEnergy ,
           DF_EnergyData   = if (is.na (rv$DF_Stack_ChartEnergyData [1,1])) {
@@ -17741,7 +18175,7 @@ server <- function (input, output, session) {
           Type_LegendLabel       = "Standard", 
           Do_FlipChart           = TRUE,
           stackStrategy          = 'samesign',
-          ScalingFactor_FontSize = 0.7,
+          ScalingFactor_FontSize = 0.6,
           Set_MaxY_Auto          = input$Checkbox_AutoScaling_ChartCompareRight, # Set_MaxY_Auto_ChartCompareLeft,
           y_Max_ManualInput      = input$NumericInput_MaxValue_Scale_ChartCompareRight, #y_Max_ManualInput_ChartCompareLeft #        
           Filter_VarName         = c("q_del_sum_gas", 
@@ -17756,7 +18190,6 @@ server <- function (input, output, session) {
         )
       }) 
       
-
       
       observeEvent (
         input$NumericInput_Height_ChartCompareLeft, {
