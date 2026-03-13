@@ -1,7 +1,7 @@
 ## IWU - Energieprofil-WebTool (Shiny App)
 #### Berechnung des Energiebedarfs für Heizung und Warmwasser auf der Basis von energierelevanten Gebäudemerkmalen (Energieprofil-Indikatoren)
 
-Version: 06.03.2026
+Version: 13.03.2026
 
 ### Einführung 
 

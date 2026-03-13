@@ -505,6 +505,15 @@ InputVariableNames <- c (
   "f_Insulation_Floor",
   "Indicator_InternalWallInsulation",
   
+  "Lambda_Insulation_Roof",
+  "Lambda_Insulation_Ceiling",
+  "Lambda_Insulation_Wall",
+  "Lambda_Insulation_Floor",
+  "Code_MeasureType_Roof",
+  "Code_MeasureType_Ceiling",
+  "Code_MeasureType_Wall",
+  "Code_MeasureType_Floor",
+  
   "f_Area_WindowType2",
   "Code_NumberPanes_WindowType1",
   "Code_NumberPanes_WindowType2",
@@ -653,11 +662,15 @@ List_UI_InputFields_Numeric <- c (
   "d_Insulation_Ceiling",
   "d_Insulation_Wall",
   "d_Insulation_Floor",
+  "Lambda_Insulation_Roof",
+  "Lambda_Insulation_Ceiling",
+  "Lambda_Insulation_Wall",
+  "Lambda_Insulation_Floor",
   
   "Year_Installation_WindowType1",
   "Year_Installation_WindowType2"
   
-) # Current number: 20
+) # Current number: 24
 
 
 List_UI_InputFields_Numeric_Percent <- c (
@@ -800,6 +813,11 @@ List_UI_InputFields_RadioButton <- c (
   "Code_InsulationType_Wall",
   "Code_InsulationType_Floor",
   
+  "Code_MeasureType_Roof",
+  "Code_MeasureType_Ceiling",
+  "Code_MeasureType_Wall",
+  "Code_MeasureType_Floor",
+  
   "Code_NumberPanes_WindowType1",
   "Code_NumberPanes_WindowType2",
   "Code_Frame_WindowType1",
@@ -828,7 +846,7 @@ List_UI_InputFields_RadioButton <- c (
   "Code_U_Class_National"
   
   
-) # Current number: 17 + 4 + 1 + 1 + 2 + 2 + 1 = 28
+) # Current number: 17 + 4 + 1 + 1 + 2 + 2 + 1 + 4 = 32
   
 
 
@@ -2683,7 +2701,7 @@ ui <- shinydashboard::dashboardPage (
 ## IWU - Energieprofil-WebTool (Shiny App)
 #### Berechnung des Energiebedarfs für Heizung und Warmwasser auf der Basis von energierelevanten Gebäudemerkmalen (Energieprofil-Indikatoren)
 
-Version: 06.03.2026
+Version: 13.03.2026
 
 ### Einführung 
 
@@ -3906,9 +3924,10 @@ www.iwu.de
                           numericInput (
                             inputId = "h_Ceiling",
                             label = "lichte Raumhöhe",
-                            value = 1,
-                            min = 1,
-                            max = 100
+                            value = NULL,
+                            min = 2,
+                            max = 10,
+                            step = 0.1
                             # width = 75
                           ), # End numeric input
                           
@@ -4137,6 +4156,7 @@ www.iwu.de
                       # ),  # End fluidRow heading roof
 
 
+
                       fluidRow (
                         
                         style = "background-color:white;",
@@ -4180,171 +4200,180 @@ www.iwu.de
                           ),
                           
                         ), # End column
-                          
-                          column (
-                            4,
-                            
-                            br (),
-                            
-                            
-                            fluidRow(
-                              column (
-                                12,
-                                strong ("energetischer Zustand")
-                              ),
-                              style = ColumnStyle_Label_2Lines 
-                            ),
-
-                            
-                            radioButtons(
-                              inputId = "Code_InsulationType_Roof",
-                              label = NULL,
-                              # choices = c(
-                              #     "keine Änderung",
-                              #     "Original-Dämmung",
-                              #     "Modernisierung",
-                              #     "keine Angabe / unbekannt"
-                              # ),                                ,
-                              selected = NULL,
-                              inline = FALSE,
-                              width = NULL,
-                              choiceNames = c (
-                                "Original, keine Angaben zur Dämmung bei Errichtung",
-                                "Original, Angaben zur Dämmung bei Errichtung",
-                                "nachträgliche Dämmung / Modernisierung",
-                                "keine Angabe / unbekannter Zustand"
-                              ),
-                              # choiceNames = c (
-                              #   "seit Errichtung keine Änderung, keine Angaben zur Dämmung",
-                              #   "keine Änderung, Angaben beziehen sich auf Original-Dämmung",
-                              #   "Modernisierung / nachträgliche Dämmung",
-                              #   "keine Angabe / unbekannter Zustand"
-                              # ),
-                              choiceValues = c(
-                                "None",
-                                "Original",
-                                "Refurbish",
-                                "_NA_"
-                              )
-                            ) # End radioButtons                           
-                            
-                        ), # End column 
                         
                         column (
-                          2,
+                          4,
                           
                           br (),
                           
-                          fluidRow (
-                            column (
-                              12,
-                              strong ("Jahr der Modernisierung")  
-                            ),
-                            style = ColumnStyle_Label_2Lines 
-                          ),
-
-                          conditionalPanel (
-                            condition = "(input.Code_Type_NumericQueries != 'Numeric') &
-                                (input.Checkbox_Year_Refurbishment_Roof_InputNotAvailable == 0) &
-                                (input.Code_InsulationType_Roof == 'Refurbish')",
-                            
-                            sliderInput (
-                              inputId = "Year_Refurbishment_Roof_Slider",
-                              label = NULL,
-                              value = 1970,
-                              min = 1970,
-                              max = 2030,
-                              step = 1,
-                              sep = ""
-                              #width = 500
-                            ), # End slider input
-                            
-                          ), # End conditional panel
-                          
-                          conditionalPanel (
-                            condition = "(input.Code_Type_NumericQueries != 'Slider') &
-                                (input.Checkbox_Year_Refurbishment_Roof_InputNotAvailable == 0) &
-                                (input.Code_InsulationType_Roof == 'Refurbish')",
-                            
-                            numericInput (
-                              inputId = "Year_Refurbishment_Roof",
-                              label = NULL,
-                              value = NA,
-                              min = 1970,
-                              max = 2030,
-                              width = 75
-                            ) # End numeric input
-                            
-                          ), # End conditional panel
-                          
-                          
-                          conditionalPanel (
-                            condition = "(input.Code_InsulationType_Roof == 'Refurbish')",
-                            
-                            checkboxInput (
-                              inputId = "Checkbox_Year_Refurbishment_Roof_InputNotAvailable",
-                              label = "keine Angabe / unbekannt",
-                              value = FALSE,
-                              width = NULL
-                            ), # End checkbox input 
-                            
-                          ), # End conditional panel
-                          
-                          
-                          conditionalPanel (
-                            condition = "(input.Code_InsulationType_Roof != 'Refurbish')",
-                            
-                            "- entfällt -" 
-                            
-                          ), # End conditional panel
-                          
-                          
-                        ), # End column
-                        
-                        column (
-                          2,
-                          
-                          br (),
                           
                           fluidRow(
                             column (
                               12,
-                              strong ("Dämmstärke [cm]")
+                              strong ("energetischer Zustand")
                             ),
                             style = ColumnStyle_Label_2Lines 
                           ),
                           
                           
-                          conditionalPanel (
-                            condition = "(input.Code_Type_NumericQueries != 'Numeric') &
-                                         (input.Checkbox_d_Insulation_Roof_InputNotAvailable == 0) &
-                                         ((input.Code_InsulationType_Roof == 'Original') | 
-                                         ( input.Code_InsulationType_Roof == 'Refurbish'))",
-                            
-                            sliderInput (
-                              # numericInput (
-                              inputId = "d_Insulation_Roof_Slider",
-                              label = NULL,
-                              #label = "Dämmstärke [cm]",
-                              value = 1, # 2026-02-13 geändert von 0 auf 1
-                              min = 1,
-                              max = 40,
-                              step = 1
-                              #width = 500
+                          radioButtons(
+                            inputId = "Code_InsulationType_Roof",
+                            label = NULL,
+                            # choices = c(
+                            #     "keine Änderung",
+                            #     "Original-Dämmung",
+                            #     "Modernisierung",
+                            #     "keine Angabe / unbekannt"
+                            # ),                                ,
+                            selected = NULL,
+                            inline = FALSE,
+                            width = NULL,
+                            choiceNames = c (
+                              "Original, keine Angaben zur Dämmung bei Errichtung",
+                              "Original, Angaben zur Dämmung bei Errichtung",
+                              "nachträgliche Dämmung / Modernisierung",
+                              "keine Angabe / unbekannter Zustand"
                             ),
-                            
-                          ), # End conditional panel
+                            # choiceNames = c (
+                            #   "seit Errichtung keine Änderung, keine Angaben zur Dämmung",
+                            #   "keine Änderung, Angaben beziehen sich auf Original-Dämmung",
+                            #   "Modernisierung / nachträgliche Dämmung",
+                            #   "keine Angabe / unbekannter Zustand"
+                            # ),
+                            choiceValues = c(
+                              "None",
+                              "Original",
+                              "Refurbish",
+                              "_NA_"
+                            )
+                          ) # End radioButtons                           
                           
-                          conditionalPanel (
-                            condition = "(input.Code_Type_NumericQueries != 'Slider') &
+                        ), # End column 
+                        
+                        
+                        column (
+                          6,
+                          
+                          fluidRow (
+                            
+                            
+                            
+                            
+                            column (
+                              4,
+                              
+                              br (),
+                              
+                              fluidRow (
+                                column (
+                                  12,
+                                  strong ("Jahr der Modernisierung")  
+                                ),
+                                style = ColumnStyle_Label_2Lines 
+                              ),
+                              
+                              conditionalPanel (
+                                condition = "(input.Code_Type_NumericQueries != 'Numeric') &
+                                (input.Checkbox_Year_Refurbishment_Roof_InputNotAvailable == 0) &
+                                (input.Code_InsulationType_Roof == 'Refurbish')",
+                                
+                                sliderInput (
+                                  inputId = "Year_Refurbishment_Roof_Slider",
+                                  label = NULL,
+                                  value = 1970,
+                                  min = 1970,
+                                  max = 2030,
+                                  step = 1,
+                                  sep = ""
+                                  #width = 500
+                                ), # End slider input
+                                
+                              ), # End conditional panel
+                              
+                              conditionalPanel (
+                                condition = "(input.Code_Type_NumericQueries != 'Slider') &
+                                (input.Checkbox_Year_Refurbishment_Roof_InputNotAvailable == 0) &
+                                (input.Code_InsulationType_Roof == 'Refurbish')",
+                                
+                                numericInput (
+                                  inputId = "Year_Refurbishment_Roof",
+                                  label = NULL,
+                                  value = NA,
+                                  min = 1970,
+                                  max = 2030,
+                                  width = 75
+                                ) # End numeric input
+                                
+                              ), # End conditional panel
+                              
+                              
+                              conditionalPanel (
+                                condition = "(input.Code_InsulationType_Roof == 'Refurbish')",
+                                
+                                checkboxInput (
+                                  inputId = "Checkbox_Year_Refurbishment_Roof_InputNotAvailable",
+                                  label = "keine Angabe / unbekannt",
+                                  value = FALSE,
+                                  width = NULL
+                                ), # End checkbox input 
+                                
+                              ), # End conditional panel
+                              
+                              
+                              conditionalPanel (
+                                condition = "(input.Code_InsulationType_Roof != 'Refurbish')",
+                                
+                                "- entfällt -" 
+                                
+                              ), # End conditional panel
+                              
+                              
+                            ), # End column
+                            
+                            column (
+                              4,
+                              
+                              br (),
+                              
+                              fluidRow(
+                                column (
+                                  12,
+                                  strong ("Dämmstärke [cm]")
+                                ),
+                                style = ColumnStyle_Label_2Lines 
+                              ),
+                              
+                              
+                              conditionalPanel (
+                                condition = "(input.Code_Type_NumericQueries != 'Numeric') &
                                          (input.Checkbox_d_Insulation_Roof_InputNotAvailable == 0) &
                                          ((input.Code_InsulationType_Roof == 'Original') | 
                                          ( input.Code_InsulationType_Roof == 'Refurbish'))",
-                            
-                            # fluidRow (
-                            #   
-                            #   column (
-                            #     8,
+                                
+                                sliderInput (
+                                  # numericInput (
+                                  inputId = "d_Insulation_Roof_Slider",
+                                  label = NULL,
+                                  #label = "Dämmstärke [cm]",
+                                  value = 1, # 2026-02-13 geändert von 0 auf 1
+                                  min = 1,
+                                  max = 40,
+                                  step = 1
+                                  #width = 500
+                                ),
+                                
+                              ), # End conditional panel
+                              
+                              conditionalPanel (
+                                condition = "(input.Code_Type_NumericQueries != 'Slider') &
+                                         (input.Checkbox_d_Insulation_Roof_InputNotAvailable == 0) &
+                                         ((input.Code_InsulationType_Roof == 'Original') | 
+                                         ( input.Code_InsulationType_Roof == 'Refurbish'))",
+                                
+                                # fluidRow (
+                                #   
+                                #   column (
+                                #     8,
                                 
                                 numericInput (
                                   inputId = "d_Insulation_Roof",
@@ -4356,123 +4385,215 @@ www.iwu.de
                                   width = 75
                                 ) # End numeric input
                                 
-                            #   ), # End column
-                            #   
-                            #   column (
-                            #     4,
-                            #     "cm"
-                            #   ) # End column
-                            #   
-                            # ) # End fluid row
-                            
-                          ), # End conditional panel
-                          
-                        
-                          
-                          conditionalPanel (
-                            condition = "(input.Code_InsulationType_Roof == 'Refurbish') | 
+                                #   ), # End column
+                                #   
+                                #   column (
+                                #     4,
+                                #     "cm"
+                                #   ) # End column
+                                #   
+                                # ) # End fluid row
+                                
+                              ), # End conditional panel
+                              
+                              
+                              
+                              conditionalPanel (
+                                condition = "(input.Code_InsulationType_Roof == 'Refurbish') | 
                                          (input.Code_InsulationType_Roof == 'Original')",
-                            
-                            checkboxInput (
-                              inputId = "Checkbox_d_Insulation_Roof_InputNotAvailable",
-                              label = "keine Angabe / unbekannt",
-                              value = FALSE,
-                              width = NULL
-                            ), # End checkbox input
-                            
-                          ), # End conditional panel
-                          
-                          
-                          conditionalPanel (
-                            condition = "(input.Code_InsulationType_Roof != 'Refurbish') & 
+                                
+                                checkboxInput (
+                                  inputId = "Checkbox_d_Insulation_Roof_InputNotAvailable",
+                                  label = "keine Angabe / unbekannt",
+                                  value = FALSE,
+                                  width = NULL
+                                ), # End checkbox input
+                                
+                              ), # End conditional panel
+                              
+                              
+                              conditionalPanel (
+                                condition = "(input.Code_InsulationType_Roof != 'Refurbish') & 
                                          (input.Code_InsulationType_Roof != 'Original')",
+                                
+                                "- entfällt -" 
+                                
+                              ), # End conditional panel
+                              
+                              
+                              
+                              
+                              
+                              #style = "height:35px"
+                            ), # End column
                             
-                            "- entfällt -" 
+                            column (
+                              4,
+                              
+                              br (),
+                              
+                              fluidRow (
+                                column (
+                                  12,
+                                  strong ("Anteil an der Bauteilfläche [%]")
+                                ),
+                                style = ColumnStyle_Label_2Lines 
+                              ),
+                              
+                              
+                              conditionalPanel (
+                                condition = "(input.Code_Type_NumericQueries != 'Numeric')  &
+                                         (input.Checkbox_f_Insulation_Roof_InputNotAvailable == 0)  &
+                                         ((input.Code_InsulationType_Roof == 'Original') | 
+                                         ( input.Code_InsulationType_Roof == 'Refurbish'))",
+                                
+                                sliderInput (
+                                  inputId = "f_Insulation_Roof_Slider",
+                                  label = NULL,
+                                  value = 10, # 2026-02-13 geändert von 0 auf 10
+                                  min = 10,
+                                  max = 100,
+                                  step = 10
+                                  #width = 200
+                                ),
+                                
+                              ), # End conditional panel
+                              
+                              conditionalPanel (
+                                condition = "(input.Code_Type_NumericQueries != 'Slider') &
+                                         (input.Checkbox_f_Insulation_Roof_InputNotAvailable == 0)  &
+                                         ((input.Code_InsulationType_Roof == 'Original') | 
+                                         ( input.Code_InsulationType_Roof == 'Refurbish'))",
+                                
+                                numericInput (
+                                  inputId = "f_Insulation_Roof",
+                                  label = NULL,
+                                  value = 0,
+                                  min = 10,
+                                  max = 100,
+                                  step = 10,
+                                  width = 75
+                                ) # End numericInput
+                                
+                              ), # End conditional panel
+                              
+                              
+                              conditionalPanel (
+                                condition = "(input.Code_InsulationType_Roof == 'Refurbish') | 
+                                         (input.Code_InsulationType_Roof == 'Original')",
+                                
+                                checkboxInput (
+                                  inputId = "Checkbox_f_Insulation_Roof_InputNotAvailable",
+                                  label = "keine Angabe / unbekannt",
+                                  value = FALSE,
+                                  width = NULL
+                                ), # End checkbos input 
+                                
+                              ), # End conditional panel
+                              
+                              
+                              conditionalPanel (
+                                condition = "(input.Code_InsulationType_Roof != 'Refurbish') & 
+                                         (input.Code_InsulationType_Roof != 'Original')",
+                                
+                                "- entfällt -" 
+                                
+                              ), # End conditional panel
+                              
+                              
+                            ), # End column             
                             
-                          ), # End conditional panel
+                          ), # End fluidRow
                           
-                          
-                          
-                          
-                          
-                          #style = "height:35px"
-                        ), # End column
-                        
-                        column (
-                          2,
-                          
-                          br (),
                           
                           fluidRow (
-                            column (
-                              12,
-                              strong ("Anteil an der Bauteilfläche [%]")
-                            ),
-                            style = ColumnStyle_Label_2Lines 
-                          ),
-                          
-
-                          conditionalPanel (
-                            condition = "(input.Code_Type_NumericQueries != 'Numeric')  &
-                                         (input.Checkbox_f_Insulation_Roof_InputNotAvailable == 0)  &
-                                         ((input.Code_InsulationType_Roof == 'Original') | 
-                                         ( input.Code_InsulationType_Roof == 'Refurbish'))",
-
-                            sliderInput (
-                              inputId = "f_Insulation_Roof_Slider",
-                              label = NULL,
-                              value = 10, # 2026-02-13 geändert von 0 auf 10
-                              min = 10,
-                              max = 100,
-                              step = 10
-                              #width = 200
-                            ),
-
-                          ), # End conditional panel
-
-                          conditionalPanel (
-                            condition = "(input.Code_Type_NumericQueries != 'Slider') &
-                                         (input.Checkbox_f_Insulation_Roof_InputNotAvailable == 0)  &
-                                         ((input.Code_InsulationType_Roof == 'Original') | 
-                                         ( input.Code_InsulationType_Roof == 'Refurbish'))",
-
-                            numericInput (
-                              inputId = "f_Insulation_Roof",
-                              label = NULL,
-                              value = 0,
-                              min = 10,
-                              max = 100,
-                              step = 10,
-                              width = 75
-                            ) # End numericInput
-
-                          ), # End conditional panel
-
-                          
-                          conditionalPanel (
-                            condition = "(input.Code_InsulationType_Roof == 'Refurbish') | 
-                                         (input.Code_InsulationType_Roof == 'Original')",
                             
-                            checkboxInput (
-                              inputId = "Checkbox_f_Insulation_Roof_InputNotAvailable",
-                              label = "keine Angabe / unbekannt",
-                              value = FALSE,
-                              width = NULL
-                            ), # End checkbos input 
                             
-                          ), # End conditional panel
-                          
-                          
-                          conditionalPanel (
-                            condition = "(input.Code_InsulationType_Roof != 'Refurbish') & 
-                                         (input.Code_InsulationType_Roof != 'Original')",
+                            conditionalPanel (
+                              condition =  "(input.Checkbox_d_Insulation_Roof_InputNotAvailable == 0) &
+                                         ((input.Code_InsulationType_Roof == 'Refurbish') | 
+                                          (input.Code_InsulationType_Roof == 'Original'))",
+                              
+                              column (
+                                12,
+                                
+                                checkboxInput (
+                                  inputId = "Checkbox_Show_ExpertInput_Roof",
+                                  label = "Details der Dämmung (Experteneingabe)",
+                                  value = FALSE
+                                ),
+                                
+                                
+                                conditionalPanel (
+                                  condition =  "(input.Checkbox_Show_ExpertInput_Roof == 1)",
+                                  
+                                  column (
+                                    6, 
+                                    
+                                    "effektive Wärmeleitfähigkeit [W/m/K]",
+                                    
+                                    numericInput (
+                                      inputId = "Lambda_Insulation_Roof",
+                                      label = NULL,
+                                      value = 0,
+                                      min = 0.001,
+                                      max = 1.000,
+                                      step = 0.001,
+                                      width = 100
+                                    ) # End numericInput
+                                    
+                                  ), # End column
+                                  
+                                  
+                                  column (
+                                    6,
+                                    
+                                    conditionalPanel (
+                                      condition =  "input.Code_InsulationType_Roof == 'Refurbish'",
+                                      
+                                      radioButtons (
+                                        inputId = "Code_MeasureType_Roof",
+                                        label = NULL,
+                                        selected = "_NA_",
+                                        inline = FALSE,
+                                        width = NULL,
+                                        choiceNames = c (
+                                          "zusätzliche Dämmung",
+                                          "vorhandene Konstruktion ausgetauscht",
+                                          "vorhandene Dämmung ausgetauscht",
+                                          "k.A."
+                                        ),
+                                        choiceValues = c(
+                                          "Add",
+                                          "Replace",
+                                          "ReplaceInsulation",
+                                          "_NA_"
+                                        )
+                                      ) # End radioButtons                           
+                                      
+                                    ), # End conditionalPanel
+                                    
+                                    
+                                  ), # End column
+                                  
+                                  
+                                ), # End conditional panel expert input
+                                
+                              ), # End column expert input insulation Roof  
+                              
+                              
+                            ), # End conditional panel
                             
-                            "- entfällt -" 
                             
-                          ), # End conditional panel
+                            
+                            
+                            
+                            
+                          ), # End fluidRow
                           
                           
-
+                          
+                          #), # End fluidRow
                           
                           
                           #style = "height:35px"
@@ -4498,380 +4619,489 @@ www.iwu.de
                       # 
                       # ),  # End fluidRow heading roof
                       
+                    fluidRow (
                       
-                      fluidRow (
-                        
-                        style = "background-color:white;",
-                        
-                        column (12,
-                                strong ("oberste Geschossdecke"),
-                                
-                                style = "background-color: lightblue",
-                                #style = "border: 1px solid lightgrey"
-                                
-                                
-                        ),
-                        
-                        conditionalPanel (
-                          condition = "
+                      style = "background-color:white;",
+                      
+                      column (12,
+                              strong ("oberste Geschossdecke"),
+                              
+                              style = "background-color: lightblue",
+                              #style = "border: 1px solid lightgrey"
+                              
+                      ),
+                      
+                      conditionalPanel (
+                        condition = "
                             (input.Code_AtticCond != '-') &
                             (input.Code_AtticCond != 'C') 
                           ",
+                        
+                        column (
+                          2,
+                          br (),
                           
-                          column (
-                            2,
-                            br (),
-                            
-                            
-                            fluidRow (
-                              column (
-                                12,
-                                strong ("Art der Konstruktion")
-                              ),
-                              style = ColumnStyle_Label_2Lines 
-                            ),
-                            
-                            checkboxInput (
-                              inputId = "Indicator_Ceiling_Constr_Massive", 
-                              label = "massiv", 
-                              value = FALSE, 
-                              width = NULL
-                            ),
-                            
-                            checkboxInput (
-                              inputId = "Indicator_Ceiling_Constr_Wood", 
-                              label = "Holz", 
-                              value = FALSE, 
-                              width = NULL
-                            ),
-                            
-                          ), # End column
                           
-                          column (
-                            4,
-                            
-                            br (),
-                            
-                            
-                            fluidRow(
-                              column (
-                                12,
-                                strong ("energetischer Zustand")
-                              ),
-                              style = ColumnStyle_Label_2Lines 
+                          fluidRow (
+                            column (
+                              12,
+                              strong ("Art der Konstruktion")
                             ),
-                            
-                            
-                            radioButtons(
-                              inputId = "Code_InsulationType_Ceiling",
-                              label = NULL,
-                              # choices = c(
-                              #     "keine Änderung",
-                              #     "Original-Dämmung",
-                              #     "Modernisierung",
-                              #     "keine Angabe / unbekannt"
-                              # ),                                ,
-                              selected = NULL,
-                              inline = FALSE,
-                              width = NULL,
-                              choiceNames = c (
-                                "Original, keine Angaben zur Dämmung bei Errichtung",
-                                "Original, Angaben zur Dämmung bei Errichtung",
-                                "nachträgliche Dämmung / Modernisierung",
-                                "keine Angabe / unbekannter Zustand"
-                              ),
-                              # choiceNames = c (
-                              #   "seit Errichtung keine Änderung, keine Angaben zur Dämmung",
-                              #   "keine Änderung, Angaben beziehen sich auf Original-Dämmung",
-                              #   "Modernisierung / nachträgliche Dämmung",
-                              #   "keine Angabe / unbekannter Zustand"
-                              # ),
-                              choiceValues = c(
-                                "None",
-                                "Original",
-                                "Refurbish",
-                                "_NA_"
-                              )
-                            ) # End radioButtons                           
-                            
-                          ), # End column 
+                            style = ColumnStyle_Label_2Lines 
+                          ),
                           
-                          column (
-                            2,
-                            
-                            br (),
-                            
-                            fluidRow (
-                              column (
-                                12,
-                                strong ("Jahr der Modernisierung")  
-                              ),
-                              style = ColumnStyle_Label_2Lines 
+                          checkboxInput (
+                            inputId = "Indicator_Ceiling_Constr_Massive", 
+                            label = "massiv", 
+                            value = FALSE, 
+                            width = NULL
+                          ),
+                          
+                          checkboxInput (
+                            inputId = "Indicator_Ceiling_Constr_Wood", 
+                            label = "Holz", 
+                            value = FALSE, 
+                            width = NULL
+                          ),
+                          
+                        ), # End column
+                        
+                        column (
+                          4,
+                          
+                          br (),
+                          
+                          
+                          fluidRow(
+                            column (
+                              12,
+                              strong ("energetischer Zustand")
                             ),
+                            style = ColumnStyle_Label_2Lines 
+                          ),
+                          
+                          
+                          radioButtons(
+                            inputId = "Code_InsulationType_Ceiling",
+                            label = NULL,
+                            # choices = c(
+                            #     "keine Änderung",
+                            #     "Original-Dämmung",
+                            #     "Modernisierung",
+                            #     "keine Angabe / unbekannt"
+                            # ),                                ,
+                            selected = NULL,
+                            inline = FALSE,
+                            width = NULL,
+                            choiceNames = c (
+                              "Original, keine Angaben zur Dämmung bei Errichtung",
+                              "Original, Angaben zur Dämmung bei Errichtung",
+                              "nachträgliche Dämmung / Modernisierung",
+                              "keine Angabe / unbekannter Zustand"
+                            ),
+                            # choiceNames = c (
+                            #   "seit Errichtung keine Änderung, keine Angaben zur Dämmung",
+                            #   "keine Änderung, Angaben beziehen sich auf Original-Dämmung",
+                            #   "Modernisierung / nachträgliche Dämmung",
+                            #   "keine Angabe / unbekannter Zustand"
+                            # ),
+                            choiceValues = c(
+                              "None",
+                              "Original",
+                              "Refurbish",
+                              "_NA_"
+                            )
+                          ) # End radioButtons                           
+                          
+                        ), # End column 
+                        
+                        
+                        column (
+                          6,
+                          
+                          fluidRow (
                             
-                            conditionalPanel (
-                              condition = "(input.Code_Type_NumericQueries != 'Numeric') &
+                            
+                            
+                            
+                            column (
+                              4,
+                              
+                              br (),
+                              
+                              fluidRow (
+                                column (
+                                  12,
+                                  strong ("Jahr der Modernisierung")  
+                                ),
+                                style = ColumnStyle_Label_2Lines 
+                              ),
+                              
+                              conditionalPanel (
+                                condition = "(input.Code_Type_NumericQueries != 'Numeric') &
                                 (input.Checkbox_Year_Refurbishment_Ceiling_InputNotAvailable == 0) &
                                 (input.Code_InsulationType_Ceiling == 'Refurbish')",
+                                
+                                sliderInput (
+                                  inputId = "Year_Refurbishment_Ceiling_Slider",
+                                  label = NULL,
+                                  value = 1970,
+                                  min = 1970,
+                                  max = 2030,
+                                  step = 1,
+                                  sep = ""
+                                  #width = 500
+                                ), # End slider input
+                                
+                              ), # End conditional panel
                               
-                              sliderInput (
-                                inputId = "Year_Refurbishment_Ceiling_Slider",
-                                label = NULL,
-                                value = 1970,
-                                min = 1970,
-                                max = 2030,
-                                step = 1,
-                                sep = ""
-                                #width = 500
-                              ), # End slider input
-                              
-                            ), # End conditional panel
-                            
-                            conditionalPanel (
-                              condition = "(input.Code_Type_NumericQueries != 'Slider') &
+                              conditionalPanel (
+                                condition = "(input.Code_Type_NumericQueries != 'Slider') &
                                 (input.Checkbox_Year_Refurbishment_Ceiling_InputNotAvailable == 0) &
                                 (input.Code_InsulationType_Ceiling == 'Refurbish')",
+                                
+                                numericInput (
+                                  inputId = "Year_Refurbishment_Ceiling",
+                                  label = NULL,
+                                  value = NA,
+                                  min = 1970,
+                                  max = 2030,
+                                  width = 75
+                                ) # End numeric input
+                                
+                              ), # End conditional panel
                               
-                              numericInput (
-                                inputId = "Year_Refurbishment_Ceiling",
-                                label = NULL,
-                                value = NA,
-                                min = 1970,
-                                max = 2030,
-                                width = 75
-                              ) # End numeric input
                               
-                            ), # End conditional panel
-                            
-                            
-                            conditionalPanel (
-                              condition = "(input.Code_InsulationType_Ceiling == 'Refurbish')",
+                              conditionalPanel (
+                                condition = "(input.Code_InsulationType_Ceiling == 'Refurbish')",
+                                
+                                checkboxInput (
+                                  inputId = "Checkbox_Year_Refurbishment_Ceiling_InputNotAvailable",
+                                  label = "keine Angabe / unbekannt",
+                                  value = FALSE,
+                                  width = NULL
+                                ), # End checkbox input 
+                                
+                              ), # End conditional panel
                               
-                              checkboxInput (
-                                inputId = "Checkbox_Year_Refurbishment_Ceiling_InputNotAvailable",
-                                label = "keine Angabe / unbekannt",
-                                value = FALSE,
-                                width = NULL
-                              ), # End checkbox input 
                               
-                            ), # End conditional panel
-                            
-                            
-                            conditionalPanel (
-                              condition = "(input.Code_InsulationType_Ceiling != 'Refurbish')",
+                              conditionalPanel (
+                                condition = "(input.Code_InsulationType_Ceiling != 'Refurbish')",
+                                
+                                "- entfällt -" 
+                                
+                              ), # End conditional panel
                               
-                              "- entfällt -" 
                               
-                            ), # End conditional panel
+                            ), # End column
                             
-                            
-                          ), # End column
-                          
-                          column (
-                            2,
-                            
-                            br (),
-                            
-                            fluidRow(
-                              column (
-                                12,
-                                strong ("Dämmstärke [cm]")
+                            column (
+                              4,
+                              
+                              br (),
+                              
+                              fluidRow(
+                                column (
+                                  12,
+                                  strong ("Dämmstärke [cm]")
+                                ),
+                                style = ColumnStyle_Label_2Lines 
                               ),
-                              style = ColumnStyle_Label_2Lines 
-                            ),
-                            
-                            
-                            conditionalPanel (
-                              condition = "(input.Code_Type_NumericQueries != 'Numeric') &
+                              
+                              
+                              conditionalPanel (
+                                condition = "(input.Code_Type_NumericQueries != 'Numeric') &
                                          (input.Checkbox_d_Insulation_Ceiling_InputNotAvailable == 0) &
                                          ((input.Code_InsulationType_Ceiling == 'Original') | 
                                          ( input.Code_InsulationType_Ceiling == 'Refurbish'))",
+                                
+                                sliderInput (
+                                  # numericInput (
+                                  inputId = "d_Insulation_Ceiling_Slider",
+                                  label = NULL,
+                                  #label = "Dämmstärke [cm]",
+                                  value = 1, # 2026-02-13 geändert von 0 auf 1
+                                  min = 1,
+                                  max = 40,
+                                  step = 1
+                                  #width = 500
+                                ),
+                                
+                              ), # End conditional panel
                               
-                              sliderInput (
-                                # numericInput (
-                                inputId = "d_Insulation_Ceiling_Slider",
-                                label = NULL,
-                                #label = "Dämmstärke [cm]",
-                                value = 1, # 2026-02-13 geändert von 0 auf 1
-                                min = 1,
-                                max = 40,
-                                step = 1
-                                #width = 500
-                              ),
-                              
-                            ), # End conditional panel
-                            
-                            conditionalPanel (
-                              condition = "(input.Code_Type_NumericQueries != 'Slider') &
+                              conditionalPanel (
+                                condition = "(input.Code_Type_NumericQueries != 'Slider') &
                                          (input.Checkbox_d_Insulation_Ceiling_InputNotAvailable == 0) &
                                          ((input.Code_InsulationType_Ceiling == 'Original') | 
                                          ( input.Code_InsulationType_Ceiling == 'Refurbish'))",
+                                
+                                # fluidRow (
+                                #   
+                                #   column (
+                                #     8,
+                                
+                                numericInput (
+                                  inputId = "d_Insulation_Ceiling",
+                                  label = NULL,
+                                  #label = "[cm]",
+                                  value = NA,
+                                  min = 1,
+                                  max = 40,
+                                  width = 75
+                                ) # End numeric input
+                                
+                                #   ), # End column
+                                #   
+                                #   column (
+                                #     4,
+                                #     "cm"
+                                #   ) # End column
+                                #   
+                                # ) # End fluid row
+                                
+                              ), # End conditional panel
                               
-                              # fluidRow (
-                              #   
-                              #   column (
-                              #     8,
                               
-                              numericInput (
-                                inputId = "d_Insulation_Ceiling",
-                                label = NULL,
-                                #label = "[cm]",
-                                value = NA,
-                                min = 1,
-                                max = 40,
-                                width = 75
-                              ) # End numeric input
                               
-                              #   ), # End column
-                              #   
-                              #   column (
-                              #     4,
-                              #     "cm"
-                              #   ) # End column
-                              #   
-                              # ) # End fluid row
-                              
-                            ), # End conditional panel
-                            
-                            
-                            
-                            conditionalPanel (
-                              condition = "(input.Code_InsulationType_Ceiling == 'Refurbish') | 
+                              conditionalPanel (
+                                condition = "(input.Code_InsulationType_Ceiling == 'Refurbish') | 
                                          (input.Code_InsulationType_Ceiling == 'Original')",
+                                
+                                checkboxInput (
+                                  inputId = "Checkbox_d_Insulation_Ceiling_InputNotAvailable",
+                                  label = "keine Angabe / unbekannt",
+                                  value = FALSE,
+                                  width = NULL
+                                ), # End checkbox input
+                                
+                              ), # End conditional panel
                               
-                              checkboxInput (
-                                inputId = "Checkbox_d_Insulation_Ceiling_InputNotAvailable",
-                                label = "keine Angabe / unbekannt",
-                                value = FALSE,
-                                width = NULL
-                              ), # End checkbox input
                               
-                            ), # End conditional panel
+                              conditionalPanel (
+                                condition = "(input.Code_InsulationType_Ceiling != 'Refurbish') & 
+                                         (input.Code_InsulationType_Ceiling != 'Original')",
+                                
+                                "- entfällt -" 
+                                
+                              ), # End conditional panel
+                              
+                              
+                              
+                              
+                              
+                              #style = "height:35px"
+                            ), # End column
+                            
+                            column (
+                              4,
+                              
+                              br (),
+                              
+                              fluidRow (
+                                column (
+                                  12,
+                                  strong ("Anteil an der Bauteilfläche [%]")
+                                ),
+                                style = ColumnStyle_Label_2Lines 
+                              ),
+                              
+                              
+                              conditionalPanel (
+                                condition = "(input.Code_Type_NumericQueries != 'Numeric')  &
+                                         (input.Checkbox_f_Insulation_Ceiling_InputNotAvailable == 0)  &
+                                         ((input.Code_InsulationType_Ceiling == 'Original') | 
+                                         ( input.Code_InsulationType_Ceiling == 'Refurbish'))",
+                                
+                                sliderInput (
+                                  inputId = "f_Insulation_Ceiling_Slider",
+                                  label = NULL,
+                                  value = 10, # 2026-02-13 geändert von 0 auf 10
+                                  min = 10,
+                                  max = 100,
+                                  step = 10
+                                  #width = 200
+                                ),
+                                
+                              ), # End conditional panel
+                              
+                              conditionalPanel (
+                                condition = "(input.Code_Type_NumericQueries != 'Slider') &
+                                         (input.Checkbox_f_Insulation_Ceiling_InputNotAvailable == 0)  &
+                                         ((input.Code_InsulationType_Ceiling == 'Original') | 
+                                         ( input.Code_InsulationType_Ceiling == 'Refurbish'))",
+                                
+                                numericInput (
+                                  inputId = "f_Insulation_Ceiling",
+                                  label = NULL,
+                                  value = 0,
+                                  min = 10,
+                                  max = 100,
+                                  step = 10,
+                                  width = 75
+                                ) # End numericInput
+                                
+                              ), # End conditional panel
+                              
+                              
+                              conditionalPanel (
+                                condition = "(input.Code_InsulationType_Ceiling == 'Refurbish') | 
+                                         (input.Code_InsulationType_Ceiling == 'Original')",
+                                
+                                checkboxInput (
+                                  inputId = "Checkbox_f_Insulation_Ceiling_InputNotAvailable",
+                                  label = "keine Angabe / unbekannt",
+                                  value = FALSE,
+                                  width = NULL
+                                ), # End checkbos input 
+                                
+                              ), # End conditional panel
+                              
+                              
+                              conditionalPanel (
+                                condition = "(input.Code_InsulationType_Ceiling != 'Refurbish') & 
+                                         (input.Code_InsulationType_Ceiling != 'Original')",
+                                
+                                "- entfällt -" 
+                                
+                              ), # End conditional panel
+                              
+                              
+                              
+                              
+                              
+                              #style = "height:35px"
+                            ), # End column
+                            
+                          ), # End fluidRow
+                          
+                          
+                          fluidRow (
                             
                             
                             conditionalPanel (
-                              condition = "(input.Code_InsulationType_Ceiling != 'Refurbish') & 
-                                         (input.Code_InsulationType_Ceiling != 'Original')",
+                              condition =  "(input.Checkbox_d_Insulation_Ceiling_InputNotAvailable == 0) &
+                                         ((input.Code_InsulationType_Ceiling == 'Refurbish') | 
+                                          (input.Code_InsulationType_Ceiling == 'Original'))",
                               
-                              "- entfällt -" 
-                              
-                            ), # End conditional panel
-                            
-                            
-                            
-                            
-                            
-                            #style = "height:35px"
-                          ), # End column
-                          
-                          column (
-                            2,
-                            
-                            br (),
-                            
-                            fluidRow (
                               column (
                                 12,
-                                strong ("Anteil an der Bauteilfläche [%]")
-                              ),
-                              style = ColumnStyle_Label_2Lines 
-                            ),
-                            
-                            
-                            conditionalPanel (
-                              condition = "(input.Code_Type_NumericQueries != 'Numeric')  &
-                                         (input.Checkbox_f_Insulation_Ceiling_InputNotAvailable == 0)  &
-                                         ((input.Code_InsulationType_Ceiling == 'Original') | 
-                                         ( input.Code_InsulationType_Ceiling == 'Refurbish'))",
+                                
+                                checkboxInput (
+                                  inputId = "Checkbox_Show_ExpertInput_Ceiling",
+                                  label = "Details der Dämmung (Experteneingabe)",
+                                  value = FALSE
+                                ),
+                                
+                                
+                                conditionalPanel (
+                                  condition =  "(input.Checkbox_Show_ExpertInput_Ceiling == 1)",
+                                  
+                                  column (
+                                    6, 
+                                    
+                                    "effektive Wärmeleitfähigkeit [W/m/K]",
+                                    
+                                    numericInput (
+                                      inputId = "Lambda_Insulation_Ceiling",
+                                      label = NULL,
+                                      value = 0,
+                                      min = 0.001,
+                                      max = 1.000,
+                                      step = 0.001,
+                                      width = 100
+                                    ) # End numericInput
+                                    
+                                  ), # End column
+                                  
+                                  
+                                  column (
+                                    6,
+                                    
+                                    conditionalPanel (
+                                      condition =  "input.Code_InsulationType_Ceiling == 'Refurbish'",
+                                      
+                                      radioButtons (
+                                        inputId = "Code_MeasureType_Ceiling",
+                                        label = NULL,
+                                        selected = "_NA_",
+                                        inline = FALSE,
+                                        width = NULL,
+                                        choiceNames = c (
+                                          "zusätzliche Dämmung",
+                                          "vorhandene Konstruktion ausgetauscht",
+                                          "vorhandene Dämmung ausgetauscht",
+                                          "k.A."
+                                        ),
+                                        choiceValues = c(
+                                          "Add",
+                                          "Replace",
+                                          "ReplaceInsulation",
+                                          "_NA_"
+                                        )
+                                      ) # End radioButtons                           
+                                      
+                                    ), # End conditionalPanel
+                                    
+                                    
+                                  ), # End column
+                                  
+                                  
+                                ), # End conditional panel expert input
+                                
+                              ), # End column expert input insulation ceiling  
                               
-                              sliderInput (
-                                inputId = "f_Insulation_Ceiling_Slider",
-                                label = NULL,
-                                value = 10, # 2026-02-13 geändert von 0 auf 10
-                                min = 10,
-                                max = 100,
-                                step = 10
-                                #width = 200
-                              ),
                               
                             ), # End conditional panel
                             
-                            conditionalPanel (
-                              condition = "(input.Code_Type_NumericQueries != 'Slider') &
-                                         (input.Checkbox_f_Insulation_Ceiling_InputNotAvailable == 0)  &
-                                         ((input.Code_InsulationType_Ceiling == 'Original') | 
-                                         ( input.Code_InsulationType_Ceiling == 'Refurbish'))",
-                              
-                              numericInput (
-                                inputId = "f_Insulation_Ceiling",
-                                label = NULL,
-                                value = 0,
-                                min = 10,
-                                max = 100,
-                                step = 10,
-                                width = 75
-                              ) # End numericInput
-                              
-                            ), # End conditional panel
-                            
-                            
-                            conditionalPanel (
-                              condition = "(input.Code_InsulationType_Ceiling == 'Refurbish') | 
-                                         (input.Code_InsulationType_Ceiling == 'Original')",
-                              
-                              checkboxInput (
-                                inputId = "Checkbox_f_Insulation_Ceiling_InputNotAvailable",
-                                label = "keine Angabe / unbekannt",
-                                value = FALSE,
-                                width = NULL
-                              ), # End checkbos input 
-                              
-                            ), # End conditional panel
-                            
-                            
-                            conditionalPanel (
-                              condition = "(input.Code_InsulationType_Ceiling != 'Refurbish') & 
-                                         (input.Code_InsulationType_Ceiling != 'Original')",
-                              
-                              "- entfällt -" 
-                              
-                            ), # End conditional panel
                             
                             
                             
                             
                             
-                            #style = "height:35px"
-                          ), # End column
-                          
-                          style = "border: 1px solid lightgrey"
-                          #style = "border: 1px dotted lightgrey"
+                          ), # End fluidRow
                           
                           
                           
-                        ), # End conditional panel "Show input for top ceiling"
+                          
+                          
+                        ), # End column
                         
                         
-                        conditionalPanel (
-                          condition = "
+                        
+                        
+                        
+                        
+                        style = "border: 1px solid lightgrey"
+                        #style = "border: 1px dotted lightgrey"
+                        
+                        
+                        
+                      ), # End conditional panel "Show input for top ceiling"
+                      
+                      
+                      conditionalPanel (
+                        condition = "
                             (input.Code_AtticCond == '-') |
                             (input.Code_AtticCond == 'C')
                           ",
-                          column (
-                            12,
-                            br (),
-                            "- keine Eingabe bei der gewählten Dach-Situation -",
-                            br (),
-                            br ()
-                          )
-                        ), # End conditional panel "Don't show input for top ceiling"
-                        
-                        
-                        
-                        
-                        
-                      ),  # End fluidRow input Ceiling
+                        column (
+                          12,
+                          br (),
+                          "- keine Eingabe bei der gewählten Dach-Situation -",
+                          br (),
+                          br ()
+                        )
+                      ), # End conditional panel "Don't show input for top ceiling"
                       
+                      
+                      
+                      
+                      
+                    ),  # End fluidRow input Ceiling
+                    
+
+                    
+                                          
                       
                       # br (),
                       # 
@@ -4906,89 +5136,139 @@ www.iwu.de
                         
                                                 
                         br (),
-                        
+          
                         column (
-                          2,
+                          6,
                           
-                          br (),
+                          fluidRow (
+                            
+                            column (
+                              4,
+                              
+                              br (),
+                              
+                              column (
+                                12,
+                                
+                                fluidRow (
+                                
+                                # fluidRow (
+                                #   column (
+                                #     12,
+                                strong ("Art der Konstruktion"),
+                                #   ),
+                                #   style = ColumnStyle_Label_2Lines 
+                                # ),
+                                
+                                checkboxInput (
+                                  inputId = "Indicator_Wall_Constr_Massive", 
+                                  label = "massiv", 
+                                  value = FALSE, 
+                                  width = NULL
+                                ),
+                                
+                                checkboxInput (
+                                  inputId = "Indicator_Wall_Constr_Wood", 
+                                  label = "Holz", 
+                                  value = FALSE, 
+                                  width = NULL
+                                ),
+                                
+                                ), # End fluidRow
+                                
+                              ) # End Column
+                              
+                              
+                            ), # End column
+                            
+                            column (
+                              8,
+                              
+                              br (),
+                              
+                              fluidRow(
+                                column (
+                                  12,
+                                  strong ("energetischer Zustand")
+                                ),
+                                style = ColumnStyle_Label_2Lines 
+                              ),
+                              
+                              
+                              radioButtons(
+                                inputId = "Code_InsulationType_Wall",
+                                label = NULL,
+                                # choices = c(
+                                #     "keine Änderung",
+                                #     "Original-Dämmung",
+                                #     "Modernisierung",
+                                #     "keine Angabe / unbekannt"
+                                # ),                                ,
+                                selected = NULL,
+                                inline = FALSE,
+                                width = NULL,
+                                choiceNames = c (
+                                  "Original, keine Angaben zur Dämmung bei Errichtung",
+                                  "Original, Angaben zur Dämmung bei Errichtung",
+                                  "nachträgliche Dämmung / Modernisierung",
+                                  "keine Angabe / unbekannter Zustand"
+                                ),
+                                # choiceNames = c (
+                                #   "seit Errichtung keine Änderung, keine Angaben zur Dämmung",
+                                #   "keine Änderung, Angaben beziehen sich auf Original-Dämmung",
+                                #   "Modernisierung / nachträgliche Dämmung",
+                                #   "keine Angabe / unbekannter Zustand"
+                                # ),
+                                choiceValues = c(
+                                  "None",
+                                  "Original",
+                                  "Refurbish",
+                                  "_NA_"
+                                )
+                              ) # End radioButtons                           
+                              
+                            ), # End column 
+                            
+                          ), # End fluidRow
                           
-                          column (12,
-                            
-                            # fluidRow (
-                            #   column (
-                            #     12,
-                            strong ("Art der Konstruktion"),
-                            #   ),
-                            #   style = ColumnStyle_Label_2Lines 
-                            # ),
-                            
-                            checkboxInput (
-                              inputId = "Indicator_Wall_Constr_Massive", 
-                              label = "massiv", 
-                              value = FALSE, 
-                              width = NULL
+                          fluidRow (
+                          
+                            column (
+                              12,
+                              strong ("Dämmung von außen möglich?"),
+                              radioButtons (
+                                inputId = "Code_Potential_ExternalWallInsulation",
+                                label = NULL,
+                                selected = NULL,
+                                inline = TRUE,
+                                width = NULL,
+                                choiceNames = c (
+                                  "ja",
+                                  "teilweise",
+                                  "nein",
+                                  "unbekannt"
+                                ),
+                                choiceValues = c(
+                                  "Possible",
+                                  "PartlyPossible",
+                                  "NotPossible",
+                                  "_NA_"
+                                )
+                              ) # End radioButtons                           
+                              
                             ),
                             
-                            checkboxInput (
-                              inputId = "Indicator_Wall_Constr_Wood", 
-                              label = "Holz", 
-                              value = FALSE, 
-                              width = NULL
-                            ),
-                            
-                          ) # End Column
+                          
+
+                            ) # End fluidRow
+                          
                           
                           
                         ), # End column
                         
-                        column (
-                          4,
-                          
-                          br (),
-                          
-                          fluidRow(
-                            column (
-                              12,
-                              strong ("energetischer Zustand")
-                            ),
-                            style = ColumnStyle_Label_2Lines 
-                          ),
-                          
-                          
-                          radioButtons(
-                            inputId = "Code_InsulationType_Wall",
-                            label = NULL,
-                            # choices = c(
-                            #     "keine Änderung",
-                            #     "Original-Dämmung",
-                            #     "Modernisierung",
-                            #     "keine Angabe / unbekannt"
-                            # ),                                ,
-                            selected = NULL,
-                            inline = FALSE,
-                            width = NULL,
-                            choiceNames = c (
-                              "Original, keine Angaben zur Dämmung bei Errichtung",
-                              "Original, Angaben zur Dämmung bei Errichtung",
-                              "nachträgliche Dämmung / Modernisierung",
-                              "keine Angabe / unbekannter Zustand"
-                            ),
-                            # choiceNames = c (
-                            #   "seit Errichtung keine Änderung, keine Angaben zur Dämmung",
-                            #   "keine Änderung, Angaben beziehen sich auf Original-Dämmung",
-                            #   "Modernisierung / nachträgliche Dämmung",
-                            #   "keine Angabe / unbekannter Zustand"
-                            # ),
-                            choiceValues = c(
-                              "None",
-                              "Original",
-                              "Refurbish",
-                              "_NA_"
-                            )
-                          ) # End radioButtons                           
-                          
-                        ), # End column 
                         
+              
+              
                         column (
                           6,
                           fluidRow (
@@ -5242,6 +5522,9 @@ www.iwu.de
                             
                           ), # End fluidRow
                           
+                          
+                          
+                          
                           fluidRow (
                             
                             conditionalPanel (
@@ -5251,12 +5534,12 @@ www.iwu.de
                                 ",
                               #(input.Checkbox_d_Insulation_Wall_InputNotAvailable == 0)
                               
-                              column (
-                                4
-                              ),
+                              # column (
+                              #   4
+                              # ),
                               
                               column (
-                                8,
+                                12,
                                 checkboxInput (
                                   inputId = "Indicator_InternalWallInsulation",
                                   label = "überwiegend Innendämmung",
@@ -5272,37 +5555,101 @@ www.iwu.de
                             
                           ), # End fluidRow
                           
-                          fluidRow (
-                            
-                            br (),
-                            
-                            column (
-                              12,
-                              strong ("Dämmung von außen möglich?"),
-                              radioButtons (
-                                inputId = "Code_Potential_ExternalWallInsulation",
-                                label = NULL,
-                                selected = NULL,
-                                inline = TRUE,
-                                width = NULL,
-                                choiceNames = c (
-                                  "ja",
-                                  "teilweise",
-                                  "nein",
-                                  "unbekannt"
-                                ),
-                                choiceValues = c(
-                                  "Possible",
-                                  "PartlyPossible",
-                                  "NotPossible",
-                                  "_NA_"
-                                )
-                              ) # End radioButtons                           
-                              
-                            ),
-                          ) # End fluidRow
                           
                         
+                          
+                          fluidRow (
+                            
+                            
+                            conditionalPanel (
+                              condition =  "(input.Checkbox_d_Insulation_Wall_InputNotAvailable == 0) &
+                                         ((input.Code_InsulationType_Wall == 'Refurbish') | 
+                                          (input.Code_InsulationType_Wall == 'Original'))",
+                              
+                              column (
+                                12,
+                                
+                                checkboxInput (
+                                  inputId = "Checkbox_Show_ExpertInput_Wall",
+                                  label = "Details der Dämmung (Experteneingabe)",
+                                  value = FALSE
+                                ),
+                                
+                                
+                                conditionalPanel (
+                                  condition =  "(input.Checkbox_Show_ExpertInput_Wall == 1)",
+                                  
+                                  column (
+                                    6, 
+                                    
+                                    "effektive Wärmeleitfähigkeit [W/m/K]",
+                                    
+                                    numericInput (
+                                      inputId = "Lambda_Insulation_Wall",
+                                      label = NULL,
+                                      value = 0,
+                                      min = 0.001,
+                                      max = 1.000,
+                                      step = 0.001,
+                                      width = 100
+                                    ) # End numericInput
+                                    
+                                  ), # End column
+                                  
+                                  
+                                  column (
+                                    6,
+                                    
+                                    conditionalPanel (
+                                      condition =  "input.Code_InsulationType_Wall == 'Refurbish'",
+                                      
+                                      radioButtons (
+                                        inputId = "Code_MeasureType_Wall",
+                                        label = NULL,
+                                        selected = "_NA_",
+                                        inline = FALSE,
+                                        width = NULL,
+                                        choiceNames = c (
+                                          "zusätzliche Dämmung",
+                                          "vorhandene Konstruktion ausgetauscht",
+                                          "vorhandene Dämmung ausgetauscht",
+                                          "k.A."
+                                        ),
+                                        choiceValues = c(
+                                          "Add",
+                                          "Replace",
+                                          "ReplaceInsulation",
+                                          "_NA_"
+                                        )
+                                      ) # End radioButtons                           
+                                      
+                                    ), # End conditionalPanel
+                                    
+                                    
+                                  ), # End column
+                                  
+                                  
+                                ), # End conditional panel expert input
+                                
+                              ), # End column expert input insulation Wall  
+                              
+                              
+                            ), # End conditional panel
+                            
+                            
+                            
+                            
+                            
+                            
+                          ), # End fluidRow
+                          
+                          
+                          
+                          
+                          
+                          
+                          
+                          
                           
                           ), # End column
                         
@@ -5588,31 +5935,37 @@ www.iwu.de
                           
                           br (),
                           
-                          column (12,
-                                  
-                                  # fluidRow (
-                                  #   column (
-                                  #     12,
-                                  strong ("Art der Konstruktion"),
-                                  #   ),
-                                  #   style = ColumnStyle_Label_2Lines 
-                                  # ),
-                                  
-                                  checkboxInput (
-                                    inputId = "Indicator_Floor_Constr_Massive", 
-                                    label = "massiv", 
-                                    value = FALSE, 
-                                    width = NULL
-                                  ),
-                                  
-                                  checkboxInput (
-                                    inputId = "Indicator_Floor_Constr_Wood", 
-                                    label = "Holz", 
-                                    value = FALSE, 
-                                    width = NULL
-                                  ),
-                                  
-                          ) # End Column
+                          fluidRow (
+                            
+                            column (12,
+                                    
+                                    # fluidRow (
+                                    #   column (
+                                    #     12,
+                                    strong ("Art der Konstruktion"),
+                                    #   ),
+                                    #   style = ColumnStyle_Label_2Lines 
+                                    # ),
+                                    
+                                    checkboxInput (
+                                      inputId = "Indicator_Floor_Constr_Massive", 
+                                      label = "massiv", 
+                                      value = FALSE, 
+                                      width = NULL
+                                    ),
+                                    
+                                    checkboxInput (
+                                      inputId = "Indicator_Floor_Constr_Wood", 
+                                      label = "Holz", 
+                                      value = FALSE, 
+                                      width = NULL
+                                    ),
+                                    
+                            ) # End Column
+                            
+                            
+                          ), # End fluidRow
+                          
                           
                           
                         ), # End column
@@ -5622,7 +5975,7 @@ www.iwu.de
                           
                           br (),
                           
-                          fluidRow(
+                          fluidRow (
                             column (
                               12,
                               strong ("energetischer Zustand")
@@ -5660,258 +6013,365 @@ www.iwu.de
                         ), # End column 
                         
                         
-                        column (
-                          2,
-                          
-                          br (),
-                          
-                          fluidRow (
-                            column (
-                              12,
-                              strong ("Jahr der Modernisierung")  
-                            ),
-                            style = ColumnStyle_Label_2Lines 
-                          ),
-                          
-                          conditionalPanel (
-                            condition = "(input.Code_Type_NumericQueries != 'Numeric') &
-                                (input.Checkbox_Year_Refurbishment_Floor_InputNotAvailable == 0) &
-                                (input.Code_InsulationType_Floor == 'Refurbish')",
-                            
-                            sliderInput (
-                              inputId = "Year_Refurbishment_Floor_Slider",
-                              label = NULL,
-                              value = 1970,
-                              min = 1970,
-                              max = 2030,
-                              step = 1,
-                              sep = ""
-                              #width = 500
-                            ), # End slider input
-                            
-                          ), # End conditional panel
-                          
-                          conditionalPanel (
-                            condition = "(input.Code_Type_NumericQueries != 'Slider') &
-                                (input.Checkbox_Year_Refurbishment_Floor_InputNotAvailable == 0) &
-                                (input.Code_InsulationType_Floor == 'Refurbish')",
-                            
-                            numericInput (
-                              inputId = "Year_Refurbishment_Floor",
-                              label = NULL,
-                              value = NA,
-                              min = 1970,
-                              max = 2030,
-                              width = 75
-                            ) # End numeric input
-                            
-                          ), # End conditional panel
-                          
-                          
-                          conditionalPanel (
-                            condition = "(input.Code_InsulationType_Floor == 'Refurbish')",
-                            
-                            checkboxInput (
-                              inputId = "Checkbox_Year_Refurbishment_Floor_InputNotAvailable",
-                              label = "keine Angabe / unbekannt",
-                              value = FALSE,
-                              width = NULL
-                            ), # End checkbox input 
-                            
-                          ), # End conditional panel
-                          
-                          
-                          conditionalPanel (
-                            condition = "(input.Code_InsulationType_Floor != 'Refurbish')",
-                            
-                            "- entfällt -" 
-                            
-                          ), # End conditional panel
-                          
-                          
-                        ), # End column
+                        
                         
                         column (
-                          2,
+                          6,
                           
-                          br (),
+                          fluidRow (
+                            
+                            
                           
-                          fluidRow(
-                            column (
-                              12,
-                              strong ("Dämmstärke [cm]")
+                          column (
+                            4,
+                            
+                            br (),
+                            
+                            fluidRow (
+                              column (
+                                12,
+                                strong ("Jahr der Modernisierung")  
+                              ),
+                              style = ColumnStyle_Label_2Lines 
                             ),
-                            style = ColumnStyle_Label_2Lines 
-                          ),
+                            
+                            conditionalPanel (
+                              condition = "(input.Code_Type_NumericQueries != 'Numeric') &
+                                (input.Checkbox_Year_Refurbishment_Floor_InputNotAvailable == 0) &
+                                (input.Code_InsulationType_Floor == 'Refurbish')",
+                              
+                              sliderInput (
+                                inputId = "Year_Refurbishment_Floor_Slider",
+                                label = NULL,
+                                value = 1970,
+                                min = 1970,
+                                max = 2030,
+                                step = 1,
+                                sep = ""
+                                #width = 500
+                              ), # End slider input
+                              
+                            ), # End conditional panel
+                            
+                            conditionalPanel (
+                              condition = "(input.Code_Type_NumericQueries != 'Slider') &
+                                (input.Checkbox_Year_Refurbishment_Floor_InputNotAvailable == 0) &
+                                (input.Code_InsulationType_Floor == 'Refurbish')",
+                              
+                              numericInput (
+                                inputId = "Year_Refurbishment_Floor",
+                                label = NULL,
+                                value = NA,
+                                min = 1970,
+                                max = 2030,
+                                width = 75
+                              ) # End numeric input
+                              
+                            ), # End conditional panel
+                            
+                            
+                            conditionalPanel (
+                              condition = "(input.Code_InsulationType_Floor == 'Refurbish')",
+                              
+                              checkboxInput (
+                                inputId = "Checkbox_Year_Refurbishment_Floor_InputNotAvailable",
+                                label = "keine Angabe / unbekannt",
+                                value = FALSE,
+                                width = NULL
+                              ), # End checkbox input 
+                              
+                            ), # End conditional panel
+                            
+                            
+                            conditionalPanel (
+                              condition = "(input.Code_InsulationType_Floor != 'Refurbish')",
+                              
+                              "- entfällt -" 
+                              
+                            ), # End conditional panel
+                            
+                            
+                          ), # End column
                           
                           
-                          conditionalPanel (
-                            condition = "(input.Code_Type_NumericQueries != 'Numeric') &
+                          column (
+                            4,
+                            
+                            br (),
+                            
+                            fluidRow(
+                              column (
+                                12,
+                                strong ("Dämmstärke [cm]")
+                              ),
+                              style = ColumnStyle_Label_2Lines 
+                            ),
+                            
+                            
+                            conditionalPanel (
+                              condition = "(input.Code_Type_NumericQueries != 'Numeric') &
                                          (input.Checkbox_d_Insulation_Floor_InputNotAvailable == 0) &
                                          ((input.Code_InsulationType_Floor == 'Original') | 
                                          ( input.Code_InsulationType_Floor == 'Refurbish'))",
+                              
+                              sliderInput (
+                                # numericInput (
+                                inputId = "d_Insulation_Floor_Slider",
+                                label = NULL,
+                                #label = "Dämmstärke [cm]",
+                                value = 1, # 2026-02-13 geändert von 0 auf 1
+                                min = 1,
+                                max = 40,
+                                step = 1
+                                #width = 500
+                              ),
+                              
+                            ), # End conditional panel
                             
-                            sliderInput (
-                              # numericInput (
-                              inputId = "d_Insulation_Floor_Slider",
-                              label = NULL,
-                              #label = "Dämmstärke [cm]",
-                              value = 1, # 2026-02-13 geändert von 0 auf 1
-                              min = 1,
-                              max = 40,
-                              step = 1
-                              #width = 500
-                            ),
-                            
-                          ), # End conditional panel
-                          
-                          conditionalPanel (
-                            condition = "(input.Code_Type_NumericQueries != 'Slider') &
+                            conditionalPanel (
+                              condition = "(input.Code_Type_NumericQueries != 'Slider') &
                                          (input.Checkbox_d_Insulation_Floor_InputNotAvailable == 0) &
                                          ((input.Code_InsulationType_Floor == 'Original') | 
                                          ( input.Code_InsulationType_Floor == 'Refurbish'))",
+                              
+                              # fluidRow (
+                              #   
+                              #   column (
+                              #     8,
+                              
+                              numericInput (
+                                inputId = "d_Insulation_Floor",
+                                label = NULL,
+                                #label = "[cm]",
+                                value = NA,
+                                min = 1,
+                                max = 40,
+                                width = 75
+                              ) # End numeric input
+                              
+                              #   ), # End column
+                              #   
+                              #   column (
+                              #     4,
+                              #     "cm"
+                              #   ) # End column
+                              #   
+                              # ) # End fluid row
+                              
+                            ), # End conditional panel
                             
-                            # fluidRow (
-                            #   
-                            #   column (
-                            #     8,
-                                
-                                numericInput (
-                                  inputId = "d_Insulation_Floor",
-                                  label = NULL,
-                                  #label = "[cm]",
-                                  value = NA,
-                                  min = 1,
-                                  max = 40,
-                                  width = 75
-                                ) # End numeric input
-                                
-                            #   ), # End column
-                            #   
-                            #   column (
-                            #     4,
-                            #     "cm"
-                            #   ) # End column
-                            #   
-                            # ) # End fluid row
                             
-                          ), # End conditional panel
-                          
-                          
-                          
-                          conditionalPanel (
-                            condition = "(input.Code_InsulationType_Floor == 'Refurbish') | 
+                            
+                            conditionalPanel (
+                              condition = "(input.Code_InsulationType_Floor == 'Refurbish') | 
                                          (input.Code_InsulationType_Floor == 'Original')",
+                              
+                              checkboxInput (
+                                inputId = "Checkbox_d_Insulation_Floor_InputNotAvailable",
+                                label = "keine Angabe / unbekannt",
+                                value = FALSE,
+                                width = NULL
+                              ), # End checkbox input
+                              
+                            ), # End conditional panel
                             
-                            checkboxInput (
-                              inputId = "Checkbox_d_Insulation_Floor_InputNotAvailable",
-                              label = "keine Angabe / unbekannt",
-                              value = FALSE,
-                              width = NULL
-                            ), # End checkbox input
                             
-                          ), # End conditional panel
-                          
-                          
-                          conditionalPanel (
-                            condition = "(input.Code_InsulationType_Floor != 'Refurbish') & 
+                            conditionalPanel (
+                              condition = "(input.Code_InsulationType_Floor != 'Refurbish') & 
                                          (input.Code_InsulationType_Floor != 'Original')",
+                              
+                              "- entfällt -" 
+                              
+                            ), # End conditional panel
                             
-                            "- entfällt -" 
                             
-                          ), # End conditional panel
+                            
+                            
+                            
+                            #style = "height:35px"
+                          ), # End column
+                          
+                          
+                          column (
+                            4,
+                            
+                            br (),
+                            
+                            fluidRow (
+                              column (
+                                12,
+                                strong ("Anteil an der Bauteilfläche [%]")
+                              ),
+                              style = ColumnStyle_Label_2Lines 
+                            ),
+                            
+                            
+                            conditionalPanel (
+                              condition = "(input.Code_Type_NumericQueries != 'Numeric')  &
+                                         (input.Checkbox_f_Insulation_Floor_InputNotAvailable == 0)  &
+                                         ((input.Code_InsulationType_Floor == 'Original') | 
+                                         ( input.Code_InsulationType_Floor == 'Refurbish'))",
+                              
+                              sliderInput (
+                                inputId = "f_Insulation_Floor_Slider",
+                                label = NULL,
+                                value = 10, # 2026-02-13 geändert von 0 auf 10
+                                min = 10,
+                                max = 100,
+                                step = 10
+                                #width = 200
+                              ),
+                              
+                            ), # End conditional panel
+                            
+                            conditionalPanel (
+                              condition = "(input.Code_Type_NumericQueries != 'Slider') &
+                                         (input.Checkbox_f_Insulation_Floor_InputNotAvailable == 0)  &
+                                         ((input.Code_InsulationType_Floor == 'Original') | 
+                                         ( input.Code_InsulationType_Floor == 'Refurbish'))",
+                              
+                              numericInput (
+                                inputId = "f_Insulation_Floor",
+                                label = NULL,
+                                value = 0,
+                                min = 10,
+                                max = 100,
+                                step = 10,
+                                width = 75
+                              ) # End numericInput
+                              
+                            ), # End conditional panel
+                            
+                            
+                            conditionalPanel (
+                              condition = "(input.Code_InsulationType_Floor == 'Refurbish') | 
+                                         (input.Code_InsulationType_Floor == 'Original')",
+                              
+                              checkboxInput (
+                                inputId = "Checkbox_f_Insulation_Floor_InputNotAvailable",
+                                label = "keine Angabe / unbekannt",
+                                value = FALSE,
+                                width = NULL
+                              ), # End checkbox input 
+                              
+                            ), # End conditional panel
+                            
+                            
+                            conditionalPanel (
+                              condition = "(input.Code_InsulationType_Floor != 'Refurbish') & 
+                                         (input.Code_InsulationType_Floor != 'Original')",
+                              
+                              "- entfällt -" 
+                              
+                            ), # End conditional panel
+                            
+                            
+                            #style = "height:35px"
+                          ), # End column
+                          
+                          ), # End fluidRow
                           
                           
                           
-                          
-                          
-                          #style = "height:35px"
-                        ), # End column
-                        
-                        
-                        column (
-                          2,
-                          
-                          br (),
                           
                           fluidRow (
+                            
+                          conditionalPanel (
+                            condition =  "(input.Checkbox_d_Insulation_Floor_InputNotAvailable == 0) &
+                                         ((input.Code_InsulationType_Floor == 'Refurbish') | 
+                                          (input.Code_InsulationType_Floor == 'Original'))",
+                            
                             column (
                               12,
-                              strong ("Anteil an der Bauteilfläche [%]")
-                            ),
-                            style = ColumnStyle_Label_2Lines 
-                          ),
-                          
-                          
-                          conditionalPanel (
-                            condition = "(input.Code_Type_NumericQueries != 'Numeric')  &
-                                         (input.Checkbox_f_Insulation_Floor_InputNotAvailable == 0)  &
-                                         ((input.Code_InsulationType_Floor == 'Original') | 
-                                         ( input.Code_InsulationType_Floor == 'Refurbish'))",
+                              
+                              checkboxInput (
+                                inputId = "Checkbox_Show_ExpertInput_Floor",
+                                label = "Details der Dämmung (Experteneingabe)",
+                                value = FALSE
+                              ),
+                              
+                              
+                              conditionalPanel (
+                                condition =  "(input.Checkbox_Show_ExpertInput_Floor == 1)",
+                                
+                                column (
+                                  6, 
+                                  
+                                  "effektive Wärmeleitfähigkeit [W/m/K]",
+                                  
+                                  numericInput (
+                                    inputId = "Lambda_Insulation_Floor",
+                                    label = NULL,
+                                    value = 0,
+                                    min = 0.001,
+                                    max = 1.000,
+                                    step = 0.001,
+                                    width = 100
+                                  ) # End numericInput
+                                  
+                                ), # End column
+
+                                
+                                column (
+                                  6,
+                                  
+                                  conditionalPanel (
+                                    condition =  "input.Code_InsulationType_Floor == 'Refurbish'",
+
+                                    radioButtons (
+                                      inputId = "Code_MeasureType_Floor",
+                                      label = NULL,
+                                      selected = "_NA_",
+                                      inline = FALSE,
+                                      width = NULL,
+                                      choiceNames = c (
+                                        "zusätzliche Dämmung",
+                                        "vorhandene Konstruktion ausgetauscht",
+                                        "vorhandene Dämmung ausgetauscht",
+                                        "k.A."
+                                      ),
+                                      choiceValues = c(
+                                        "Add",
+                                        "Replace",
+                                        "ReplaceInsulation",
+                                        "_NA_"
+                                      )
+                                    ) # End radioButtons                           
+                                    
+                                  ), # End conditionalPanel
+                                  
+                                  
+                                ), # End column
+                                
+                              
+                              ), # End conditional panel expert input
+                              
+                            ), # End column expert input insulation floor  
                             
-                            sliderInput (
-                              inputId = "f_Insulation_Floor_Slider",
-                              label = NULL,
-                              value = 10, # 2026-02-13 geändert von 0 auf 10
-                              min = 10,
-                              max = 100,
-                              step = 10
-                              #width = 200
-                            ),
                             
                           ), # End conditional panel
                           
-                          conditionalPanel (
-                            condition = "(input.Code_Type_NumericQueries != 'Slider') &
-                                         (input.Checkbox_f_Insulation_Floor_InputNotAvailable == 0)  &
-                                         ((input.Code_InsulationType_Floor == 'Original') | 
-                                         ( input.Code_InsulationType_Floor == 'Refurbish'))",
-                            
-                            numericInput (
-                              inputId = "f_Insulation_Floor",
-                              label = NULL,
-                              value = 0,
-                              min = 10,
-                              max = 100,
-                              step = 10,
-                              width = 75
-                            ) # End numericInput
-                            
-                          ), # End conditional panel
+                          
+                          ), # End fluidRow
                           
                           
-                          conditionalPanel (
-                            condition = "(input.Code_InsulationType_Floor == 'Refurbish') | 
-                                         (input.Code_InsulationType_Floor == 'Original')",
-                            
-                            checkboxInput (
-                              inputId = "Checkbox_f_Insulation_Floor_InputNotAvailable",
-                              label = "keine Angabe / unbekannt",
-                              value = FALSE,
-                              width = NULL
-                            ), # End checkbox input 
-                            
-                          ), # End conditional panel
                           
                           
-                          conditionalPanel (
-                            condition = "(input.Code_InsulationType_Floor != 'Refurbish') & 
-                                         (input.Code_InsulationType_Floor != 'Original')",
-                            
-                            "- entfällt -" 
-                            
-                          ), # End conditional panel
                           
-                          
-                          #style = "height:35px"
                         ), # End column
+                        
+                        
                         
                         style = "border: 1px solid lightgrey"
                         #style = "border: 1px dotted lightgrey"
                         
                       ),  # End fluidRow input Floor
                       
-                      
+                    
+                    
+                    
+                    
+
                       
                       
                       # br (),
@@ -13462,7 +13922,10 @@ server <- function (input, output, session) {
   js$backgroundCol (List_UI_InputFields_Numeric [18],"ivory") 
   js$backgroundCol (List_UI_InputFields_Numeric [19],"ivory") 
   js$backgroundCol (List_UI_InputFields_Numeric [20],"ivory") 
-  
+  js$backgroundCol (List_UI_InputFields_Numeric [21],"ivory") 
+  js$backgroundCol (List_UI_InputFields_Numeric [22],"ivory") 
+  js$backgroundCol (List_UI_InputFields_Numeric [23],"ivory") 
+  js$backgroundCol (List_UI_InputFields_Numeric [24],"ivory") 
   
   js$backgroundCol (List_UI_InputFields_Numeric_Percent [1],"ivory") 
   js$backgroundCol (List_UI_InputFields_Numeric_Percent [2],"ivory") 
@@ -14461,26 +14924,26 @@ server <- function (input, output, session) {
     Name_InputField = List_UI_InputFields_Numeric [20],
     SuffixInputField = "",
     input = input, rv = rv)
-# 
-#   ObserveInputField_UpdateDFCalcVariable (
-#     Name_InputField = List_UI_InputFields_Numeric [21],
-#     SuffixInputField = "",
-#     input = input, rv = rv)
-# 
-#   ObserveInputField_UpdateDFCalcVariable (
-#     Name_InputField = List_UI_InputFields_Numeric [22],
-#     SuffixInputField = "",
-#     input = input, rv = rv)
-# 
-#   ObserveInputField_UpdateDFCalcVariable (
-#     Name_InputField = List_UI_InputFields_Numeric [23],
-#     SuffixInputField = "",
-#     input = input, rv = rv)
-# 
-#   ObserveInputField_UpdateDFCalcVariable (
-#     Name_InputField = List_UI_InputFields_Numeric [24],
-#     SuffixInputField = "",
-#     input = input, rv = rv)
+
+  ObserveInputField_UpdateDFCalcVariable (
+    Name_InputField = List_UI_InputFields_Numeric [21],
+    SuffixInputField = "",
+    input = input, rv = rv)
+
+  ObserveInputField_UpdateDFCalcVariable (
+    Name_InputField = List_UI_InputFields_Numeric [22],
+    SuffixInputField = "",
+    input = input, rv = rv)
+
+  ObserveInputField_UpdateDFCalcVariable (
+    Name_InputField = List_UI_InputFields_Numeric [23],
+    SuffixInputField = "",
+    input = input, rv = rv)
+
+  ObserveInputField_UpdateDFCalcVariable (
+    Name_InputField = List_UI_InputFields_Numeric [24],
+    SuffixInputField = "",
+    input = input, rv = rv)
 
   
   ## Numeric percent
@@ -15016,7 +15479,28 @@ server <- function (input, output, session) {
     input = input, rv = rv)
   
   
-    
+  ObserveInputField_UpdateDFCalcVariable (
+    Name_InputField = List_UI_InputFields_RadioButton [29],
+    SuffixInputField = "",
+    input = input, rv = rv)
+  
+  ObserveInputField_UpdateDFCalcVariable (
+    Name_InputField = List_UI_InputFields_RadioButton [30],
+    SuffixInputField = "",
+    input = input, rv = rv)
+  
+  ObserveInputField_UpdateDFCalcVariable (
+    Name_InputField = List_UI_InputFields_RadioButton [31],
+    SuffixInputField = "",
+    input = input, rv = rv)
+  
+  ObserveInputField_UpdateDFCalcVariable (
+    Name_InputField = List_UI_InputFields_RadioButton [32],
+    SuffixInputField = "",
+    input = input, rv = rv)
+  
+  
+  
   
   ## List_UI_Checkbox_InputNotAvailable ----
   
