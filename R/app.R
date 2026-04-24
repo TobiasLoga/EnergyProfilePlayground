@@ -13,11 +13,11 @@
 # install.packages ("shinylive")
 # install.packages ("tabuladata")
 
+# renv::install (packages = "TobiasLoga/AuxFunctions")
 # devtools::install_github ("IWUGERMANY/tabuladata")
 # #renv::install (packages = "IWUGERMANY/tabuladata")
-# # renv::install (packages = "TobiasLoga/AuxFunctions")
 
-# 
+ 
 # devtools::install_github ("TobiasLoga/MobasyBuildingData")
 ## renv::install (packages = "TobiasLoga/MobasyBuildingData")
 
@@ -260,7 +260,7 @@ y_Max_ManualInput_ChartHeatNeed <- 400
 Set_MaxY_Auto_ChartFinalEnergy <- FALSE
 y_Max_ManualInput_ChartFinalEnergy <- 400 
 
-Set_MaxY_Auto_ChartExpectationRanges <- FALSE
+Set_MaxY_Auto_ChartExpectationRanges <- TRUE
 y_Max_ManualInput_ChartExpectationRanges <- 600 
 
 
@@ -341,6 +341,10 @@ Style_TypologyMatrix_BodyElement_Middle_Selected <-    "
   height: 135px;
   background-color: blue;
 "
+
+
+
+
 
 
 #background-color: rgb(240, 240, 240); # very light grey
@@ -517,7 +521,7 @@ InputVariableNames <- c (
   "f_Area_WindowType2",
   "Code_NumberPanes_WindowType1",
   "Code_NumberPanes_WindowType2",
-  "Indicator_LowE_WindowType1",
+  "Indicator_LowE_WindowType1",   
   "Indicator_LowE_WindowType2",
   "Code_Frame_WindowType1",
   "Code_Frame_WindowType2",
@@ -606,7 +610,75 @@ InputVariableNames <- c (
   "Code_BoundaryCond", 
   "Code_Climate",
   
-  "Code_U_Class_National"
+  "Code_U_Class_National",
+  
+  "Code_TypeInput_Envelope_SurfaceArea",
+  "Code_TypeInput_Envelope_ThermalTransmittance",
+  "Code_TypeInput_WindowAreaPassiveSolar",
+  "Code_TypeInput_AreaPotentialActiveSolar",
+  
+  "Description_Input_Roof_01",
+  "Description_Input_Roof_02",
+  "Description_Input_Wall_01",
+  "Description_Input_Wall_02",
+  "Description_Input_Wall_03",
+  "Description_Input_Floor_01",
+  "Description_Input_Floor_02",
+  "Description_Input_Window_01",
+  "Description_Input_Window_02",
+  "Description_Input_Door_01",
+  
+  "A_Input_Roof_01",
+  "A_Input_Roof_02",
+  "A_Input_Wall_01",
+  "A_Input_Wall_02",
+  "A_Input_Wall_03",
+  "A_Input_Floor_01",
+  "A_Input_Floor_02",
+  "A_Input_Window_01",
+  "A_Input_Window_02",
+  "A_Input_Door_01",
+  "U_Input_Roof_01",
+  "U_Input_Roof_02",
+  "U_Input_Wall_01",
+  "U_Input_Wall_02",
+  "U_Input_Wall_03",
+  "U_Input_Floor_01",
+  "U_Input_Floor_02",
+  "U_Input_Window_01",
+  "U_Input_Window_02",
+  "U_Input_Door_01",
+  "g_gl_n_Input_Window_1",
+  "g_gl_n_Input_Window_2",
+  "R_Add_UnheatedSpace_Roof_1",
+  "R_Add_UnheatedSpace_Roof_2",
+  "R_Add_UnheatedSpace_Wall_1",
+  "R_Add_UnheatedSpace_Wall_2",
+  "R_Add_UnheatedSpace_Wall_3",
+  "R_Add_UnheatedSpace_Floor_1",
+  "R_Add_UnheatedSpace_Floor_2",
+  "b_Transmission_Roof_1",
+  "b_Transmission_Roof_2",
+  "b_Transmission_Wall_1",
+  "b_Transmission_Wall_2",
+  "b_Transmission_Wall_3",
+  "b_Transmission_Floor_1",
+  "b_Transmission_Floor_2",
+  
+  "A_Window_Horizontal",
+  "A_Window_East",
+  "A_Window_South",
+  "A_Window_West",
+  "A_Window_North",
+  "delta_U_Input_ThermalBridging",
+  "n_Input_air_infiltration",
+
+  "Code_Orientation_ActiveSolarPotential_1",
+  "Code_Orientation_ActiveSolarPotential_2",
+  "Inclination_ActiveSolarPotential_1",
+  "Inclination_ActiveSolarPotential_2",
+  "A_ActiveSolarPotential_1",
+  "A_ActiveSolarPotential_2"
   
 )
 
@@ -637,9 +709,21 @@ InputVariableNames <- c (
 List_UI_InputFields_Text <- c (
   #"ID_Dataset",
   "Name_Variant",
-  "ID_Zone_LocationBuilding"
+  "ID_Zone_LocationBuilding",
+  
+  "Description_Input_Roof_01",
+  "Description_Input_Roof_02",
+  "Description_Input_Wall_01",
+  "Description_Input_Wall_02",
+  "Description_Input_Wall_03",
+  "Description_Input_Floor_01",
+  "Description_Input_Floor_02",
+  "Description_Input_Window_01",
+  "Description_Input_Window_02",
+  "Description_Input_Door_01"
+  
 )
-# Current number: 2 
+# Current number: 12 
 
 
 List_UI_InputFields_Numeric <- c (
@@ -668,9 +752,64 @@ List_UI_InputFields_Numeric <- c (
   "Lambda_Insulation_Floor",
   
   "Year_Installation_WindowType1",
-  "Year_Installation_WindowType2"
+  "Year_Installation_WindowType2",
   
-) # Current number: 24
+  "A_Input_Roof_01",
+  "A_Input_Roof_02",
+  "A_Input_Wall_01",
+  "A_Input_Wall_02",
+  "A_Input_Wall_03",
+  "A_Input_Floor_01",
+  "A_Input_Floor_02",
+  "A_Input_Window_01",
+  "A_Input_Window_02",
+  "A_Input_Door_01",
+  
+  "U_Input_Roof_01",
+  "U_Input_Roof_02",
+  "U_Input_Wall_01",
+  "U_Input_Wall_02",
+  "U_Input_Wall_03",
+  "U_Input_Floor_01",
+  "U_Input_Floor_02",
+  "U_Input_Window_01",
+  "U_Input_Window_02",
+  "U_Input_Door_01",
+  
+  "g_gl_n_Input_Window_1",
+  "g_gl_n_Input_Window_2",
+  
+  "R_Add_UnheatedSpace_Roof_1",
+  "R_Add_UnheatedSpace_Roof_2",
+  "R_Add_UnheatedSpace_Wall_1",
+  "R_Add_UnheatedSpace_Wall_2",
+  "R_Add_UnheatedSpace_Wall_3",
+  "R_Add_UnheatedSpace_Floor_1",
+  "R_Add_UnheatedSpace_Floor_2",
+  
+  "b_Transmission_Roof_1",
+  "b_Transmission_Roof_2",
+  "b_Transmission_Wall_1",
+  "b_Transmission_Wall_2",
+  "b_Transmission_Wall_3",
+  "b_Transmission_Floor_1",
+  "b_Transmission_Floor_2",
+  
+  "A_Window_Horizontal",
+  "A_Window_East",
+  "A_Window_South",
+  "A_Window_West",
+  "A_Window_North",
+  "delta_U_Input_ThermalBridging",
+  "n_Input_air_infiltration",
+  
+  "Inclination_ActiveSolarPotential_1",
+  "Inclination_ActiveSolarPotential_2",
+  "A_ActiveSolarPotential_1",
+  "A_ActiveSolarPotential_2"
+  
+  
+) # Current number: 24 + 36 + 7 + 4 = 71
 
 
 List_UI_InputFields_Numeric_Percent <- c (
@@ -726,8 +865,8 @@ List_UI_InputFields_CheckBox <- c (
   
   "Indicator_InternalWallInsulation",
   
-  "Indicator_LowE_WindowType1",
-  "Indicator_LowE_WindowType2",
+#  "Indicator_LowE_WindowType1", # 2026-04-24: Exception, this is now treated as a radio button
+#  "Indicator_LowE_WindowType2", # 2026-04-24: Exception, this is now treated as a radio button
   "Indicator_PassiveHouseWindow_WindowType1",
   "Indicator_PassiveHouseWindow_WindowType2",
   
@@ -796,7 +935,8 @@ List_UI_InputFields_CheckBox <- c (
   
   "Indicator_SysHW_D_S_ExtraThickInsulation"
   
-) # Current number: 13 + 1 + 9 + 12 + 14 = 34 + 14 + 14 + 1 = 64
+) # Current number: 13 + 1 + 9 + 12 + 14 = 34 + 14 + 14 + 1 - 2 = 62
+
 
   
 List_UI_InputFields_RadioButton <- c (
@@ -820,6 +960,8 @@ List_UI_InputFields_RadioButton <- c (
   
   "Code_NumberPanes_WindowType1",
   "Code_NumberPanes_WindowType2",
+  "Indicator_LowE_WindowType1", # 2026-04-24: Exception, this is now treated as a radio button
+  "Indicator_LowE_WindowType2", # 2026-04-24: Exception, this is now treated as a radio button
   "Code_Frame_WindowType1",
   "Code_Frame_WindowType2",
   "Code_ThermalBridging",
@@ -843,10 +985,18 @@ List_UI_InputFields_RadioButton <- c (
   "Code_BoundaryCond", 
   "Code_Climate",
   
-  "Code_U_Class_National"
+  "Code_U_Class_National",
+  
+  "Code_TypeInput_Envelope_SurfaceArea",
+  "Code_TypeInput_Envelope_ThermalTransmittance",
+  "Code_TypeInput_WindowAreaPassiveSolar",
+  "Code_TypeInput_AreaPotentialActiveSolar",
+  
+  "Code_Orientation_ActiveSolarPotential_1",
+  "Code_Orientation_ActiveSolarPotential_2"
   
   
-) # Current number: 17 + 4 + 1 + 1 + 2 + 2 + 1 + 4 = 32
+) # Current number: 17 + 4 + 1 + 1 + 2 + 2 + 1 + 4 + 4 + 2 = 40
   
 
 
@@ -6422,6 +6572,8 @@ www.iwu.de
                           br (),
                           br (),
                           br (),
+                          br (),
+                          br (),
                           
                           checkboxInput (
                             inputId = "Show_WindowType2",
@@ -6456,7 +6608,7 @@ www.iwu.de
                           
                           radioButtons (
                             inputId = "Code_NumberPanes_WindowType1",
-                            label = "Verglasung",
+                            label = "Anzahl Scheiben",
                             selected = "_NA_",
                             inline = FALSE,
                             width = NULL,
@@ -6475,13 +6627,31 @@ www.iwu.de
                           ), # End radioButtons    
                           
                           br (),
-                          
-                          checkboxInput (
+
+                          radioButtons (
                             inputId = "Indicator_LowE_WindowType1",
                             label = "Wärmeschutz-Verglasung",
-                            value = FALSE,
+                            selected = FALSE,
+                            inline = FALSE,
+                            choiceNames = c (
+                              "ja",
+                              "nein",
+                              "keine Angaben / unbekannt"
+                            ),
+                            choiceValues = c (
+                              TRUE,
+                              FALSE,
+                              NA
+                            ),
                             width = NULL
-                          ), # End checkbox input 
+                          ), # End radioButtons 
+                          
+                          # checkboxInput (
+                          #   inputId = "Indicator_LowE_WindowType1",
+                          #   label = "Wärmeschutz-Verglasung",
+                          #   value = FALSE,
+                          #   width = NULL
+                          # ), # End checkbox input 
                           
                           
                           
@@ -6514,10 +6684,14 @@ www.iwu.de
                           
                           checkboxInput (
                             inputId = "Indicator_PassiveHouseWindow_WindowType1",
-                            label = "Passivhaus-Fenster (3-Scheiben + gedämmter Rahmen)",
+                            label = strong ("Passivhaus-Fenster"),
                             value = FALSE,
                             width = NULL
                           ), # End checkbox input 
+                          
+                          div ("= 3 Scheiben + gedämmter Rahmen, die anderen Eingaben werden ignoriert", 
+                               style = "margin-top: -10px;"),
+                          
                           
                         ), # End column
                         
@@ -6695,7 +6869,7 @@ www.iwu.de
                             
                             radioButtons (
                               inputId = "Code_NumberPanes_WindowType2",
-                              label = "Verglasung",
+                              label = "Anzahl Scheiben",
                               selected = "_NA_",
                               inline = FALSE,
                               width = NULL,
@@ -6714,13 +6888,33 @@ www.iwu.de
                             ), # End radioButtons    
                           
                             br (),
+
                             
-                            checkboxInput (
-                              inputId = "Indicator_LowE_WindowType2",
+                            radioButtons (
+                              inputId = "Indicator_LowE_WindowType2", 
                               label = "Wärmeschutz-Verglasung",
-                              value = FALSE,
+                              selected = FALSE,
+                              inline = FALSE,
+                              choiceNames = c (
+                                "ja",
+                                "nein",
+                                "keine Angaben / unbekannt"
+                              ),
+                              choiceValues = c (
+                                TRUE,
+                                FALSE,
+                                NA
+                              ),
                               width = NULL
-                            ), # End checkbox input 
+                            ), # End radioButtons 
+                            
+                                                        
+                            # checkboxInput (
+                            #   inputId = "Indicator_LowE_WindowType2",
+                            #   label = "Wärmeschutz-Verglasung",
+                            #   value = FALSE,
+                            #   width = NULL
+                            # ), # End checkbox input 
                             
                             
                             
@@ -6753,10 +6947,14 @@ www.iwu.de
                             
                             checkboxInput (
                               inputId = "Indicator_PassiveHouseWindow_WindowType2",
-                              label = "Passivhaus-Fenster (3-Scheiben + gedämmter Rahmen)",
+                              label = strong ("Passivhaus-Fenster"),
                               value = FALSE,
                               width = NULL
                             ), # End checkbox input 
+                            
+                            div ("= 3 Scheiben + gedämmter Rahmen, die anderen Eingaben werden ignoriert", 
+                                 style = "margin-top: -10px;"),
+                            
                             
                           ), # End column
                           
@@ -7087,11 +7285,11 @@ www.iwu.de
 
                           ), # End conditionalPanel show thermal bridging input
 
+                        br (),
                         
                       ), # End fluidRow
                       
                       
-                      br (),
                       
                       
                       #######################################################################X
@@ -7332,7 +7530,7 @@ www.iwu.de
                               
                               
                               
-                            ),
+                            ), # End conditional panel
                             
                             
                             
@@ -7376,13 +7574,1143 @@ www.iwu.de
                         
                         
                         
-                      ),
+                      ), # End fluidRow Block "Undichtigkeiten"
+                      
+                      
+                    
+                    
+                    
+                    
+                    
+                    #######################################################################X
+                    #### § Building envelope - alternative manual input  -----
+                    
+                    fluidRow (
+                      
+                      style = "background-color:white;",
+                      
+                      
+                      # Header 
+                      column ( 
+                        12,
+                        strong ("Gebäudehülle - alternative manuelle Eingabe"),
+                        style = "background-color: grey; color: white;"
+                        #style = "background-color: orange",
+                        
+                      ), # End header column
+                      
+                      br (),
+                      br (),
+                      
+                    ), # End fluidRow
+                    
+                    
+                      
+                    
+                    #######################################################################X
+                    ##### > Select the type of input data used for calculation  -----
+                    
+                    
+                    fluidRow (
+                      
+                      style = "background-color:white;",
+                      
+                      # Header 
+                      column ( 
+                        11,
+                        strong ("Auswahl des Eingabetyps für die Berechnung"),
+                        style = "background-color: lightblue",
+                        
+                      ), # End header column
+
+                      column (
+                        1,
+                        checkboxInput(
+                          inputId = "Show_TypeInput_Building",
+                          label = "≡",   #"Ξ",   #"Θ",
+                          value = FALSE
+                        ),
+                        style = "background-color: lightblue; text-align: center; height: 35px"
+                      ), # End column
+                      
+                    ), # End header fluidRow
+                    
+                    
+                    
+                    column (12,
+                      
+                      style = "background-color:white;",
+                      
+
+                      conditionalPanel (
+                        condition = "input.Show_TypeInput_Building == 1",
+                        
+                        
+                        
+                        br (),
+                        
+                        fluidRow(
+                          column(6, shiny::radioButtons(
+                            inputId = "Code_TypeInput_Envelope_SurfaceArea",
+                            label = "Eingabe der Hüllfläche",
+                            choiceValues = list("Functional", "Manual", "_NA_"),
+                            choiceNames = list("Energieprofil", "manuell", "nicht definiert"),
+                            selected = "_NA_"
+                          )),
+                          column(6, shiny::radioButtons(
+                            inputId = "Code_TypeInput_WindowAreaPassiveSolar",
+                            label = "Fensterflächen nach Orientierung",
+                            choiceValues = list("Functional", "Manual", "_NA_"),
+                            choiceNames = list("Energieprofil", "manuell", "nicht definiert"),
+                            selected = "_NA_"
+                          ))
+                        ),
+                        fluidRow(
+                          column(6, shiny::radioButtons(
+                            inputId = "Code_TypeInput_Envelope_ThermalTransmittance",
+                            label = "thermische Eigenschaften der Gebäudehülle",
+                            choiceValues = list("Functional", "Manual", "_NA_"),
+                            choiceNames = list("Energieprofil", "manuell", "nicht definiert"),
+                            selected = "_NA_"
+                          )),
+                          column(6, shiny::radioButtons(
+                            inputId = "Code_TypeInput_AreaPotentialActiveSolar",
+                            label = "nutzbare (Dach-)Flächen für aktiv-solare Systeme",
+                            choiceValues = list("Functional", "Manual", "_NA_"),
+                            choiceNames = list("siehe Hüllfläche", "immer manuell", "nicht definiert"),
+                            selected = "_NA_"
+                          ))
+                        ),# End fluidRow
+                        
+                        
+                        
+                      ), # End conditional panel 
+                      
+                      
+                      br (),
                       
                       
                       
+                    ), # End column
+                    
+                    
+                      
+                    
+                    
+                    #######################################################################X
+                    ##### > Manual data entry: energy balance input data (alternative to Energy Profile Indicators)  -----
+                    
+                    
+                    
+                    fluidRow (
+                      
+                      style = "background-color:white;",
+                      
+                      # Header 
+                      column ( 
+                        11,
+                        strong ("Eingabe von Energiebilanz-Eingangsdaten (alternativ zu den Energieprofil-Indikatoren)"),
+                        style = "background-color: lightblue",
+                        
+                      ), # End header column
+                      
+                      column (
+                        1,
+                        checkboxInput(
+                          inputId = "Show_ManualInput_Building",
+                          label = "≡",   #"Ξ",   #"Θ",
+                          value = FALSE
+                        ),
+                        style = "background-color: lightblue; text-align: center; height: 35px"
+                      ), # End column
                       
                       
+                    ), # End header fluidRow
+                    
+                    
+                    fluidRow (
+                      style = "background-color:white;",
                       
+                      br (),
+                      
+                    ), # End fluidRow
+                    
+                      
+                      conditionalPanel (
+                        condition = "input.Show_ManualInput_Building == 1",
+                        
+                        
+                        #######################################################################X
+                        ###### > Manual data entry: Thermal envelope  -----
+                        
+                        
+                        
+                        br (),
+                        
+                        fluidRow(
+                          column(2, tags$strong("Bauteil-Typ")),
+                          column(3, tags$strong("Beschreibung")),
+                          column(2, tags$strong(tags$span(title = "Außenmaß des Gebäudes", "Fläche der thermischen Hülle"))),
+                          column(2, tags$strong(tags$span(title = "Wärmedurchgangskoeffizient", "U-Wert"))),
+                          column(1, tags$strong(tags$span(title = "Gesamtenergiedurchlassgrad für solare Einstrahlung senkrecht zur Scheibe", "g-Wert"))),
+                          column(1, tags$div(style = "font-size: 10px; line-height: 1.1 !important; margin: 0; padding: 0;",
+                                             tags$strong(tags$span(title = "Berücksichtigung angrenzender unbeheizter Bereiche", "zusätzlicher Wärme-durchlass-Widerstand")))),
+                          column(1, tags$div(style = "font-size: 10px; line-height: 1.1 !important; margin: 0; padding: 0;",
+                                             tags$strong(tags$span(title = "Reduktionsfaktor für Wärmeverluste ins Erdreich", "Reduktions-faktor Erdreich"))))
+                        ),
+                        
+                        # fluidRow(
+                        #   column(2, tags$strong("Bauteil-Typ")),
+                        #   column(3, tags$strong("Beschreibung")),
+                        #   column(2, tags$strong(tags$span(title = "Außenmaß des Gebäudes", "Fläche der thermischen Hülle"))),
+                        #   column(2, tags$strong(tags$span(title = "Wärmedurchgangskoeffizient", "U-Wert"))),
+                        #   column(1, tags$strong(tags$span(title = "Gesamtenergiedurchlassgrad für solare Einstrahlung senkrecht zur Scheibe", "g-Wert"))),
+                        #   column(1, tags$strong(tags$span(title = "Berücksichtigung angrenzender unbeheizter Bereiche", "zusätzlicher Wärmedurchlass-Widerstand"))),
+                        #   column(1, tags$strong(tags$span(title = "Reduktionsfaktor für Wärmeverluste ins Erdreich", "Reduktionsfaktor Erdreich")))
+                        # ),
+                        
+                        # fluidRow(
+                        #   column(2, tags$strong("Bauteil-Typ")),
+                        #   column(4, tags$strong("Beschreibung")),
+                        #   column(2, tags$strong("Fläche der thermischen Hülle")),
+                        #   column(1, tags$strong("U-Wert")),
+                        #   column(1, tags$strong("g-Wert")),
+                        #   column(1, tags$div(style = "font-size: 10px; line-height: 1.1 !important; margin: 0; padding: 0;",
+                        #                      "zusätzlicher Wärme-durchlass-Widerstand")),
+                        #   column(1, tags$div(style = "font-size: 10px; line-height: 1.1 !important; margin: 0; padding: 0;",
+                        #                      "Reduktions-faktor Erdreich"))
+                        # ),
+                        
+                        # Doesn't work
+                        # fluidRow(
+                        #   column(2, tags$strong("Bauteil-Typ")),
+                        #   column(3, tags$strong("Beschreibung")),
+                        #   column(2, tags$strong(tags$span(id = "tooltip_A", "Fläche der thermischen Hülle"))),
+                        #   column(2, tags$strong(tags$span(id = "tooltip_U", "U-Wert"))),
+                        #   column(1, tags$strong(tags$span(id = "tooltip_g", "g-Wert"))),
+                        #   column(1, tags$strong(tags$span(id = "tooltip_R", "zusätzlicher Wärmedurchlass-Widerstand"))),
+                        #   column(1, tags$strong(tags$span(id = "tooltip_b", "Reduktionsfaktor Erdreich")))
+                        # ),
+                        # shinyBS::bsTooltip(id = "tooltip_A", title = "(Außenmaß des Gebäudes)", placement = "top", trigger = "hover"),
+                        # shinyBS::bsTooltip(id = "tooltip_U", title = "Wärmedurchgangskoeffizient", placement = "top", trigger = "hover"),
+                        # shinyBS::bsTooltip(id = "tooltip_g", title = "Gesamtenergiedurchlassgrad für solare Einstrahlung senkrecht zur Scheibe", placement = "top", trigger = "hover"),
+                        # shinyBS::bsTooltip(id = "tooltip_R", title = "Berücksichtigung angrenzender unbeheizter Bereiche", placement = "top", trigger = "hover"),
+                        # shinyBS::bsTooltip(id = "tooltip_b", title = "Reduktionsfaktor für Wärmeverluste ins Erdreich", placement = "top", trigger = "hover"),
+                        
+                        # Doesn't work
+                        # fluidRow(
+                        #   column(2, tags$strong("Bauteil-Typ")),
+                        #   column(3, tags$strong("Beschreibung")),
+                        #   column(2, bslib::tooltip(tags$strong("Fläche der thermischen Hülle"),
+                        #                            "(Außenmaß des Gebäudes)", placement = "top")),
+                        #   column(2, bslib::tooltip(tags$strong("U-Wert"),
+                        #                            "Wärmedurchgangskoeffizient", placement = "top")),
+                        #   column(1, bslib::tooltip(tags$strong("g-Wert"),
+                        #                            "Gesamtenergiedurchlassgrad für solare Einstrahlung senkrecht zur Scheibe", placement = "top")),
+                        #   column(1, bslib::tooltip(tags$strong("zusätzlicher Wärmedurchlass-Widerstand"),
+                        #                            "Berücksichtigung angrenzender unbeheizter Bereiche", placement = "top")),
+                        #   column(1, tags$strong("Reduktionsfaktor Erdreich"))
+                        # ),
+                        
+                        
+                        
+                        #  fluidRow(
+                        #    column(2, tags$div(style = "font-size: 10px; line-height: 1.1 !important; margin: 0; padding: 0;", "")),
+                        #    column(4, tags$div(style = "font-size: 10px; line-height: 1.1 !important; margin: 0; padding: 0;", "")),
+                        #    column(2, tags$div(style = "font-size: 10px; line-height: 1.1 !important; margin: 0; padding: 0;", "Außenmaß des Gebäudes")),
+                        #    column(1, tags$div(style = "font-size: 10px; line-height: 1.1 !important; margin: 0; padding: 0;", "Wärme-durchgangs-koeffizient")),
+                        #    column(1, tags$div(style = "font-size: 10px; line-height: 1.1 !important; margin: 0; padding: 0;", "Gesamt-energie-durchlassgrad für solare Einstrahlung senkrecht zur Scheibe")),
+                        #    column(1, tags$div(style = "font-size: 10px; line-height: 1.1 !important; margin: 0; padding: 0;", "Berücksich-tigung angrenzender unbeheizter Bereiche")),
+                        #    column(1, tags$div(style = "font-size: 10px; line-height: 1.1 !important; margin: 0; padding: 0;", ""))
+                        #  ),
+                        # 
+                        # br (),
+                        
+                        
+                        tags$head(tags$style(HTML("
+                      #Text_Indicator_UseDirectInput_A,
+                      #Text_Indicator_DontUseDirectInput_A,
+                      #Text_Indicator_UseDirectInput_U,
+                      #Text_Indicator_DontUseDirectInput_U,
+                      #Text_Indicator_UseDirectInput_g,
+                      #Text_Indicator_DontUseDirectInput_g,
+                      #Text_Indicator_UseDirectInput_R,
+                      #Text_Indicator_DontUseDirectInput_R,
+                      #Text_Indicator_UseDirectInput_b,
+                      #Text_Indicator_DontUseDirectInput_b {
+                        text-align: center;
+                      }
+                    "))),
+                        
+                        
+                        tags$head(tags$style(HTML("
+                      #Text_Indicator_UseDirectInput_A,
+                      #Text_Indicator_UseDirectInput_U,
+                      #Text_Indicator_UseDirectInput_g,
+                      #Text_Indicator_UseDirectInput_R,
+                      #Text_Indicator_UseDirectInput_b {
+                      background-color: green !important;
+                      color: white !important;
+                      font-family: Georgia, serif !important;
+                      }
+                      #Text_Indicator_DontUseDirectInput_A,
+                      #Text_Indicator_DontUseDirectInput_U,
+                      #Text_Indicator_DontUseDirectInput_g,
+                      #Text_Indicator_DontUseDirectInput_R,
+                      #Text_Indicator_DontUseDirectInput_b {
+                      background-color: red !important;
+                      color: white !important;
+                      }
+                  "))),
+                        
+                        
+                        #  tags$head(tags$style(HTML("
+                        #   #Text_Indicator_UseDirectInput_A {
+                        #     background-color: green !important;
+                        #     color: white !important;
+                        #     font-family: Georgia, serif !important;
+                        #   }
+                        #   #Text_Indicator_DontUseDirectInput_A {
+                        #     background-color: red !important;
+                        #     color: white !important;
+                        #   }
+                        # "))),
+                        #  
+                        
+                        fluidRow(
+                          column (2, ""),
+                          column (3, ""),
+                          column (2, 
+                            shiny::conditionalPanel(
+                            condition = "input.Code_TypeInput_Envelope_SurfaceArea == 'Manual'",
+                            tags$div(style = "font-size: 11px; font-weight: bold; background-color: green; color: white; font-family: Georgia, serif; width: 40px;",
+                                     shiny::textInput(inputId = "Text_Indicator_UseDirectInput_A", label = NULL, value = "I",
+                                                      width = "40px"),)
+                          ),
+                          shiny::conditionalPanel(
+                            condition = "input.Code_TypeInput_Envelope_SurfaceArea != 'Manual'",
+                            tags$div(style = "font-size: 11px; font-weight: bold; background-color: red; color: white; width: 40px;",
+                                     shiny::textInput(inputId = "Text_Indicator_DontUseDirectInput_A", label = NULL, value = "O",
+                                                      width = "40px"),)
+                          )),
+                          column(2, shiny::conditionalPanel(
+                            condition = "input.Code_TypeInput_Envelope_ThermalTransmittance == 'Manual'",
+                            tags$div(style = "font-size: 11px; font-weight: bold; background-color: green; color: white; font-family: Georgia, serif; width: 40px;",
+                                     shiny::textInput(inputId = "Text_Indicator_UseDirectInput_U", label = NULL, value = "I",
+                                                      width = "40px"),)
+                          ),
+                          shiny::conditionalPanel(
+                            condition = "input.Code_TypeInput_Envelope_ThermalTransmittance != 'Manual'",
+                            tags$div(style = "font-size: 11px; font-weight: bold; background-color: red; color: white; width: 40px;",
+                                     shiny::textInput(inputId = "Text_Indicator_DontUseDirectInput_U", label = NULL, value = "O",
+                                                      width = "40px"),)
+                          )),
+                          column(1, shiny::conditionalPanel(
+                            condition = "input.Code_TypeInput_Envelope_ThermalTransmittance == 'Manual'",
+                            tags$div(style = "font-size: 11px; font-weight: bold; background-color: green; color: white; font-family: Georgia, serif; width: 40px;",
+                                     shiny::textInput(inputId = "Text_Indicator_UseDirectInput_g", label = NULL, value = "I",
+                                                      width = "40px"),)
+                          ),
+                          shiny::conditionalPanel(
+                            condition = "input.Code_TypeInput_Envelope_ThermalTransmittance != 'Manual'",
+                            tags$div(style = "font-size: 11px; font-weight: bold; background-color: red; color: white; width: 40px;",
+                                     shiny::textInput(inputId = "Text_Indicator_DontUseDirectInput_g", label = NULL, value = "O",
+                                                      width = "40px"),)
+                          )),
+                          column(1, shiny::conditionalPanel(
+                            condition = "input.Code_TypeInput_Envelope_ThermalTransmittance == 'Manual'",
+                            tags$div(style = "font-size: 11px; font-weight: bold; background-color: green; color: white; font-family: Georgia, serif; width: 40px;",
+                                     shiny::textInput(inputId = "Text_Indicator_UseDirectInput_R", label = NULL, value = "I",
+                                                      width = "40px"),)
+                          ),
+                          shiny::conditionalPanel(
+                            condition = "input.Code_TypeInput_Envelope_ThermalTransmittance != 'Manual'",
+                            tags$div(style = "font-size: 11px; font-weight: bold; background-color: red; color: white; width: 40px;",
+                                     shiny::textInput(inputId = "Text_Indicator_DontUseDirectInput_R", label = NULL, value = "O",
+                                                      width = "40px"),)
+                          )),
+                          column(1, shiny::conditionalPanel(
+                            condition = "input.Code_TypeInput_Envelope_ThermalTransmittance == 'Manual'",
+                            tags$div(style = "font-size: 11px; font-weight: bold; background-color: green; color: white; font-family: Georgia, serif; width: 40px;",
+                                     shiny::textInput(inputId = "Text_Indicator_UseDirectInput_b", label = NULL, value = "I",
+                                                      width = "40px"),)
+                          ),
+                          shiny::conditionalPanel(
+                            condition = "input.Code_TypeInput_Envelope_ThermalTransmittance != 'Manual'",
+                            tags$div(style = "font-size: 11px; font-weight: bold; background-color: red; color: white; width: 40px;",
+                                     shiny::textInput(inputId = "Text_Indicator_DontUseDirectInput_b", label = NULL, value = "O",
+                                                      width = "40px"),)
+                          )),
+                        ),                        
+                        
+                        
+                        fluidRow(
+                          column(2, tags$div(style = "text-align: right;", "")),
+                          column(3, tags$div(style = "text-align: right;", "")),
+                          column(2, tags$div(style = "text-align: right;", "m²")),
+                          column(2, tags$div(style = "text-align: right;", "W/(m²K)")),
+                          column(1, tags$div(style = "text-align: right;", "")),
+                          column(1, tags$div(style = "text-align: right;", "m²K/W")),
+                          column(1, tags$div(style = "text-align: right;", ""))
+                        ),
+                        
+                        
+                        
+
+                        
+                        
+                        
+                        # fluidRow(
+                        #   column(2, ""),
+                        #   column(4, ""),
+                        #   column(2, shiny::conditionalPanel(
+                        #     condition = "input.Code_TypeInput_Envelope_SurfaceArea == 'Manual'",
+                        #     tags$div(style = "font-size: 11px; font-weight: bold; background-color: green; color: white; font-family: Georgia, serif; width: 40px;",
+                        #              shiny::textInput(inputId = "Text_Indicator_UseDirectInput_A", label = NULL, value = "I",
+                        #                               width = "40px"))
+                        #   ),
+                        #   shiny::conditionalPanel(
+                        #     condition = "input.Code_TypeInput_Envelope_SurfaceArea != 'Manual'",
+                        #     tags$div(style = "font-size: 11px; font-weight: bold; background-color: red; color: white; width: 40px;",
+                        #              shiny::textInput(inputId = "Text_Indicator_DontUseDirectInput_A", label = NULL, value = "O",
+                        #                               width = "40px"))
+                        #   )),
+                        #   column(1, tags$div(style = "font-size: 11px; font-weight: bold;",
+                        #                      shiny::textInput(inputId = "Text_Indicator_UseDirectInput_U", label = NULL, value = "O",
+                        #                                       width = "40px")
+                        #   )),
+                        #   column(1, tags$div(style = "font-size: 11px; font-weight: bold;",
+                        #                      shiny::textInput(inputId = "Text_Indicator_UseDirectInput_g", label = NULL, value = "O",
+                        #                                       width = "40px")
+                        #   )),
+                        #   column(1, tags$div(style = "font-size: 11px; font-weight: bold;",
+                        #                      shiny::textInput(inputId = "Text_Indicator_UseDirectInput_R", label = NULL, value = "O",
+                        #                                       width = "40px")
+                        #   )),
+                        #   column(1, tags$div(style = "font-size: 11px; font-weight: bold;",
+                        #                      shiny::textInput(inputId = "Text_Indicator_UseDirectInput_b", label = NULL, value = "O",
+                        #                                       width = "40px")
+                        #   ))
+                        # ),                   
+                        
+                        
+                        # fluidRow(
+                        #   column(2, ""),
+                        #   column(4, ""),
+                        #   column(2, tags$div(style = "font-size: 11px; font-weight: bold;",
+                        #                      textInput(inputId = "Text_Indicator_UseDirectInput_A", label = NULL, value = "O",
+                        #                                width = "40px")
+                        #   )),
+                        #   column(1, tags$div(style = "font-size: 11px; font-weight: bold;",
+                        #                      textInput(inputId = "Text_Indicator_UseDirectInput_U", label = NULL, value = "O",
+                        #                                width = "40px")
+                        #   )),
+                        #   column(1, tags$div(style = "font-size: 11px; font-weight: bold;",
+                        #                      textInput(inputId = "Text_Indicator_UseDirectInput_g", label = NULL, value = "O",
+                        #                                width = "40px")
+                        #   )),
+                        #   column(1, tags$div(style = "font-size: 11px; font-weight: bold;",
+                        #                      textInput(inputId = "Text_Indicator_UseDirectInput_R", label = NULL, value = "O",
+                        #                                width = "40px")
+                        #   )),
+                        #   column(1, tags$div(style = "font-size: 11px; font-weight: bold;",
+                        #                      textInput(inputId = "Text_Indicator_UseDirectInput_b", label = NULL, value = "O",
+                        #                                width = "40px")
+                        #   ))
+                        # ),
+                        
+                        
+                        # fluidRow(
+                        #   column(2, ""),
+                        #   column(4, ""),
+                        #   column(2, tags$div(style = "display: flex; justify-content: flex-start;",
+                        #                      tags$div(style = "font-size: 11px; font-weight: bold;",
+                        #                               textInput(inputId = "Text_Indicator_UseDirectInput_A", label = NULL, value = "O",
+                        #                                         width = "40px"))
+                        #   )),
+                        #   column(1, tags$div(style = "display: flex; justify-content: flex-start;",
+                        #                      tags$div(style = "font-size: 11px; font-weight: bold;",
+                        #                               textInput(inputId = "Text_Indicator_UseDirectInput_U", label = NULL, value = "O",
+                        #                                         width = "40px"))
+                        #   )),
+                        #   column(1, tags$div(style = "display: flex; justify-content: flex-start;",
+                        #                      tags$div(style = "font-size: 11px; font-weight: bold;",
+                        #                               textInput(inputId = "Text_Indicator_UseDirectInput_g", label = NULL, value = "O",
+                        #                                         width = "40px"))
+                        #   )),
+                        #   column(1, tags$div(style = "display: flex; justify-content: flex-start;",
+                        #                      tags$div(style = "font-size: 11px; font-weight: bold;",
+                        #                               textInput(inputId = "Text_Indicator_UseDirectInput_R", label = NULL, value = "O",
+                        #                                         width = "40px"))
+                        #   )),
+                        #   column(1, tags$div(style = "display: flex; justify-content: flex-start;",
+                        #                      tags$div(style = "font-size: 11px; font-weight: bold;",
+                        #                               textInput(inputId = "Text_Indicator_UseDirectInput_b", label = NULL, value = "O",
+                        #                                         width = "40px"))
+                        #   ))
+                        # ),
+                        
+                        
+                        
+                        
+                        tags$head(tags$style(HTML("
+                      #Description_Input_Roof_01, #Description_Input_Roof_02,
+                      #Description_Input_Wall_01, #Description_Input_Wall_02, #Description_Input_Wall_03,
+                      #Description_Input_Floor_01, #Description_Input_Floor_02,
+                      #Description_Input_Window_01, #Description_Input_Window_02,
+                      #Description_Input_Door_01,
+                      #A_Input_Roof_01, #A_Input_Roof_02,
+                      #A_Input_Wall_01, #A_Input_Wall_02, #A_Input_Wall_03,
+                      #A_Input_Floor_01, #A_Input_Floor_02,
+                      #A_Input_Window_01, #A_Input_Window_02,
+                      #A_Input_Door_01,
+                      #U_Input_Roof_01, #U_Input_Roof_02,
+                      #U_Input_Wall_01, #U_Input_Wall_02, #U_Input_Wall_03,
+                      #U_Input_Floor_01, #U_Input_Floor_02,
+                      #U_Input_Window_01, #U_Input_Window_02,
+                      #U_Input_Door_01,
+                      #g_gl_n_Input_Window_1, #g_gl_n_Input_Window_2,
+                      #R_Add_UnheatedSpace_Roof_1, #R_Add_UnheatedSpace_Roof_2,
+                      #R_Add_UnheatedSpace_Wall_1, #R_Add_UnheatedSpace_Wall_2, #R_Add_UnheatedSpace_Wall_3,
+                      #R_Add_UnheatedSpace_Floor_1, #R_Add_UnheatedSpace_Floor_2,
+                      #b_Transmission_Roof_1, #b_Transmission_Roof_2,
+                      #b_Transmission_Wall_1, #b_Transmission_Wall_2, #b_Transmission_Wall_3,
+                      #b_Transmission_Floor_1, #b_Transmission_Floor_2 {
+                        background-color: ivory !important;
+                      }
+                    "))),
+                        
+                        
+                        
+                        tags$head(tags$style(HTML("
+                      #g_gl_n_Input_Window_1 .form-group,
+                      #g_gl_n_Input_Window_2 .form-group,
+                      #R_Add_UnheatedSpace_Roof_1 .form-group,
+                      #R_Add_UnheatedSpace_Roof_2 .form-group,
+                      #R_Add_UnheatedSpace_Wall_1 .form-group,
+                      #R_Add_UnheatedSpace_Wall_2 .form-group,
+                      #R_Add_UnheatedSpace_Wall_3 .form-group,
+                      #R_Add_UnheatedSpace_Floor_1 .form-group,
+                      #R_Add_UnheatedSpace_Floor_2 .form-group,
+                      #b_Transmission_Roof_1 .form-group,
+                      #b_Transmission_Roof_2 .form-group,
+                      #b_Transmission_Wall_1 .form-group,
+                      #b_Transmission_Wall_2 .form-group,
+                      #b_Transmission_Wall_3 .form-group,
+                      #b_Transmission_Floor_1 .form-group,
+                      #b_Transmission_Floor_2 .form-group {
+                        margin: 0 !important;
+                        padding: 0 !important;
+                      }
+                    
+                      #g_gl_n_Input_Window_1,
+                      #g_gl_n_Input_Window_2,
+                      #R_Add_UnheatedSpace_Roof_1,
+                      #R_Add_UnheatedSpace_Roof_2,
+                      #R_Add_UnheatedSpace_Wall_1,
+                      #R_Add_UnheatedSpace_Wall_2,
+                      #R_Add_UnheatedSpace_Wall_3,
+                      #R_Add_UnheatedSpace_Floor_1,
+                      #R_Add_UnheatedSpace_Floor_2,
+                      #b_Transmission_Roof_1,
+                      #b_Transmission_Roof_2,
+                      #b_Transmission_Wall_1,
+                      #b_Transmission_Wall_2,
+                      #b_Transmission_Wall_3,
+                      #b_Transmission_Floor_1,
+                      #b_Transmission_Floor_2 {
+                        margin: 0 !important;
+                        padding: 0 !important;
+                        width: 100% !important;
+                      }
+                    "))),
+                        
+                        
+                        tags$head(tags$style(HTML("
+                      #A_Input_Roof_01, #A_Input_Roof_02,
+                      #A_Input_Wall_01, #A_Input_Wall_02, #A_Input_Wall_03,
+                      #A_Input_Floor_01, #A_Input_Floor_02,
+                      #A_Input_Window_01, #A_Input_Window_02,
+                      #A_Input_Door_01,
+                      #U_Input_Roof_01, #U_Input_Roof_02,
+                      #U_Input_Wall_01, #U_Input_Wall_02, #U_Input_Wall_03,
+                      #U_Input_Floor_01, #U_Input_Floor_02,
+                      #U_Input_Window_01, #U_Input_Window_02,
+                      #U_Input_Door_01,
+                      #g_gl_n_Input_Window_1, #g_gl_n_Input_Window_2,
+                      #R_Add_UnheatedSpace_Roof_1, #R_Add_UnheatedSpace_Roof_2,
+                      #R_Add_UnheatedSpace_Wall_1, #R_Add_UnheatedSpace_Wall_2, #R_Add_UnheatedSpace_Wall_3,
+                      #R_Add_UnheatedSpace_Floor_1, #R_Add_UnheatedSpace_Floor_2,
+                      #b_Transmission_Roof_1, #b_Transmission_Roof_2,
+                      #b_Transmission_Wall_1, #b_Transmission_Wall_2, #b_Transmission_Wall_3,
+                      #b_Transmission_Floor_1, #b_Transmission_Floor_2 {
+                        text-align: right !important;
+                      }
+                    "))),
+                        
+                        
+                        fluidRow(
+                          column(2, textInput(inputId = "Name_Input_Roof_01", label = NULL, value = "Dach 1",
+                                              width = "100%")),
+                          column(3, textInput(inputId = "Description_Input_Roof_01", label = NULL, value = "Dach",
+                                              width = "100%")),
+                          column(2, numericInput(inputId = "A_Input_Roof_01", label = NULL, value = NULL,
+                                                 min = 0.0, max = 1000000.0, step = 10.0, width = "100%")),
+                          column(2, numericInput(inputId = "U_Input_Roof_01", label = NULL, value = NULL,
+                                                 min = 0.000, max = 10.000, step = 0.100, width = "100%")),
+                          column(1, ""),
+                          column(1, tags$div(style = "margin: 0; padding: 0;",
+                                             numericInput(inputId = "R_Add_UnheatedSpace_Roof_1", label = NULL, value = 0,
+                                                          min = 0.000, max = 10.000, step = 0.100, width = "100%"))),
+                          column(1, tags$div(style = "margin: 0; padding: 0;",
+                                             numericInput(inputId = "b_Transmission_Roof_1", label = NULL, value = 1,
+                                                          min = 0.000, max = 10.000, step = 0.100, width = "100%")))
+                        ),
+                        fluidRow(
+                          column(2, textInput(inputId = "Name_Input_Roof_02", label = NULL, value = "Dach 2",
+                                              width = "100%")),
+                          column(3, textInput(inputId = "Description_Input_Roof_02", label = NULL, value = "oberste Geschossdecke",
+                                              width = "100%")),
+                          column(2, numericInput(inputId = "A_Input_Roof_02", label = NULL, value = NULL,
+                                                 min = 0.0, max = 1000000.0, step = 10.0, width = "100%")),
+                          column(2, numericInput(inputId = "U_Input_Roof_02", label = NULL, value = NULL,
+                                                 min = 0.000, max = 10.000, step = 0.100, width = "100%")),
+                          column(1, ""),
+                          column(1, tags$div(style = "margin: 0; padding: 0;",
+                                             numericInput(inputId = "R_Add_UnheatedSpace_Roof_2", label = NULL, value = 0.3,
+                                                          min = 0.000, max = 10.000, step = 0.100, width = "100%"))),
+                          column(1, tags$div(style = "margin: 0; padding: 0;",
+                                             numericInput(inputId = "b_Transmission_Roof_2", label = NULL, value = 1,
+                                                          min = 0.000, max = 10.000, step = 0.100, width = "100%")))
+                        ),
+                        fluidRow(
+                          column(2, textInput(inputId = "Name_Input_Wall_01", label = NULL, value = "Außenwand 1",
+                                              width = "100%")),
+                          column(3, textInput(inputId = "Description_Input_Wall_01", label = NULL, value = "Außenwand gegen Außenluft",
+                                              width = "100%")),
+                          column(2, numericInput(inputId = "A_Input_Wall_01", label = NULL, value = NULL,
+                                                 min = 0.0, max = 1000000.0, step = 10.0, width = "100%")),
+                          column(2, numericInput(inputId = "U_Input_Wall_01", label = NULL, value = NULL,
+                                                 min = 0.000, max = 10.000, step = 0.100, width = "100%")),
+                          column(1, ""),
+                          column(1, tags$div(style = "margin: 0; padding: 0;",
+                                             numericInput(inputId = "R_Add_UnheatedSpace_Wall_1", label = NULL, value = 0,
+                                                          min = 0.000, max = 10.000, step = 0.100, width = "100%"))),
+                          column(1, tags$div(style = "margin: 0; padding: 0;",
+                                             numericInput(inputId = "b_Transmission_Wall_1", label = NULL, value = 1,
+                                                          min = 0.000, max = 10.000, step = 0.100, width = "100%")))
+                        ),
+                        fluidRow(
+                          column(2, textInput(inputId = "Name_Input_Wall_02", label = NULL, value = "Außenwand 2",
+                                              width = "100%")),
+                          column(3, textInput(inputId = "Description_Input_Wall_02", label = NULL, value = "Wand gegen Kellerraum",
+                                              width = "100%")),
+                          column(2, numericInput(inputId = "A_Input_Wall_02", label = NULL, value = NULL,
+                                                 min = 0.0, max = 1000000.0, step = 10.0, width = "100%")),
+                          column(2, numericInput(inputId = "U_Input_Wall_02", label = NULL, value = NULL,
+                                                 min = 0.000, max = 10.000, step = 0.100, width = "100%")),
+                          column(1, ""),
+                          column(1, tags$div(style = "margin: 0; padding: 0;",
+                                             numericInput(inputId = "R_Add_UnheatedSpace_Wall_2", label = NULL, value = 0.3,
+                                                          min = 0.000, max = 10.000, step = 0.100, width = "100%"))),
+                          column(1, tags$div(style = "margin: 0; padding: 0;",
+                                             numericInput(inputId = "b_Transmission_Wall_2", label = NULL, value = 0.5,
+                                                          min = 0.000, max = 10.000, step = 0.100, width = "100%")))
+                        ),
+                        fluidRow(
+                          column(2, textInput(inputId = "Name_Input_Wall_03", label = NULL, value = "Außenwand 3",
+                                              width = "100%")),
+                          column(3, textInput(inputId = "Description_Input_Wall_03", label = NULL, value = "Wand gegen Erdreich",
+                                              width = "100%")),
+                          column(2, numericInput(inputId = "A_Input_Wall_03", label = NULL, value = NULL,
+                                                 min = 0.0, max = 1000000.0, step = 10.0, width = "100%")),
+                          column(2, numericInput(inputId = "U_Input_Wall_03", label = NULL, value = NULL,
+                                                 min = 0.000, max = 10.000, step = 0.100, width = "100%")),
+                          column(1, ""),
+                          column(1, tags$div(style = "margin: 0; padding: 0;",
+                                             numericInput(inputId = "R_Add_UnheatedSpace_Wall_3", label = NULL, value = 0,
+                                                          min = 0.000, max = 10.000, step = 0.100, width = "100%"))),
+                          column(1, tags$div(style = "margin: 0; padding: 0;",
+                                             numericInput(inputId = "b_Transmission_Wall_3", label = NULL, value = 0.5,
+                                                          min = 0.000, max = 10.000, step = 0.100, width = "100%")))
+                        ),
+                        fluidRow(
+                          column(2, textInput(inputId = "Name_Input_Floor_01", label = NULL, value = "Fußboden 1",
+                                              width = "100%")),
+                          column(3, textInput(inputId = "Description_Input_Floor_01", label = NULL, value = "Kellerdecke",
+                                              width = "100%")),
+                          column(2, numericInput(inputId = "A_Input_Floor_01", label = NULL, value = NULL,
+                                                 min = 0.0, max = 1000000.0, step = 10.0, width = "100%")),
+                          column(2, numericInput(inputId = "U_Input_Floor_01", label = NULL, value = NULL,
+                                                 min = 0.000, max = 10.000, step = 0.100, width = "100%")),
+                          column(1, ""),
+                          column(1, tags$div(style = "margin: 0; padding: 0;",
+                                             numericInput(inputId = "R_Add_UnheatedSpace_Floor_1", label = NULL, value = 0.3,
+                                                          min = 0.000, max = 10.000, step = 0.100, width = "100%"))),
+                          column(1, tags$div(style = "margin: 0; padding: 0;",
+                                             numericInput(inputId = "b_Transmission_Floor_1", label = NULL, value = 0.5,
+                                                          min = 0.000, max = 10.000, step = 0.100, width = "100%")))
+                        ),
+                        fluidRow(
+                          column(2, textInput(inputId = "Name_Input_Floor_02", label = NULL, value = "Fußboden 2",
+                                              width = "100%")),
+                          column(3, textInput(inputId = "Description_Input_Floor_02", label = NULL, value = "Boden gegen Erdreich",
+                                              width = "100%")),
+                          column(2, numericInput(inputId = "A_Input_Floor_02", label = NULL, value = NULL,
+                                                 min = 0.0, max = 1000000.0, step = 10.0, width = "100%")),
+                          column(2, numericInput(inputId = "U_Input_Floor_02", label = NULL, value = NULL,
+                                                 min = 0.000, max = 10.000, step = 0.100, width = "100%")),
+                          column(1, ""),
+                          column(1, tags$div(style = "margin: 0; padding: 0;",
+                                             numericInput(inputId = "R_Add_UnheatedSpace_Floor_2", label = NULL, value = 0,
+                                                          min = 0.000, max = 10.000, step = 0.100, width = "100%"))),
+                          column(1, tags$div(style = "margin: 0; padding: 0;",
+                                             numericInput(inputId = "b_Transmission_Floor_2", label = NULL, value = 0.5,
+                                                          min = 0.000, max = 10.000, step = 0.100, width = "100%")))
+                        ),
+                        fluidRow(
+                          column(2, textInput(inputId = "Name_Input_Window_01", label = NULL, value = "Fenster Typ 1",
+                                              width = "100%")),
+                          column(3, textInput(inputId = "Description_Input_Window_01", label = NULL, value = "Fenster Typ 1",
+                                              width = "100%")),
+                          column(2, numericInput(inputId = "A_Input_Window_01", label = NULL, value = NULL,
+                                                 min = 0.0, max = 1000000.0, step = 10.0, width = "100%")),
+                          column(2, numericInput(inputId = "U_Input_Window_01", label = NULL, value = NULL,
+                                                 min = 0.000, max = 10.000, step = 0.100, width = "100%")),
+                          column(1, tags$div(style = "margin: 0; padding: 0;",
+                                             numericInput(inputId = "g_gl_n_Input_Window_1", label = NULL, value = 0.6,
+                                                          min = 0.000, max = 10.000, step = 0.100, width = "100%"))),
+                          column(1, ""),
+                          column(1, "")
+                        ),
+                        fluidRow(
+                          column(2, textInput(inputId = "Name_Input_Window_02", label = NULL, value = "Fenster Typ 2",
+                                              width = "100%")),
+                          column(3, textInput(inputId = "Description_Input_Window_02", label = NULL, value = "Fenster Typ 2",
+                                              width = "100%")),
+                          column(2, numericInput(inputId = "A_Input_Window_02", label = NULL, value = NULL,
+                                                 min = 0.0, max = 1000000.0, step = 10.0, width = "100%")),
+                          column(2, numericInput(inputId = "U_Input_Window_02", label = NULL, value = NULL,
+                                                 min = 0.000, max = 10.000, step = 0.100, width = "100%")),
+                          column(1, tags$div(style = "margin: 0; padding: 0;",
+                                             numericInput(inputId = "g_gl_n_Input_Window_2", label = NULL, value = 0.6,
+                                                          min = 0.000, max = 10.000, step = 0.100, width = "100%"))),
+                          column(1, ""),
+                          column(1, "")
+                        ),
+                        fluidRow(
+                          column(2, textInput(inputId = "Name_Input_Door_01", label = NULL, value = "Außentür",
+                                              width = "100%")),
+                          column(3, textInput(inputId = "Description_Input_Door_01", label = NULL, value = "Außentür",
+                                              width = "100%")),
+                          column(2, numericInput(inputId = "A_Input_Door_01", label = NULL, value = NULL,
+                                                 min = 0.0, max = 1000000.0, step = 10.0, width = "100%")),
+                          column(2, numericInput(inputId = "U_Input_Door_01", label = NULL, value = NULL,
+                                                 min = 0.000, max = 10.000, step = 0.100, width = "100%")),
+                          column(1, ""),
+                          column(1, ""),
+                          column(1, "")
+                        ),          
+                        
+                        
+                    
+                        
+                        #######################################################################X
+                        ###### > Manual data entry:  Window areas differentiated by orientation  -----
+                        
+                        
+                        
+
+                        
+                        # CSS für die Indikator-Farben der neuen Felder
+                        tags$head(tags$style(HTML("
+                          #Text_Indicator_UseDirectInput_A_Window_Orientation,
+                          #Text_Indicator_DontUseDirectInput_A_Window_Orientation {
+                            text-align: center;
+                          }
+                          #Text_Indicator_UseDirectInput_A_Window_Orientation {
+                            background-color: green !important;
+                            color: white !important;
+                            font-family: Georgia, serif !important;
+                          }
+                          #Text_Indicator_DontUseDirectInput_A_Window_Orientation {
+                            background-color: red !important;
+                            color: white !important;
+                          }
+                        "))),
+                        
+                        # CSS für die neuen numericInput-Felder (ivory background + right-align)
+                        tags$head(tags$style(HTML("
+                          #A_Window_Horizontal, #A_Window_East, #A_Window_South,
+                          #A_Window_West, #A_Window_North {
+                            background-color: ivory !important;
+                            text-align: right !important;
+                          }
+                        "))),
+                        
+                        fluidRow (
+                          style = "background-color:white;",
+                          
+                          br (),
+                          
+                        ), # End fluidRow
+                        
+                        br (),
+                        
+
+                        fluidRow(
+                          column(5, tags$strong("Fensterflächen nach Orientierung")),
+                          column(2,
+                                 shiny::conditionalPanel(
+                                   condition = "input.Code_TypeInput_Envelope_SurfaceArea == 'Manual'",
+                                   tags$div(style = "font-size: 11px; font-weight: bold; background-color: green; color: white; font-family: Georgia, serif; width: 40px;",
+                                            shiny::textInput(inputId = "Text_Indicator_UseDirectInput_A_Window_Orientation",
+                                                             label = NULL, value = "I", width = "40px"))
+                                 ),
+                                 shiny::conditionalPanel(
+                                   condition = "input.Code_TypeInput_Envelope_SurfaceArea != 'Manual'",
+                                   tags$div(style = "font-size: 11px; font-weight: bold; background-color: red; color: white; width: 40px;",
+                                            shiny::textInput(inputId = "Text_Indicator_DontUseDirectInput_A_Window_Orientation",
+                                                             label = NULL, value = "O", width = "40px"))
+                                 )
+                          ),
+                          column(5, "")
+                        ),
+                        
+                        fluidRow(
+                          column(5, ""),
+                          column(2, tags$div(style = "text-align: right;", "m²")),
+                          column(5, "")
+                        ),
+                        
+                        
+                        
+                        tags$div(style = "margin-top: 0px;",
+                                 fluidRow(
+                                   # style = "height: 15px;",
+                                   # style = "margin-top: -6px; padding = 0px;", Doesn't work
+                                   column(2, textInput(inputId = "Name_Input_Window_Horizontal", label = NULL, value = "Horizontal", width = "100%")),
+                                   column(3, ""),
+                                   column(2, numericInput(inputId = "A_Window_Horizontal", label = NULL, value = NULL,
+                                                          min = 0.0, max = 1000000.0, step = 10.0, width = "100%")),
+                                   column(5, "")
+                                 )),
+                        tags$div(style = "margin-top: 0px;",
+                                 fluidRow(
+                                   # style = "height: 20px;",
+                                   # style = "margin-top: -6px; padding = 0px;", Doesn't work
+                                   column(2, textInput(inputId = "Name_Input_Window_East", label = NULL, value = "Ost", width = "100%")),
+                                   column(3, ""),
+                                   column(2, numericInput(inputId = "A_Window_East", label = NULL, value = NULL,
+                                                          min = 0.0, max = 1000000.0, step = 10.0, width = "100%")),
+                                   column(5, "")
+                                 )),
+                        tags$div(style = "margin-top: 0px;",
+                                 fluidRow(
+                                   column(2, textInput(inputId = "Name_Input_Window_South", label = NULL, value = "Süd", width = "100%")),
+                                   column(3, ""),
+                                   column(2, numericInput(inputId = "A_Window_South", label = NULL, value = NULL,
+                                                          min = 0.0, max = 1000000.0, step = 10.0, width = "100%")),
+                                   column(5, "")
+                                 )),
+                        tags$div(style = "margin-top: 0px;",
+                                 fluidRow(
+                                   column(2, textInput(inputId = "Name_Input_Window_West", label = NULL, value = "West", width = "100%")),
+                                   column(3, ""),
+                                   column(2, numericInput(inputId = "A_Window_West", label = NULL, value = NULL,
+                                                          min = 0.0, max = 1000000.0, step = 10.0, width = "100%")),
+                                   column(5, "")
+                                 )),
+                        tags$div(style = "margin-top: 0px;",
+                                 fluidRow(
+                                   column(2, textInput(inputId = "Name_Input_Window_North", label = NULL, value = "Nord", width = "100%")),
+                                   column(3, ""),
+                                   column(2, numericInput(inputId = "A_Window_North", label = NULL, value = NULL,
+                                                          min = 0.0, max = 1000000.0, step = 10.0, width = "100%")),
+                                   column(5, "")
+                                 )),                        
+                        
+                       "Hinweis: Falls die Summe der Teilflächen nicht gleich der Summe der für die Transmissionswärmeverluste angesetzten Fensterflächen ist, 
+                       wird in der Berechnung eine Anpassung entsprechend der Flächenanteile der hier eingegebenen Zahlen vorgenommen.", 
+                        
+
+                        
+                        
+                       #######################################################################X
+                       ###### > Manual data entry: Further envelope parameters  -----
+                       
+                       # CSS für die Indikator-Farben
+                                             tags$head(tags$style(HTML("
+                        #Text_Indicator_UseDirectInput_ThermalBridging_Infiltration,
+                        #Text_Indicator_DontUseDirectInput_ThermalBridging_Infiltration {
+                          text-align: center;
+                        }
+                        #Text_Indicator_UseDirectInput_ThermalBridging_Infiltration {
+                          background-color: green !important;
+                          color: white !important;
+                          font-family: Georgia, serif !important;
+                        }
+                        #Text_Indicator_DontUseDirectInput_ThermalBridging_Infiltration {
+                          background-color: red !important;
+                          color: white !important;
+                        }
+                      "))),
+                                             
+                                             # CSS für die neuen numericInput-Felder (ivory background + right-align)
+                                             tags$head(tags$style(HTML("
+                        #delta_U_Input_ThermalBridging, #n_Input_air_infiltration {
+                          background-color: ivory !important;
+                          text-align: right !important;
+                        }
+                      "))),
+                                             
+                       fluidRow(
+                         style = "background-color:white;",
+                         br(),
+                       ),
+                       
+                       br(),
+                       
+
+                       fluidRow(
+                         column(7, tags$strong("Weitere Angaben zur Hülle")),
+                         column(2,
+                                shiny::conditionalPanel(
+                                  condition = "input.Code_TypeInput_Envelope_ThermalTransmittance == 'Manual'",
+                                  tags$div(style = "font-size: 11px; font-weight: bold; background-color: green; color: white; font-family: Georgia, serif; width: 40px;",
+                                           shiny::textInput(inputId = "Text_Indicator_UseDirectInput_ThermalBridging_Infiltration",
+                                                            label = NULL, value = "I", width = "40px"))
+                                ),
+                                shiny::conditionalPanel(
+                                  condition = "input.Code_TypeInput_Envelope_ThermalTransmittance != 'Manual'",
+                                  tags$div(style = "font-size: 11px; font-weight: bold; background-color: red; color: white; width: 40px;",
+                                           shiny::textInput(inputId = "Text_Indicator_DontUseDirectInput_ThermalBridging_Infiltration",
+                                                            label = NULL, value = "O", width = "40px"))
+                                )
+                         ),
+                         column(2, ""),
+                         column(1, "")
+                       ),
+                       
+                       tags$div(style = "margin-top: 0px;",
+                                fluidRow(
+                                  column(7, textInput(inputId = "Name_delta_U_Input_ThermalBridging", label = NULL,
+                                                      value = "Wärmebrücken: Zuschlag auf alle U-Werte", width = "100%")),
+                                  column(2, numericInput(inputId = "delta_U_Input_ThermalBridging", label = NULL, value = NULL,
+                                                         min = 0.000, max = 10.000, step = 0.010, width = "100%")),
+                                  column(2, tags$div(style = "padding-top: 7px;", "W/(m²K)")),
+                                  column(1, "")
+                                )
+                       ),
+                       tags$div(style = "margin-top: 0px;",
+                                fluidRow(
+                                  column(7, textInput(inputId = "Name_n_Input_air_infiltration", label = NULL,
+                                                      value = "Luftwechsel durch Undichtigkeiten in der Hülle (eff. Wert in der Heizzeit)", width = "100%")),
+                                  column(2, numericInput(inputId = "n_Input_air_infiltration", label = NULL, value = NULL,
+                                                         min = 0.000, max = 10.000, step = 0.010, width = "100%")),
+                                  column(2, tags$div(style = "padding-top: 7px;", "1/h")),
+                                  column(1, "")
+                                )
+                       ),  
+                            
+                        
+                    
+                       
+                       
+                       
+                       
+                       
+                       
+                       
+                       
+                       
+                       
+                       
+                       
+                       
+                       
+                       #######################################################################X
+                       ###### > Manual data entry: Nutzbare (Dach-)Flächen für aktiv-solare Systeme  -----
+                       
+                       # CSS für die Indikator-Farben
+                       tags$head(tags$style(HTML("
+                          #Text_Indicator_UseDirectInput_ActiveSolar_Orientation,
+                          #Text_Indicator_DontUseDirectInput_ActiveSolar_Orientation,
+                          #Text_Indicator_UseDirectInput_ActiveSolar_Inclination,
+                          #Text_Indicator_DontUseDirectInput_ActiveSolar_Inclination,
+                          #Text_Indicator_UseDirectInput_ActiveSolar_Area,
+                          #Text_Indicator_DontUseDirectInput_ActiveSolar_Area {
+                            text-align: center;
+                          }
+                          #Text_Indicator_UseDirectInput_ActiveSolar_Orientation,
+                          #Text_Indicator_UseDirectInput_ActiveSolar_Inclination,
+                          #Text_Indicator_UseDirectInput_ActiveSolar_Area {
+                            background-color: green !important;
+                            color: white !important;
+                            font-family: Georgia, serif !important;
+                          }
+                          #Text_Indicator_DontUseDirectInput_ActiveSolar_Orientation,
+                          #Text_Indicator_DontUseDirectInput_ActiveSolar_Inclination,
+                          #Text_Indicator_DontUseDirectInput_ActiveSolar_Area {
+                            background-color: red !important;
+                            color: white !important;
+                          }
+                        "))),
+                                               
+                                               # CSS für die numericInput-Felder (ivory background + right-align)
+                                               tags$head(tags$style(HTML("
+                          #Inclination_ActiveSolarPotential_1, #Inclination_ActiveSolarPotential_2,
+                          #A_ActiveSolarPotential_1, #A_ActiveSolarPotential_2 {
+                            background-color: ivory !important;
+                            text-align: right !important;
+                          }
+                        "))),
+                       
+                       fluidRow(
+                         style = "background-color:white;",
+                         br(),
+                       ),
+                       
+                       br(),
+                       
+                       # Zeile 1: Spaltenüberschriften
+                       fluidRow(
+                         column(3, tags$strong("Nutzbare Dachflächen für aktiv-solare Systeme")),
+                         column(3, tags$strong("Orientierung")),
+                         column(3, tags$strong("Neigungswinkel")),
+                         column(3, tags$strong("nutzbare Fläche"))
+                       ),
+                       
+                       # Zeile 2: Erläuterungen
+                       fluidRow(
+                         column(3, ""),
+                         column(3, tags$div(style = "font-size: 10px; line-height: 1.1 !important; margin: 0; padding: 0;",
+                                            "überwiegende Orientierung der nutzbaren Flächen")),
+                         column(3, tags$div(style = "font-size: 10px; line-height: 1.1 !important; margin: 0; padding: 0;",
+                                            "überwiegende Neigung; Werte zwischen 0° (horizontal) und 90° (vertikal)")),
+                         column(3, tags$div(style = "font-size: 10px; line-height: 1.1 !important; margin: 0; padding: 0;",
+                                            "Bruttofläche mit der gegebenen Orientierung und Neigung"))
+                       ),
+                       
+                       # Zeile 3: Text-Indikatoren
+                       fluidRow(
+                         column(3, ""),
+                         column(3,
+                                shiny::conditionalPanel(
+                                  condition = "input.Code_TypeInput_AreaPotentialActiveSolar == 'Manual'",
+                                  tags$div(style = "font-size: 11px; font-weight: bold; background-color: green; color: white; font-family: Georgia, serif; width: 40px;",
+                                           shiny::textInput(inputId = "Text_Indicator_UseDirectInput_ActiveSolar_Orientation",
+                                                            label = NULL, value = "I", width = "40px"))
+                                ),
+                                shiny::conditionalPanel(
+                                  condition = "input.Code_TypeInput_AreaPotentialActiveSolar != 'Manual'",
+                                  tags$div(style = "font-size: 11px; font-weight: bold; background-color: red; color: white; width: 40px;",
+                                           shiny::textInput(inputId = "Text_Indicator_DontUseDirectInput_ActiveSolar_Orientation",
+                                                            label = NULL, value = "O", width = "40px"))
+                                )
+                         ),
+                         column(3,
+                                shiny::conditionalPanel(
+                                  condition = "input.Code_TypeInput_AreaPotentialActiveSolar == 'Manual'",
+                                  tags$div(style = "font-size: 11px; font-weight: bold; background-color: green; color: white; font-family: Georgia, serif; width: 40px;",
+                                           shiny::textInput(inputId = "Text_Indicator_UseDirectInput_ActiveSolar_Inclination",
+                                                            label = NULL, value = "I", width = "40px"))
+                                ),
+                                shiny::conditionalPanel(
+                                  condition = "input.Code_TypeInput_AreaPotentialActiveSolar != 'Manual'",
+                                  tags$div(style = "font-size: 11px; font-weight: bold; background-color: red; color: white; width: 40px;",
+                                           shiny::textInput(inputId = "Text_Indicator_DontUseDirectInput_ActiveSolar_Inclination",
+                                                            label = NULL, value = "O", width = "40px"))
+                                )
+                         ),
+                         column(3,
+                                shiny::conditionalPanel(
+                                  condition = "input.Code_TypeInput_AreaPotentialActiveSolar == 'Manual'",
+                                  tags$div(style = "font-size: 11px; font-weight: bold; background-color: green; color: white; font-family: Georgia, serif; width: 40px;",
+                                           shiny::textInput(inputId = "Text_Indicator_UseDirectInput_ActiveSolar_Area",
+                                                            label = NULL, value = "I", width = "40px"))
+                                ),
+                                shiny::conditionalPanel(
+                                  condition = "input.Code_TypeInput_AreaPotentialActiveSolar != 'Manual'",
+                                  tags$div(style = "font-size: 11px; font-weight: bold; background-color: red; color: white; width: 40px;",
+                                           shiny::textInput(inputId = "Text_Indicator_DontUseDirectInput_ActiveSolar_Area",
+                                                            label = NULL, value = "O", width = "40px"))
+                                )
+                         )
+                       ),
+                       
+                       # Einheiten-Zeile
+                       fluidRow(
+                         column(3, ""),
+                         column(3, ""),
+                         column(3, tags$div(style = "text-align: right;", "°")),
+                         column(3, tags$div(style = "text-align: right;", "m²"))
+                       ),
+                       
+                       # Zeile 4: Teilfläche 1
+                       fluidRow(
+                         column(3, "Teilfläche 1"),
+                         column(3, shiny::selectInput(
+                           inputId = "Code_Orientation_ActiveSolarPotential_1",
+                           label = NULL,
+                           choices = list(
+                             "- nicht vorhanden -" = "-",
+                             "Ost"                 = "East",
+                             "Süd-Ost"             = "SouthEast",
+                             "Süd"                 = "South",
+                             "Süd-West"            = "SouthWest",
+                             "West"                = "West",
+                             "Nord-West"           = "NorthWest",
+                             "Nord"                = "North",
+                             "Nord-Ost"            = "NorthEast",
+                             "- nicht bekannt -"   = "_NA_"
+                           ),
+                           selected = "-",
+                           width = "100%"
+                         )),
+                         column(3, numericInput(inputId = "Inclination_ActiveSolarPotential_1", label = NULL, value = NULL,
+                                                min = 0, max = 90, step = 1, width = "100%")),
+                         column(3, numericInput(inputId = "A_ActiveSolarPotential_1", label = NULL, value = NULL,
+                                                min = 0.0, max = 1000000.0, step = 1.0, width = "100%"))
+                       ),
+                       
+                       # Zeile 5: Teilfläche 2
+                       fluidRow(
+                         column(3, "Teilfläche 2"),
+                         column(3, shiny::selectInput(
+                           inputId = "Code_Orientation_ActiveSolarPotential_2",
+                           label = NULL,
+                           choices = list(
+                             "- nicht vorhanden -" = "-",
+                             "Ost"                 = "East",
+                             "Süd-Ost"             = "SouthEast",
+                             "Süd"                 = "South",
+                             "Süd-West"            = "SouthWest",
+                             "West"                = "West",
+                             "Nord-West"           = "NorthWest",
+                             "Nord"                = "North",
+                             "Nord-Ost"            = "NorthEast",
+                             "- nicht bekannt -"   = "_NA_"
+                           ),
+                           selected = "-",
+                           width = "100%"
+                         )),
+                         column(3, numericInput(inputId = "Inclination_ActiveSolarPotential_2", label = NULL, value = NULL,
+                                                min = 0, max = 90, step = 1, width = "100%")),
+                         column(3, numericInput(inputId = "A_ActiveSolarPotential_2", label = NULL, value = NULL,
+                                                min = 0.0, max = 1000000.0, step = 1.0, width = "100%"))
+                       ),
+                       
+                           
+                        
+                          
+                        
+                      ), # End conditional panel
+                      
+       
+                   
+                   
+                   
                       
                       # DAS GEHT !!!!!
                         # style = Style_Height_Dashboard_MainPanel
@@ -7409,6 +8737,10 @@ www.iwu.de
                     ), # End tabPanel
                     
   
+                    
+                    
+                    
+                    
                     #######################################################################X
                     #### tabPanel "Wärmeversorgung" - Input building data -----
                     
@@ -10183,75 +11515,75 @@ tabPanel (
   
   #### >>> TEMPLATE FOR BOX -----
   
-  box (
-    
-    status = "info",
-    solidHeader = TRUE, 
-    width = 6,
-    background = NULL,
-    
-    style = "
-                        #margin-top: -20px;
-                        #margin-bottom: -10px;
-                        #margin-left: -20px;
-                        padding: 0 !important;
-                      ",
-    
-    fluidRow (
-      
-      box (
-        
-        div (
-          
-          strong ("Neue Box"), 
-          
-          style = "margin-top: -8px; margin-left: 10px;"
-          
-        ), # End div
-        
-        title =  NULL,
-        footer = NULL,
-        status = NULL,
-        solidHeader = TRUE, 
-        background = "light-blue", 
-        width = 12,
-        height = 25,
-        collapsible = FALSE, 
-        collapsed = FALSE,
-        
-        
-      ), # End box
-      
-    ), # End fluid row 
-    
-    
-    fluidRow (
-      
-      style = "margin-top: -20px; margin-left: 8px; padding:0 !important;",
-      
-      column (
-        12,
-        
-        "Leere Spalte",
-        br (),
-        br (),
-        
-      ), # End column
-      
-      
-      column (
-        12,
-        "Leere Spalte",
-        
-        
-        br (),
-        br (),
-        
-      ), # End column
-      
-    ) # End fluidRow
-    
-  ), # End box 
+  # box (
+  #   
+  #   status = "info",
+  #   solidHeader = TRUE, 
+  #   width = 6,
+  #   background = NULL,
+  #   
+  #   style = "
+  #                       #margin-top: -20px;
+  #                       #margin-bottom: -10px;
+  #                       #margin-left: -20px;
+  #                       padding: 0 !important;
+  #                     ",
+  #   
+  #   fluidRow (
+  #     
+  #     box (
+  #       
+  #       div (
+  #         
+  #         strong ("Neue Box"), 
+  #         
+  #         style = "margin-top: -8px; margin-left: 10px;"
+  #         
+  #       ), # End div
+  #       
+  #       title =  NULL,
+  #       footer = NULL,
+  #       status = NULL,
+  #       solidHeader = TRUE, 
+  #       background = "light-blue", 
+  #       width = 12,
+  #       height = 25,
+  #       collapsible = FALSE, 
+  #       collapsed = FALSE,
+  #       
+  #       
+  #     ), # End box
+  #     
+  #   ), # End fluid row 
+  #   
+  #   
+  #   fluidRow (
+  #     
+  #     style = "margin-top: -20px; margin-left: 8px; padding:0 !important;",
+  #     
+  #     column (
+  #       12,
+  #       
+  #       "Leere Spalte",
+  #       br (),
+  #       br (),
+  #       
+  #     ), # End column
+  #     
+  #     
+  #     column (
+  #       12,
+  #       "Leere Spalte",
+  #       
+  #       
+  #       br (),
+  #       br (),
+  #       
+  #     ), # End column
+  #     
+  #   ) # End fluidRow
+  #   
+  # ), # End box 
   
   
   
@@ -14570,7 +15902,7 @@ server <- function (input, output, session) {
 
   
   #####################################################################################X
-  ## Observe percentage input fields --> update the assigned percentatge slider input fields -----
+  ## Observe percentage input fields --> update the assigned percentage slider input fields -----
 
   ## List_UI_InputFields_Slider_Percent
     
@@ -14817,6 +16149,8 @@ server <- function (input, output, session) {
   #   input = input, rv = rv)
   
   
+  
+  
     
   ## Numeric
   ## List_UI_InputFields_Numeric  
@@ -14945,6 +16279,247 @@ server <- function (input, output, session) {
     SuffixInputField = "",
     input = input, rv = rv)
 
+  
+  ObserveInputField_UpdateDFCalcVariable (
+    Name_InputField = List_UI_InputFields_Numeric [25],
+    SuffixInputField = "",
+    input = input, rv = rv
+  )
+  ObserveInputField_UpdateDFCalcVariable (
+    Name_InputField = List_UI_InputFields_Numeric [26],
+    SuffixInputField = "",
+    input = input, rv = rv
+  )
+  ObserveInputField_UpdateDFCalcVariable (
+    Name_InputField = List_UI_InputFields_Numeric [27],
+    SuffixInputField = "",
+    input = input, rv = rv
+  )
+  ObserveInputField_UpdateDFCalcVariable (
+    Name_InputField = List_UI_InputFields_Numeric [28],
+    SuffixInputField = "",
+    input = input, rv = rv
+  )
+  ObserveInputField_UpdateDFCalcVariable (
+    Name_InputField = List_UI_InputFields_Numeric [29],
+    SuffixInputField = "",
+    input = input, rv = rv
+  )
+  ObserveInputField_UpdateDFCalcVariable (
+    Name_InputField = List_UI_InputFields_Numeric [30],
+    SuffixInputField = "",
+    input = input, rv = rv
+  )
+  ObserveInputField_UpdateDFCalcVariable (
+    Name_InputField = List_UI_InputFields_Numeric [31],
+    SuffixInputField = "",
+    input = input, rv = rv
+  )
+  ObserveInputField_UpdateDFCalcVariable (
+    Name_InputField = List_UI_InputFields_Numeric [32],
+    SuffixInputField = "",
+    input = input, rv = rv
+  )
+  ObserveInputField_UpdateDFCalcVariable (
+    Name_InputField = List_UI_InputFields_Numeric [33],
+    SuffixInputField = "",
+    input = input, rv = rv
+  )
+  ObserveInputField_UpdateDFCalcVariable (
+    Name_InputField = List_UI_InputFields_Numeric [34],
+    SuffixInputField = "",
+    input = input, rv = rv
+  )
+  ObserveInputField_UpdateDFCalcVariable (
+    Name_InputField = List_UI_InputFields_Numeric [35],
+    SuffixInputField = "",
+    input = input, rv = rv
+  )
+  ObserveInputField_UpdateDFCalcVariable (
+    Name_InputField = List_UI_InputFields_Numeric [36],
+    SuffixInputField = "",
+    input = input, rv = rv
+  )
+  ObserveInputField_UpdateDFCalcVariable (
+    Name_InputField = List_UI_InputFields_Numeric [37],
+    SuffixInputField = "",
+    input = input, rv = rv
+  )
+  ObserveInputField_UpdateDFCalcVariable (
+    Name_InputField = List_UI_InputFields_Numeric [38],
+    SuffixInputField = "",
+    input = input, rv = rv
+  )
+  ObserveInputField_UpdateDFCalcVariable (
+    Name_InputField = List_UI_InputFields_Numeric [39],
+    SuffixInputField = "",
+    input = input, rv = rv
+  )
+  ObserveInputField_UpdateDFCalcVariable (
+    Name_InputField = List_UI_InputFields_Numeric [40],
+    SuffixInputField = "",
+    input = input, rv = rv
+  )
+  ObserveInputField_UpdateDFCalcVariable (
+    Name_InputField = List_UI_InputFields_Numeric [41],
+    SuffixInputField = "",
+    input = input, rv = rv
+  )
+  ObserveInputField_UpdateDFCalcVariable (
+    Name_InputField = List_UI_InputFields_Numeric [42],
+    SuffixInputField = "",
+    input = input, rv = rv
+  )
+  ObserveInputField_UpdateDFCalcVariable (
+    Name_InputField = List_UI_InputFields_Numeric [43],
+    SuffixInputField = "",
+    input = input, rv = rv
+  )
+  ObserveInputField_UpdateDFCalcVariable (
+    Name_InputField = List_UI_InputFields_Numeric [44],
+    SuffixInputField = "",
+    input = input, rv = rv
+  )
+  ObserveInputField_UpdateDFCalcVariable (
+    Name_InputField = List_UI_InputFields_Numeric [45],
+    SuffixInputField = "",
+    input = input, rv = rv
+  )
+  ObserveInputField_UpdateDFCalcVariable (
+    Name_InputField = List_UI_InputFields_Numeric [46],
+    SuffixInputField = "",
+    input = input, rv = rv
+  )
+  ObserveInputField_UpdateDFCalcVariable (
+    Name_InputField = List_UI_InputFields_Numeric [47],
+    SuffixInputField = "",
+    input = input, rv = rv
+  )
+  ObserveInputField_UpdateDFCalcVariable (
+    Name_InputField = List_UI_InputFields_Numeric [48],
+    SuffixInputField = "",
+    input = input, rv = rv
+  )
+  ObserveInputField_UpdateDFCalcVariable (
+    Name_InputField = List_UI_InputFields_Numeric [49],
+    SuffixInputField = "",
+    input = input, rv = rv
+  )
+  ObserveInputField_UpdateDFCalcVariable (
+    Name_InputField = List_UI_InputFields_Numeric [50],
+    SuffixInputField = "",
+    input = input, rv = rv
+  )
+  ObserveInputField_UpdateDFCalcVariable (
+    Name_InputField = List_UI_InputFields_Numeric [51],
+    SuffixInputField = "",
+    input = input, rv = rv
+  )
+  ObserveInputField_UpdateDFCalcVariable (
+    Name_InputField = List_UI_InputFields_Numeric [52],
+    SuffixInputField = "",
+    input = input, rv = rv
+  )
+  ObserveInputField_UpdateDFCalcVariable (
+    Name_InputField = List_UI_InputFields_Numeric [53],
+    SuffixInputField = "",
+    input = input, rv = rv
+  )
+  ObserveInputField_UpdateDFCalcVariable (
+    Name_InputField = List_UI_InputFields_Numeric [54],
+    SuffixInputField = "",
+    input = input, rv = rv
+  )
+  ObserveInputField_UpdateDFCalcVariable (
+    Name_InputField = List_UI_InputFields_Numeric [55],
+    SuffixInputField = "",
+    input = input, rv = rv
+  )
+  ObserveInputField_UpdateDFCalcVariable (
+    Name_InputField = List_UI_InputFields_Numeric [56],
+    SuffixInputField = "",
+    input = input, rv = rv
+  )
+  ObserveInputField_UpdateDFCalcVariable (
+    Name_InputField = List_UI_InputFields_Numeric [57],
+    SuffixInputField = "",
+    input = input, rv = rv
+  )
+  ObserveInputField_UpdateDFCalcVariable (
+    Name_InputField = List_UI_InputFields_Numeric [58],
+    SuffixInputField = "",
+    input = input, rv = rv
+  )
+  ObserveInputField_UpdateDFCalcVariable (
+    Name_InputField = List_UI_InputFields_Numeric [59],
+    SuffixInputField = "",
+    input = input, rv = rv
+  )
+  ObserveInputField_UpdateDFCalcVariable (
+    Name_InputField = List_UI_InputFields_Numeric [60],
+    SuffixInputField = "",
+    input = input, rv = rv
+  )
+  
+  ObserveInputField_UpdateDFCalcVariable (
+    Name_InputField = List_UI_InputFields_Numeric [61],
+    SuffixInputField = "",
+    input = input, rv = rv
+  )
+  ObserveInputField_UpdateDFCalcVariable (
+    Name_InputField = List_UI_InputFields_Numeric [62],
+    SuffixInputField = "",
+    input = input, rv = rv
+  )
+  ObserveInputField_UpdateDFCalcVariable (
+    Name_InputField = List_UI_InputFields_Numeric [63],
+    SuffixInputField = "",
+    input = input, rv = rv
+  )
+  ObserveInputField_UpdateDFCalcVariable (
+    Name_InputField = List_UI_InputFields_Numeric [64],
+    SuffixInputField = "",
+    input = input, rv = rv
+  )
+  ObserveInputField_UpdateDFCalcVariable (
+    Name_InputField = List_UI_InputFields_Numeric [65],
+    SuffixInputField = "",
+    input = input, rv = rv
+  )
+  ObserveInputField_UpdateDFCalcVariable (
+    Name_InputField = List_UI_InputFields_Numeric [66],
+    SuffixInputField = "",
+    input = input, rv = rv
+  )
+  ObserveInputField_UpdateDFCalcVariable (
+    Name_InputField = List_UI_InputFields_Numeric [67],
+    SuffixInputField = "",
+    input = input, rv = rv
+  )
+  
+  ObserveInputField_UpdateDFCalcVariable (
+    Name_InputField = List_UI_InputFields_Numeric [68],
+    SuffixInputField = "",
+    input = input, rv = rv
+  )
+  ObserveInputField_UpdateDFCalcVariable (
+    Name_InputField = List_UI_InputFields_Numeric [69],
+    SuffixInputField = "",
+    input = input, rv = rv
+  )
+  ObserveInputField_UpdateDFCalcVariable (
+    Name_InputField = List_UI_InputFields_Numeric [70],
+    SuffixInputField = "",
+    input = input, rv = rv
+  )
+  
+  ObserveInputField_UpdateDFCalcVariable (
+    Name_InputField = List_UI_InputFields_Numeric [71],
+    SuffixInputField = "",
+    input = input, rv = rv
+  )
+  
+  
   
   ## Numeric percent
   ## List_UI_InputFields_Numeric_Percent
@@ -15312,16 +16887,16 @@ server <- function (input, output, session) {
   
   
   
-  ObserveInputField_UpdateDFCalcVariable (
-    Name_InputField = List_UI_InputFields_CheckBox [63],
-    SuffixInputField = "",
-    input = input, rv = rv)
-  
-  
-  ObserveInputField_UpdateDFCalcVariable (
-    Name_InputField = List_UI_InputFields_CheckBox [64],
-    SuffixInputField = "",
-    input = input, rv = rv)
+  # ObserveInputField_UpdateDFCalcVariable (
+  #   Name_InputField = List_UI_InputFields_CheckBox [63],
+  #   SuffixInputField = "",
+  #   input = input, rv = rv)
+  # 
+  # 
+  # ObserveInputField_UpdateDFCalcVariable (
+  #   Name_InputField = List_UI_InputFields_CheckBox [64],
+  #   SuffixInputField = "",
+  #   input = input, rv = rv)
   
   
     
@@ -15496,6 +17071,51 @@ server <- function (input, output, session) {
   
   ObserveInputField_UpdateDFCalcVariable (
     Name_InputField = List_UI_InputFields_RadioButton [32],
+    SuffixInputField = "",
+    input = input, rv = rv)
+
+  ObserveInputField_UpdateDFCalcVariable (
+    Name_InputField = List_UI_InputFields_RadioButton [33],
+    SuffixInputField = "",
+    input = input, rv = rv)
+  
+  
+  ObserveInputField_UpdateDFCalcVariable (
+    Name_InputField = List_UI_InputFields_RadioButton [34],
+    SuffixInputField = "",
+    input = input, rv = rv)
+  
+  
+  ObserveInputField_UpdateDFCalcVariable (
+    Name_InputField = List_UI_InputFields_RadioButton [35],
+    SuffixInputField = "",
+    input = input, rv = rv)
+  
+  
+  ObserveInputField_UpdateDFCalcVariable (
+    Name_InputField = List_UI_InputFields_RadioButton [36],
+    SuffixInputField = "",
+    input = input, rv = rv)
+
+    
+  ObserveInputField_UpdateDFCalcVariable (
+    Name_InputField = List_UI_InputFields_RadioButton [37],
+    SuffixInputField = "",
+    input = input, rv = rv)
+  
+  ObserveInputField_UpdateDFCalcVariable (
+    Name_InputField = List_UI_InputFields_RadioButton [38],
+    SuffixInputField = "",
+    input = input, rv = rv)
+  
+  
+  ObserveInputField_UpdateDFCalcVariable (
+    Name_InputField = List_UI_InputFields_RadioButton [39],
+    SuffixInputField = "",
+    input = input, rv = rv)
+  
+  ObserveInputField_UpdateDFCalcVariable (
+    Name_InputField = List_UI_InputFields_RadioButton [40],
     SuffixInputField = "",
     input = input, rv = rv)
   

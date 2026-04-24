@@ -11,7 +11,7 @@
   "Packages": {
     "AuxFunctions": {
       "Package": "AuxFunctions",
-      "Version": "1.0.1",
+      "Version": "1.0.3",
       "Source": "GitHub",
       "Type": "Package",
       "Title": "Auxiliary functions with focus on emulating Excel functions",
@@ -28,7 +28,7 @@
       "RemoteUsername": "TobiasLoga",
       "RemoteRepo": "AuxFunctions",
       "RemoteRef": "main",
-      "RemoteSha": "524e517362972498888347ebb3b9d18a53e3053c"
+      "RemoteSha": "53b5b739ada989bd0ea9262e966e0348f9aa0cb5"
     },
     "CliDaMon": {
       "Package": "CliDaMon",
@@ -95,7 +95,7 @@
     },
     "MobasyBuildingData": {
       "Package": "MobasyBuildingData",
-      "Version": "0.1.6",
+      "Version": "0.1.7",
       "Source": "GitHub",
       "Type": "Package",
       "Title": "MOBASY Building data tables",
@@ -115,7 +115,7 @@
       "RemoteRepo": "MobasyBuildingData",
       "RemoteUsername": "TobiasLoga",
       "RemoteRef": "HEAD",
-      "RemoteSha": "402c26eebfa28af06b7ab7ea9632fe9d7aaec28c",
+      "RemoteSha": "25392e3f59845b3feb935925a277eefef19056da",
       "NeedsCompilation": "no",
       "Depends": [
         "R (>= 3.5.0)"
@@ -123,7 +123,7 @@
     },
     "MobasyModel": {
       "Package": "MobasyModel",
-      "Version": "0.1.6",
+      "Version": "0.1.8",
       "Source": "GitHub",
       "Type": "Package",
       "Title": "MOBASY model - realistic calculation of the energy demand for heating and its uncertainty",
@@ -144,7 +144,7 @@
       "RemoteRepo": "MobasyModel",
       "RemoteUsername": "TobiasLoga",
       "RemoteRef": "HEAD",
-      "RemoteSha": "209401ca530bb8f5cdcd657c75accd3f78bb511a",
+      "RemoteSha": "14be09a3ca7c8fbe9a56c73c6fed75bde5ded2aa",
       "NeedsCompilation": "no",
       "Author": "Jens Calisti [cre] (<https://orcid.org/0000-0003-2211-0553>)",
       "Depends": [
@@ -738,7 +738,7 @@
     },
     "clidamonger": {
       "Package": "clidamonger",
-      "Version": "1.4.0",
+      "Version": "1.5.0",
       "Source": "GitHub",
       "Title": "Monthly Climate Data for Germany, Usable for Heating and Cooling Calculations",
       "Description": "This data package contains monthly climate data in Germany, it can be used for heating and  cooling calculations (external temperature, heating / cooling days, solar radiation).",
@@ -754,14 +754,15 @@
       "RoxygenNote": "7.3.2",
       "LazyData": "true",
       "LazyDataCompression": "xz",
-      "Author": "Tobias Loga [aut] (<https://orcid.org/0000-0001-5097-5613>), Guillaume Behem [aut], Jens Calisti [cre] (<https://orcid.org/0000-0003-2211-0553>)",
-      "Maintainer": "Jens Calisti <jens@tangled.de>",
       "RemoteType": "github",
       "RemoteHost": "api.github.com",
-      "RemoteUsername": "IWUGERMANY",
       "RemoteRepo": "clidamonger",
+      "RemoteUsername": "IWUGERMANY",
       "RemoteRef": "main",
-      "RemoteSha": "0bf772d4c305ef167030eda8e85167dfd020c932"
+      "RemoteSha": "44b0e0177e4490a42e35b4e35fd84eb95c49cf23",
+      "NeedsCompilation": "no",
+      "Author": "Tobias Loga [aut] (<https://orcid.org/0000-0001-5097-5613>), Guillaume Behem [aut], Jens Calisti [cre] (<https://orcid.org/0000-0003-2211-0553>)",
+      "Maintainer": "Jens Calisti <jens@tangled.de>"
     },
     "clipr": {
       "Package": "clipr",
@@ -4137,7 +4138,7 @@
     },
     "tabuladata": {
       "Package": "tabuladata",
-      "Version": "0.1.1",
+      "Version": "0.1.2",
       "Source": "GitHub",
       "Title": "TABULA tables - parameters for energy performance calculation",
       "Authors@R": "person (given = \"Tobias\", family = \"Loga\", , \"t.loga@iwu.de\", role = c(\"aut\", \"cre\"), comment = c(ORCID = \"YOUR-ORCID-ID\")) person (given = \"Jens\", family = \"Calisti\", email = \"jens@tangled.de\", role = \"cre\", comment = c(ORCID = \"0000-0003-2211-0553\"))",
@@ -4152,7 +4153,7 @@
       "RemoteRepo": "tabuladata",
       "RemoteUsername": "IWUGERMANY",
       "RemoteRef": "HEAD",
-      "RemoteSha": "5860d085ba21ea3793fa38a896c044554b169814",
+      "RemoteSha": "2411fa43afa99ced68fb8ffc10c40b14e97a72ba",
       "NeedsCompilation": "no",
       "Author": "Jens Calisti [cre] (<https://orcid.org/0000-0003-2211-0553>)",
       "Maintainer": "Jens Calisti <jens@tangled.de>",
